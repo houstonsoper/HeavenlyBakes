@@ -1,8 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "heavenlybakes.frontend", "heavenlybakes.frontend", "{D34808C2-B0EC-4252-B86E-B635908A84FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heavenlybakes.api", "heavenlybakes.api\heavenlybakes.api.csproj", "{A56CC37E-16E3-4744-8BB6-FD715A088433}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A56CC37E-16E3-4744-8BB6-FD715A088433} = {D34808C2-B0EC-4252-B86E-B635908A84FC}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A56CC37E-16E3-4744-8BB6-FD715A088433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A56CC37E-16E3-4744-8BB6-FD715A088433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A56CC37E-16E3-4744-8BB6-FD715A088433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A56CC37E-16E3-4744-8BB6-FD715A088433}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
