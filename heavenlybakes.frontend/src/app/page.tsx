@@ -5,6 +5,7 @@ import {fetchBakes, fetchPopularBakes} from "../../services/bakeService";
 import {useEffect, useState} from "react";
 import Bake from "../../interfaces/bake";
 import BakeCard from "../../components/bakeCard";
+import BakeCarousel from "../../components/bakeCarousel";
 
 export default function Home() {
   const [bakes, setBakes] = useState<Bake[]>([]);
@@ -12,7 +13,7 @@ export default function Home() {
   //Fetch Popular Bakes from API on page load
   useEffect(() => {
     const getBakes = async () => {
-      const fetchedBakes : Bake[] = await fetchPopularBakes(4);
+      const fetchedBakes : Bake[] = await fetchPopularBakes(10);
       setBakes(fetchedBakes);
     }
     getBakes();
@@ -20,11 +21,10 @@ export default function Home() {
   
   return (
       <div className="container m-auto py-12">
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-y-12">
-          {bakes.map((bake : Bake) => (
-              <BakeCard key={bake.id} bake={bake} />
-          ))}
-        </div>
+          <div className="showcase">
+              <h1 className="text-center pb-2">Popular</h1>
+            <BakeCarousel bakes={bakes} />
+          </div>
       </div>
   );
 }

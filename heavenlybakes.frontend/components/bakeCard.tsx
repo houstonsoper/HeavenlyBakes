@@ -13,7 +13,7 @@ export default function BakeCard({bake} : BakeCardProps){
             </div>
 
             <div className="card-bottom">
-                <h1>{bake.name}</h1>
+                <h2>{bake.name}</h2>
                 <p>£{bake.price.toFixed(2)}</p>
             </div>
         </div>
