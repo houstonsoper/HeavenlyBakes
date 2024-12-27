@@ -1,4 +1,4 @@
-﻿import {Bake} from "../interfaces/bake";
+﻿import Bake from "../interfaces/bake";
 import Image from "next/image";
 
 interface BakeCardProps{

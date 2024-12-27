@@ -1,4 +1,4 @@
-﻿export interface Bake {
+﻿export default interface Bake {
     id: number,
     name: string,
     price: number,

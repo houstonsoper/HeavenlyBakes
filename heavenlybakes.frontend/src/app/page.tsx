@@ -1,18 +1,18 @@
 "use client"
 
 import Image from "next/image";
-import {fetchBakes} from "../../services/bakeService";
+import {fetchBakes, fetchPopularBakes} from "../../services/bakeService";
 import {useEffect, useState} from "react";
-import {Bake} from "../../interfaces/bake";
+import Bake from "../../interfaces/bake";
 import BakeCard from "../../components/bakeCard";
 
 export default function Home() {
   const [bakes, setBakes] = useState<Bake[]>([]);
   
-  //Fetch Bakes from API on page load
+  //Fetch Popular Bakes from API on page load
   useEffect(() => {
     const getBakes = async () => {
-      const fetchedBakes : Bake[] = await fetchBakes();
+      const fetchedBakes : Bake[] = await fetchPopularBakes(4);
       setBakes(fetchedBakes);
     }
     getBakes();
