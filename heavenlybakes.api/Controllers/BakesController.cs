@@ -1,4 +1,5 @@
 ﻿using heavenlybakes.api.Context;
+using heavenlybakes.api.Extensions;
 using heavenlybakes.api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,10 @@ public class BakesController : ControllerBase
         var bakes = await _bakesRepository.GetAllBakesAsync();
         
         if(!bakes.Any()) return NotFound();
+
+        //Map data to the Bake DTO
+        var bakeDto = bakes.Select(b => b.ToBakeDto());
         
-        return Ok(bakes);
+        return Ok(bakeDto);
     }
 }
