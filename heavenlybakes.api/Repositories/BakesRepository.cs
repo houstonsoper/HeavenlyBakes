@@ -17,4 +17,15 @@ public class BakesRepository : IBakesRepository
     {
         return await _context.Bakes.ToListAsync();
     }
+
+    public async Task<Bake> GetBakeByIdAsync(int bakeId)
+    {
+        var bake = await _context.Bakes.FindAsync(bakeId);
+
+        if (bake == null)
+        {
+            return null;
+        }
+        return bake;
+    }
 }

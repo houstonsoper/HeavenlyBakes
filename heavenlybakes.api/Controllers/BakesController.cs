@@ -38,4 +38,17 @@ public class BakesController : ControllerBase
         
         return Ok(bakeDto);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetBakeByIdAsync(int id)
+    {
+        var bake = await _bakesRepository.GetBakeByIdAsync(id);
+
+        if (bake == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(bake.ToBakeDto());
+    }
 }
