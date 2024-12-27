@@ -1,14 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using heavenlybakes.api.Context;
+using heavenlybakes.api.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace heavenlybakes.api.Controllers;
 
 [ApiController]
-[Route("bakes")]
+[Route("[controller]")]
 
 public class BakesController : ControllerBase
 {
-    public IActionResult Index()
+    private readonly IBakesRepository _bakesRepository;
+
+    public BakesController(IBakesRepository bakesRepository)
     {
-        return Ok();
+        _bakesRepository = bakesRepository;
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetBakes()
+    {
+        var bakes = await _bakesRepository.GetAllBakesAsync();
+        
+        if(!bakes.Any()) return NotFound();
+        
+        return Ok(bakes);
     }
 }

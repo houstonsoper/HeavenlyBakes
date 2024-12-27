@@ -1,6 +1,6 @@
-@heavenlybakes.api_HostAddress = http://localhost:5101
-
-GET {{heavenlybakes.api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
+#@heavenlybakes.api_HostAddress = http://localhost:5101
+#
+#GET {{heavenlybakes.api_HostAddress}}/weatherforecast/
+#Accept: application/json
+#
+####

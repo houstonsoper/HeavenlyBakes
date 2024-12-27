@@ -1,4 +1,5 @@
 using heavenlybakes.api.Context;
+using heavenlybakes.api.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IBakesRepository, BakesRepository>();
+builder.Services.AddControllers(); 
+
+// Enable CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") //front-end URL
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+    });
+});
 
 builder.Services.AddDbContext<HeavenlyBakesDbContext>(options =>
 {
@@ -23,6 +38,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
