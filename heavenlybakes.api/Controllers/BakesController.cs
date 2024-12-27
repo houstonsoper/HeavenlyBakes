@@ -18,12 +18,21 @@ public class BakesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetBakes()
+    public async Task<IActionResult> GetBakes([FromQuery] int? limit, [FromQuery] int? offset)
     {
         var bakes = await _bakesRepository.GetAllBakesAsync();
         
-        if(!bakes.Any()) return NotFound();
+        //Filter bakes by optional query paramaters if included
+        if (limit.HasValue && limit != 0)
+        { 
+            bakes = bakes.Take(limit.Value);
+        }
 
+        if (offset.HasValue)
+        {
+            bakes = bakes.Skip(offset.Value);
+        }
+        
         //Map data to the Bake DTO
         var bakeDto = bakes.Select(b => b.ToBakeDto());
         
