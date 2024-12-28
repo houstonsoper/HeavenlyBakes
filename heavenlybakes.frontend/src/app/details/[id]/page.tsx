@@ -9,11 +9,14 @@ import {fetchBakeById} from "@/services/bakeService";
 import {useRouter} from "next/navigation";
 import BasketItem from "@/interfaces/basketItem";
 import {createCookie, getCookie} from "@/services/cookieService";
+import {Params} from "next/dist/server/request/params";
+import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function Details(){
     const [bake, setBake] = useState <Bake | null> (null);
-    const params = useParams();
-    const router = useRouter();
+    const params : Params = useParams();
+    const router : AppRouterInstance = useRouter();
+    const [quantity, setQuantity] = useState<number>(0);
     
     useEffect(()=>{
         const getBake = async () => {
@@ -37,11 +40,22 @@ export default function Details(){
                 imageUrl: bake.imageUrl,
             };
             
-            //Check if there is already items in the basket
-            const existingBasket : object[] | null = getCookie("basket") || [];
+            //Get the existing basket from the cookie 
+            const existingBasket : BasketItem [] | null = getCookie("basket") || [];
             
-            //Add basketItem to the basket and make a cookie
-            const updatedBasket: object[] = [...existingBasket, basketItem];
+            //Check if the item already existing in the basket
+            const itemExists : boolean = existingBasket.some(item => item.id === basketItem.id);
+            
+            //Increase quantity if item exists, or add it to the basket if it doesn't
+            const updatedBasket : BasketItem[] = 
+                itemExists ? 
+                    existingBasket.map(item => item.id === basketItem.id 
+                        ? {...item, quantity: item.quantity + 1}
+                        : item
+                    )
+                    : [...existingBasket, basketItem];
+                
+            //Update the basket cookie
             createCookie("basket", updatedBasket);
             
             router.push(`/basket`);
