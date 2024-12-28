@@ -16,7 +16,7 @@ export default function Details(){
     const [bake, setBake] = useState <Bake | null> (null);
     const params : Params = useParams();
     const router : AppRouterInstance = useRouter();
-    const [quantity, setQuantity] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(1);
     
     useEffect(()=>{
         const getBake = async () => {
@@ -36,7 +36,7 @@ export default function Details(){
                 id: bake.id,
                 name: bake.name,
                 price: bake.price,
-                quantity: 1,
+                quantity: quantity,
                 imageUrl: bake.imageUrl,
             };
             
@@ -50,7 +50,7 @@ export default function Details(){
             const updatedBasket : BasketItem[] = 
                 itemExists ? 
                     existingBasket.map(item => item.id === basketItem.id 
-                        ? {...item, quantity: item.quantity + 1}
+                        ? {...item, quantity: item.quantity + basketItem.quantity}
                         : item
                     )
                     : [...existingBasket, basketItem];
@@ -86,11 +86,11 @@ export default function Details(){
                     <button onClick={addToBasketHandler}>Add to Basket</button>
                 </div>
                 <div className="flex">
-                    <button>
+                    <button onClick={() => quantity != 1 ? setQuantity(quantity - 1) : null}>
                         <span className="material-symbols-outlined">remove</span>
                     </button>
-                    <p>quantity</p>
-                    <button>
+                    <p>{quantity}</p>
+                    <button onClick={() => setQuantity(quantity + 1)}>
                         <span className="material-symbols-outlined">add</span>
                     </button>
                 </div>
