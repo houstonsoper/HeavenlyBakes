@@ -2,14 +2,18 @@
 
 import {useParams} from "next/navigation";
 import {useState, useEffect} from "react";
-import Bake from "../../../../interfaces/bake";
+import Bake from "@/interfaces/bake"
 import Image from "next/image";
 import Link from "next/link";
-import {fetchBakeById} from "../../../../services/bakeService";
+import {fetchBakeById} from "@/services/bakeService";
+import {useRouter} from "next/navigation";
+import BasketItem from "@/interfaces/basketItem";
+import {createCookie, getCookie} from "@/services/cookieService";
 
 export default function Details(){
     const [bake, setBake] = useState <Bake | null> (null);
     const params = useParams();
+    const router = useRouter();
     
     useEffect(()=>{
         const getBake = async () => {
@@ -20,9 +24,33 @@ export default function Details(){
         }
         getBake();
     }, [params.id])
+    
+    const addToBasketHandler = () =>{
+        
+        //Create a basketItem object with the details of the item
+        if(bake) {
+            const basketItem: BasketItem = {
+                id: bake.id,
+                name: bake.name,
+                price: bake.price,
+                quantity: 1,
+                imageUrl: bake.imageUrl,
+            };
+            
+            //Check if there is already items in the basket
+            const existingBasket : object[] | null = getCookie("basket") || [];
+            
+            //Add basketItem to the basket and make a cookie
+            const updatedBasket: object[] = [...existingBasket, basketItem];
+            createCookie("basket", updatedBasket);
+            
+            router.push(`/basket`);
+        }
+        return null;
+    }
 
     return bake ? (
-        <div className="bake-container container m-auto block xl:flex">
+        <div className="bake-container container m-auto block xl:flex justify-center">
             <div className="bake-image-container">
                 <Image
                     className="bake-img"
@@ -32,7 +60,7 @@ export default function Details(){
                     height={400}
                 />
             </div>
-            <div className="bake-details-container">
+            <div className="bake-details-container ms-5">
                 <div>
                     <h1>{bake.name}</h1>
                     <p className="price">£{bake.price.toFixed(2)}</p>
@@ -41,7 +69,7 @@ export default function Details(){
                     <p>{bake.description}</p>
                 </div>
                 <div className="checkout-link mt-6">
-                    Add to Basket
+                    <button onClick={addToBasketHandler}>Add to Basket</button>
                 </div>
                 <div className="flex">
                     <button>

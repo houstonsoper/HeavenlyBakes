@@ -1,10 +1,10 @@
 "use client"
 
 import Image from "next/image";
-import {fetchBakes, fetchPopularBakes} from "../../services/bakeService";
+import {fetchBakes, fetchPopularBakes} from "@/services/bakeService";
 import {useEffect, useState} from "react";
-import Bake from "../../interfaces/bake";
-import BakeCard from "../../components/bakeCard";
+import Bake from "@/interfaces/bake";
+import BakeCard from "../components/bakeCard";
 
 export default function Home() {
     const [bakes, setBakes] = useState<Bake[]>([]);
