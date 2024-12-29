@@ -5,9 +5,10 @@ import Link from "next/link";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
 import SearchBar from "@/components/searchBar";
+import BasketCount from "@/components/basketCount";
 
 export default function Navbar() {
-
+    
     return (
         <nav className="bg-gray-200 shadow shadow-gray-300 w-100 px-8 md:px-auto">
             <div
@@ -20,7 +21,7 @@ export default function Navbar() {
                 <div className="order-2">
                     <SearchBar/>
                 </div>
-
+                
                 <div className="text-gray-500 order-3 w-full md:w-auto md:order-2">
                     <ul className="flex font-semibold justify-between">
                         <Link className="md:px-4 md:py-2 text-indigo-500" href="/">HOME </Link> 
@@ -28,11 +29,7 @@ export default function Navbar() {
                     </ul>
                 </div>
                 <div className="order-2 md:order-3">
-                        <Link href="/basket">
-                            <span className="material-symbols-outlined">
-                                shopping_bag
-                            </span>
-                        </Link>
+                    <BasketCount/>
                 </div>
             </div>
         </nav>

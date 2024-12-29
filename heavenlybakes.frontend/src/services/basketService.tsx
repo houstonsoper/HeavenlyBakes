@@ -52,3 +52,15 @@ export function removeFromBasket(basketItem : BasketItem){
     
     createCookie("basket", updatedBasketItems);
 }
+
+export function getBasketCount() : number {
+    const basket : Basket = getExistingBasket();
+    
+    //Calculate the quantity of items in the basket
+    let count : number = 0;
+    basket.items.forEach((item : BasketItem) => {
+        count += item.quantity 
+    })
+    
+    return count;
+}

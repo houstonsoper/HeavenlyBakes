@@ -3,46 +3,25 @@ import React, {Dispatch, SetStateAction} from "react";
 import BasketItem from "../interfaces/basketItem"
 import {useState} from "react";
 import {addToBasket, removeFromBasket} from "@/services/basketService";
+import {useBasket} from "@/contexts/basketContext";
 
 interface BasketItemComponentProps{
     item: BasketItem,
-    updateBasket: () => void,
 }
 
-export default function BasketItemComponent({item, updateBasket} :BasketItemComponentProps) {
-    const [quantity, setQuantity] = useState<number>(item.quantity);
+export default function BasketItemComponent({item} :BasketItemComponentProps) {
+    const { increaseQuantity, decreaseQuantity, removeFromBasket } = useBasket();
     
     const handleDecreaseQuantity = () => {
-        if(quantity > 1){
-            //Update quantity displayed on the screen
-            setQuantity(quantity => quantity -1) 
-
-            //Update the item quantity and total price then refresh the basket 
-            item.quantity = item.quantity - 1;
-            item.totalPrice = item.quantity * item.price;
-            removeFromBasket(item);
-            addToBasket(item);
-        } else {
-            removeFromBasket(item);
-        }
-        updateBasket();
-    }
+        decreaseQuantity(item);
+    };
     
     const handleIncreaseQuantity = () => {
-        //Update quantity displayed on the screen
-        setQuantity(quantity => quantity + 1);
-
-        //Update the item quantity and total price then refresh the basket 
-        item.quantity = item.quantity + 1;
-        item.totalPrice = item.quantity * item.price;
-        removeFromBasket(item);
-        addToBasket(item);
-        updateBasket();
-    }
+        increaseQuantity(item);
+    };
     
     const handleRemoveItem = () => {
         removeFromBasket(item);
-        updateBasket();
     }
     
     return(
@@ -56,7 +35,7 @@ export default function BasketItemComponent({item, updateBasket} :BasketItemComp
                     <button className="material-symbols-outlined ms-auto" onClick={handleRemoveItem}> delete </button>
                 </div>
                 <p>Price: £{item.price.toFixed(2)}</p>
-                <p>Quantity:{quantity}</p>
+                <p>Quantity:{item.quantity}</p>
                 <p>Total: £{item.totalPrice.toFixed(2)}</p>
                 <div className="flex">
                     <button onClick={handleDecreaseQuantity}>
