@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import Bake from "@/interfaces/bake";
 import BakeCard from "../../components/bakeCard";
 import {useSearchParams} from "next/navigation";
+import {Search} from "lucide-react";
 
 export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
@@ -16,14 +17,11 @@ export default function Page() {
         const getBakes = async () => {
 
             //Get the search string from the search Params
-            const searchString: string | null = searchParams.get("search");
+            const searchTerm: string | null = searchParams.get("search");
             
-            //Fetch bakes by search term if included
-            if(searchString) {
-                const fetchedBakes: Bake[] = await fetchBakes({searchTerm: searchString});
-                setBakes(fetchedBakes);
-            }
-            return;
+            //Fetch bakes by search term if included, else fetch all
+            const fetchedBakes: Bake[] = await fetchBakes(searchTerm ? {searchTerm} : {});
+            setBakes(fetchedBakes);
         }
         getBakes();
     }, [searchParams])

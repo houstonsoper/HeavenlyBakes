@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useState} from "react";
+﻿import React, {ChangeEvent, useEffect, useState} from "react";
 import Bake from "@/interfaces/bake";
 import {fetchBakes, fetchPopularBakes} from "@/services/bakeService";
 import router from "next/router";
@@ -8,11 +8,10 @@ export default function SearchBar() {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const router = useRouter();
     
-    
     //Handle the users inputted search term
-    const handleSearchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchTerm = (event : React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-    }
+    };
     
     //Handle when the user submits the search
     const handleSearch = () => {
@@ -20,10 +19,17 @@ export default function SearchBar() {
         setSearchTerm("");
     }
     
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Enter") {
+            handleSearch();
+        }
+    }
+    
     return (
         <div>
             <input placeholder={"Search"}
                    value={searchTerm}
+                   onKeyDown={handleKeyDown}
                    onChange={handleSearchTerm}/>
             <button onClick={handleSearch}>Search</button>
         </div>
