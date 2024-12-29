@@ -25,11 +25,11 @@ export default function BasketItemComponent({item} :BasketItemComponentProps) {
     }
     
     return(
-        <div className="w-1/2 m-auto flex p-3 border border-gray-200 rounded-lg my-8">
-            <div>
-                <Image src={item.imageUrl} alt={item.name} width={100} height={100}/>
+        <div className="w-3/4 m-auto flex p-3 border border-gray-200 rounded-lg my-8">
+            <div className="flex justify-center">
+                <Image src={item.imageUrl} alt={item.name} width={150} height={150}/>
             </div>
-            <div className="flex flex-col px-4 w-full">
+            <div className="flex flex-col px-6 w-full">
                 <div className="flex">
                     <h1 className="t">{item.name}</h1>
                     <button className="material-symbols-outlined ms-auto" onClick={handleRemoveItem}> delete </button>
