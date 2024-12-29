@@ -9,7 +9,7 @@ interface BakeCardProps{
 export default function BakeCard({bake} : BakeCardProps){
     return(
         <div className="card m-auto">
-            <Link href={"/details/"+bake.id}>
+            <Link href={"/bakes/"+bake.id}>
             <div className="card-top">
                 <Image src={bake.imageUrl} alt={bake.name} width={200} height={200} />
             </div>
