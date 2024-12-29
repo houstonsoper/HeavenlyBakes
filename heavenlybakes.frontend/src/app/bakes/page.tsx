@@ -5,18 +5,28 @@ import {fetchBakes, fetchPopularBakes} from "@/services/bakeService";
 import {useEffect, useState} from "react";
 import Bake from "@/interfaces/bake";
 import BakeCard from "../../components/bakeCard";
+import {useSearchParams} from "next/navigation";
 
 export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
-
-    //Fetch Popular Bakes from API on page load
+    const searchParams = useSearchParams();
+    
+    //Fetch Bakes
     useEffect(() => {
         const getBakes = async () => {
-            const fetchedBakes: Bake[] = await fetchPopularBakes(20);
-            setBakes(fetchedBakes);
+
+            //Get the search string from the search Params
+            const searchString: string | null = searchParams.get("search");
+            
+            //Fetch bakes by search term if included
+            if(searchString) {
+                const fetchedBakes: Bake[] = await fetchBakes({searchTerm: searchString});
+                setBakes(fetchedBakes);
+            }
+            return;
         }
         getBakes();
-    }, [])
+    }, [searchParams])
 
     return (
         <div className="container m-auto py-12">

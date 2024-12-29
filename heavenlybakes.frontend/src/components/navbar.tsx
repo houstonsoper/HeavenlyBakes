@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import SearchBar from "@/components/searchBar";
 
 export default function Navbar() {
 
@@ -17,8 +18,7 @@ export default function Navbar() {
                 </div>
                 
                 <div className="order-2">
-                    <input placeholder={"Search"}/>
-                    <button>Search</button>
+                    <SearchBar/>
                 </div>
 
                 <div className="text-gray-500 order-3 w-full md:w-auto md:order-2">

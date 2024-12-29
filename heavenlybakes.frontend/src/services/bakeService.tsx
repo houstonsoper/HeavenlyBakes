@@ -3,7 +3,7 @@ import BakeParams from "../interfaces/bakeParams";
 
 const BASE_URL = 'https://localhost:44367';
 
-export async function fetchBakes({limit = 0,  offset = 0} : BakeParams = {}) : Promise<Bake[]> {
+export async function fetchBakes({searchTerm = "", limit = 0,  offset = 0} : BakeParams = {}) : Promise<Bake[]> {
     try{
         const URL = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}`;
         const response = await fetch(URL);
@@ -11,8 +11,11 @@ export async function fetchBakes({limit = 0,  offset = 0} : BakeParams = {}) : P
         if(!response.ok){
             throw new Error("Unable to retrieve Bakes from API");
         }
+
+        const bakes : Bake[] = await response.json();
         
-        return await response.json();
+        //Filter bakes by search term, if there isn't one filter by an empty string which will return all bakes.
+        return bakes.filter(bake => bake.name.toLowerCase().includes((searchTerm || "").toLowerCase()));
     }
     catch(error : any){
         console.error(error.message);
