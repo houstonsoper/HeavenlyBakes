@@ -20,6 +20,10 @@ export default function Home() {
 
     return (
         <div className="container m-auto py-12">
+            <section>
+                <Image className={"pb-3 "} src={"https://placehold.co/1900x600/png"} alt={"carousel"} width={1900} height={600} />
+            </section>
+            <section>
             <div>
                 <h1 className="text-center pb-4">Popular</h1>
                 <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-y-12">
@@ -27,6 +31,7 @@ export default function Home() {
                     ))}
                 </div>
             </div>
+            </section>
         </div>
     );
 }

@@ -28,14 +28,11 @@ export default function Navbar() {
                     </ul>
                 </div>
                 <div className="order-2 md:order-3">
-                    <button
-                        className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-gray-50 rounded-xl flex items-center gap-2">
                         <Link href="/basket">
                             <span className="material-symbols-outlined">
                                 shopping_bag
                             </span>
                         </Link>
-                    </button>
                 </div>
             </div>
         </nav>

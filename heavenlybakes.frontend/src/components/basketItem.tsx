@@ -1,29 +1,21 @@
 ﻿import Image from "next/image";
 import React, {Dispatch, SetStateAction} from "react";
 import BasketItem from "../interfaces/basketItem"
-import {useState, useEffect} from "react";
-import {addToBasket, getExistingBasket, removeFromBasket} from "@/services/basketService";
-import Basket from "@/interfaces/basket";
+import {useState} from "react";
+import {addToBasket, removeFromBasket} from "@/services/basketService";
 
 interface BasketItemComponentProps{
     item: BasketItem,
-    updateBasket: () => void;
+    updateBasket: () => void,
 }
 
 export default function BasketItemComponent({item, updateBasket} :BasketItemComponentProps) {
     const [quantity, setQuantity] = useState<number>(item.quantity);
-    const [basket, setBasket] = useState<Basket>({items:[], total:0});
-    
-    //Get the basket
-    useEffect(() => {
-        const existingBasket : Basket = getExistingBasket();
-        setBasket(existingBasket);
-    }, []);
     
     const handleDecreaseQuantity = () => {
         if(quantity > 1){
             //Update quantity displayed on the screen
-            setQuantity(quantity - 1) 
+            setQuantity(quantity => quantity -1) 
 
             //Update the item quantity and total price then refresh the basket 
             item.quantity = item.quantity - 1;
@@ -38,14 +30,13 @@ export default function BasketItemComponent({item, updateBasket} :BasketItemComp
     
     const handleIncreaseQuantity = () => {
         //Update quantity displayed on the screen
-        setQuantity(quantity + 1);
+        setQuantity(quantity => quantity + 1);
 
         //Update the item quantity and total price then refresh the basket 
         item.quantity = item.quantity + 1;
         item.totalPrice = item.quantity * item.price;
         removeFromBasket(item);
         addToBasket(item);
-
         updateBasket();
     }
     

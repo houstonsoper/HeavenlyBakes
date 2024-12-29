@@ -12,16 +12,17 @@ export default function Page(){
     const [basket, setBasket] = useState<Basket>({items:[], total: 0});
     const [updateBasket, setUpdateBasket] = useState<boolean>(false);
     
-    //Get basket on page load/when an update is made to it
+    //Fetch basket on mount or when update is triggered
     useEffect(() => {
-        const existingBasket : Basket = getExistingBasket();
-        setBasket(existingBasket);
-        setUpdateBasket(false);
+        const updatedBasket: Basket = getExistingBasket();
+        setBasket(updatedBasket);
+        setUpdateBasket(false); 
     }, [updateBasket]);
-    
+
+    //Function that triggers a state change to updateBasket
     const handleBasketUpdate = () => {
-        setUpdateBasket(true);
-    }
+        setUpdateBasket(true); 
+    };
     
     return(
         <div className="container m-auto">
