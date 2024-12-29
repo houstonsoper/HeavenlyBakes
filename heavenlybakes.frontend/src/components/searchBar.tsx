@@ -26,12 +26,16 @@ export default function SearchBar() {
     }
     
     return (
-        <div>
-            <input placeholder={"Search"}
+        <div className="flex justify-center">
+            <input placeholder={"Search our selection"}
                    value={searchTerm}
                    onKeyDown={handleKeyDown}
                    onChange={handleSearchTerm}/>
-            <button onClick={handleSearch}>Search</button>
+            <button onClick={handleSearch} className="flex">
+                <span className="material-symbols-outlined ms-2 bg-orange-300 rounded px-1">
+                    search
+                </span>
+            </button>
         </div>
     )
 }
