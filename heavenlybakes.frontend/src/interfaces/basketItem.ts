@@ -4,4 +4,5 @@
         price: number,
         quantity: number,
         imageUrl: string,
+        totalPrice: number,
 }

@@ -49,6 +49,11 @@ export default function BasketItemComponent({item, updateBasket} :BasketItemComp
         updateBasket();
     }
     
+    const handleRemoveItem = () => {
+        removeFromBasket(item);
+        updateBasket();
+    }
+    
     return(
         <div className="w-1/2 m-auto flex p-3 border border-gray-200 rounded-lg my-8">
             <div>
@@ -57,7 +62,7 @@ export default function BasketItemComponent({item, updateBasket} :BasketItemComp
             <div className="flex flex-col px-4 w-full">
                 <div className="flex">
                     <h1 className="t">{item.name}</h1>
-                    <span className="material-symbols-outlined ms-auto"> delete </span>
+                    <button className="material-symbols-outlined ms-auto" onClick={handleRemoveItem}> delete </button>
                 </div>
                 <p>Price: £{item.price.toFixed(2)}</p>
                 <p>Quantity:{quantity}</p>
