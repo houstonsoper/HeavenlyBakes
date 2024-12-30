@@ -19,6 +19,11 @@ public class OrderController : Controller
     [HttpPost("/AddOrder")]
     public async Task<IActionResult> AddOrder([FromBody] OrderRequestDto order)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState); 
+        }
+        
         var newOrder = await _orderRepository.AddOrderAsync(order);
         
         return Ok(newOrder.ToOrderRequestDto());
