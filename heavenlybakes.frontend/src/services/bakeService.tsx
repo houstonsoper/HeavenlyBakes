@@ -14,8 +14,9 @@ export async function fetchBakes({searchTerm = "", limit = 0,  offset = 0} : Bak
 
         const bakes : Bake[] = await response.json();
         
-        //Filter bakes by search term, if there isn't one filter by an empty string which will return all bakes.
-        return bakes.filter(bake => bake.name.toLowerCase().includes((searchTerm || "").toLowerCase()));
+        return bakes
+            .filter(bake => bake.inProduction && bake.stock > 0) //Filter by inProduction and in stock
+            .filter(bake => bake.name.toLowerCase().includes((searchTerm || "").toLowerCase())); //Filter by search term
     }
     catch(error : any){
         console.error(error.message);

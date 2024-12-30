@@ -6,4 +6,6 @@
     imageUrl: string,
     description: string,
     rating: number,
+    stock: number,
+    inProduction: boolean,
 }
