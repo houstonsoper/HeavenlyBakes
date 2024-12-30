@@ -17,5 +17,5 @@ public static class OrderExtension
             Total = order.Total,
             PaymentMethod = order.PaymentMethod
         };
-    } 
+    }
 }

@@ -28,4 +28,17 @@ public class OrderController : Controller
         
         return Ok(newOrder.ToOrderRequestDto());
     }
+    
+    [HttpPost("/AddOrderItem")]
+    public async Task<IActionResult> AddOrder([FromBody] OrderItemRequestDto orderItem)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState); 
+        }
+        
+        var newOrderItem = await _orderRepository.AddOrderItemAsync(orderItem);
+        
+        return Ok(newOrderItem.ToOrderItemDto());
+    }
 }

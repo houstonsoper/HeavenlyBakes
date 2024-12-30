@@ -33,4 +33,40 @@ public class OrderRepository : IOrderRepository
         
         return newOrder;
     }
+
+    public async Task<OrderItem> AddOrderItemAsync(OrderItemRequestDto orderItem)
+    {
+        var newOrderItem = new OrderItem
+        {
+            OrderId = orderItem.OrderId,
+            CustomerId = orderItem.CustomerId,
+            BakeId = orderItem.BakeId,
+            Quantity = orderItem.Quantity,
+            Price = orderItem.Price,
+        };
+        
+        await _context.OrderItems.AddAsync(newOrderItem);
+        
+        var bake  = await _context.Bakes.FindAsync(orderItem.BakeId);
+
+        //Update total quantity avaliable for the Bake based on the amount purchased in the order
+        if (bake != null)
+        { 
+            var newQuantity = bake.Stock - orderItem.Quantity;
+
+            //Prevent stock from going below negative
+            if (newQuantity > 0)
+            {
+                bake.Stock = newQuantity;
+            }
+            else
+            {
+                throw new InvalidOperationException("Insufficient stock.");
+            }
+        }
+
+        await _context.SaveChangesAsync();
+        
+        return newOrderItem;
+    }
 }
