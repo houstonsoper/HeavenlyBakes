@@ -1,5 +1,7 @@
 ﻿using heavenlybakes.api.Context;
+using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Extensions;
+using heavenlybakes.api.Models;
 using heavenlybakes.api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +36,7 @@ public class BakesController : ControllerBase
         }
         
         //Map data to the Bake DTO
-        var bakeDto = bakes.Select(b => b.ToBakeDto());
+        var bakeDto = bakes.Select(b => b.ToBakeRequestDto());
         
         return Ok(bakeDto);
     }
@@ -49,6 +51,6 @@ public class BakesController : ControllerBase
             return NotFound();
         }
         
-        return Ok(bake.ToBakeDto());
+        return Ok(bake.ToBakeRequestDto());
     }
 }

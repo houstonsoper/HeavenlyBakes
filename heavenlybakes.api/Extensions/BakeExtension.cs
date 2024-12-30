@@ -5,7 +5,7 @@ namespace heavenlybakes.api.Extensions;
 
 public static class BakeExtension
 {
-    public static BakeRequestDto ToBakeDto(this Bake bake)
+    public static BakeRequestDto ToBakeRequestDto(this Bake bake)
     {
         return new BakeRequestDto
         {
