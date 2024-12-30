@@ -25,14 +25,14 @@ public class BakesController : ControllerBase
         var bakes = await _bakesRepository.GetAllBakesAsync();
         
         //Filter bakes by optional query paramaters if included
-        if (limit.HasValue && limit != 0)
-        { 
-            bakes = bakes.Take(limit.Value);
-        }
-
         if (offset.HasValue)
         {
             bakes = bakes.Skip(offset.Value);
+        }
+        
+        if (limit.HasValue && limit != 0)
+        { 
+            bakes = bakes.Take(limit.Value);
         }
         
         //Map data to the Bake DTO
