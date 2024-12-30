@@ -4,7 +4,6 @@ namespace heavenlybakes.api.Models;
 
 public class OrderItem
 {
-    public int Id { get; set; }
     public required int OrderId { get; set; }
     public required string CustomerId { get; set; }
     public required int BakeId { get; set; }

@@ -8,8 +8,7 @@ public class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<OrderIt
 {
     public void Configure(EntityTypeBuilder<OrderItem> builder)
     {
-        //Primary Key
-        builder.HasKey(oi => oi.Id);
+        builder.HasKey(oi => new { oi.OrderId, oi.CustomerId, oi.BakeId });
 
         //Foreign Key - OrderId
         builder
