@@ -28,4 +28,10 @@ public class Bake
 
     [Range(0, 5, ErrorMessage = "Rating must be between 0 and 5.")]
     public decimal Rating { get; set; } = 0;
+
+    [Range(0, int.MaxValue, ErrorMessage = "Stock exceeded maximum value.")]
+    
+    public int Stock { get; set; } = 0;
+
+    public bool InProduction { get; set; } = false;
 }

@@ -15,7 +15,9 @@ public static class BakeExtension
             Type = bake.Type,
             ImageUrl = bake.ImageUrl,
             Description = bake.Description,
-            Rating = bake.Rating
+            Rating = bake.Rating,
+            Stock = bake.Stock,
+            InProduction = bake.InProduction,
         };
     }
 }

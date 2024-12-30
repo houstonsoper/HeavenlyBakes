@@ -14,4 +14,8 @@ public class BakeRequestDto
     public required string Description { get; set; } = string.Empty;
     
     public decimal Rating { get; set; } = 0;    
+    
+    public int Stock { get; set; } = 0;
+
+    public bool InProduction { get; set; } = false;
 }
