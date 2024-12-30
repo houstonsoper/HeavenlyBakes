@@ -5,6 +5,6 @@ namespace heavenlybakes.api.Repositories;
 
 public interface IOrderRepository
 {
-    public Task<Order> AddOrderAsync(OrderRequestDto order);
-    public Task<OrderItem> AddOrderItemAsync(OrderItemRequestDto orderItem);
+    public Task<Order> AddOrderAsync(OrderPostDto order);
+    public Task<OrderItem> AddOrderItemAsync(OrderItemPostDto orderItem);
 }

@@ -13,8 +13,9 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
     
-    public async Task<Order> AddOrderAsync(OrderRequestDto order)
+    public async Task<Order> AddOrderAsync(OrderPostDto order)
     {
+        //Create a new Order
         var newOrder = new Order
         {
             CustomerId = order.CustomerId,
@@ -23,7 +24,7 @@ public class OrderRepository : IOrderRepository
             ShippingCity = order.ShippingCity,
             ShippingPostalCode = order.ShippingPostalCode,
             ShippingCountry = order.ShippingCountry,
-            Total = order.Total,
+            Total = 0, //This will updated later when the order items are added
             PaymentMethod = order.PaymentMethod,
             OrderStatus = order.OrderStatus
         };
@@ -34,22 +35,30 @@ public class OrderRepository : IOrderRepository
         return newOrder;
     }
 
-    public async Task<OrderItem> AddOrderItemAsync(OrderItemRequestDto orderItem)
+    public async Task<OrderItem> AddOrderItemAsync(OrderItemPostDto orderItem)
     {
+        var bake  = await _context.Bakes.FindAsync(orderItem.BakeId);
+        var order = await _context.Orders.FindAsync(orderItem.OrderId);
+
+        //Throw error if bake is not found
+        if (bake == null)
+        {
+            throw new NullReferenceException("Bake not found");
+        }
+        
+        //Create a new OrderItem
         var newOrderItem = new OrderItem
         {
             OrderId = orderItem.OrderId,
             CustomerId = orderItem.CustomerId,
             BakeId = orderItem.BakeId,
             Quantity = orderItem.Quantity,
-            Price = orderItem.Price,
+            Price = bake.Price * orderItem.Quantity,
         };
         
         await _context.OrderItems.AddAsync(newOrderItem);
         
-        var bake  = await _context.Bakes.FindAsync(orderItem.BakeId);
-
-        //Update total quantity avaliable for the Bake based on the amount purchased in the order
+        //Update stock for the Bake based on the amount purchased in the order
         if (bake != null)
         { 
             var newQuantity = bake.Stock - orderItem.Quantity;
@@ -64,7 +73,13 @@ public class OrderRepository : IOrderRepository
                 throw new InvalidOperationException("Insufficient stock.");
             }
         }
-
+        
+        //Update total cost of the order based on the cost of the items
+        if (order != null)
+        {
+            order.Total = order.Total + newOrderItem.Price;
+        }
+        
         await _context.SaveChangesAsync();
         
         return newOrderItem;

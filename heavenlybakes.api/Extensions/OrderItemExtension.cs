@@ -5,7 +5,7 @@ namespace heavenlybakes.api.Extensions;
 
 public static class OrderItemExtension
 {
-    public static OrderItemRequestDto ToOrderItemDto(this OrderItem orderItem)
+    public static OrderItemRequestDto ToOrderItemRequestDto(this OrderItem orderItem)
     {
         return new OrderItemRequestDto
         {

@@ -17,7 +17,7 @@ public class OrderController : Controller
     }
     
     [HttpPost("/AddOrder")]
-    public async Task<IActionResult> AddOrder([FromBody] OrderRequestDto order)
+    public async Task<IActionResult> AddOrder([FromBody] OrderPostDto order)
     {
         if (!ModelState.IsValid)
         {
@@ -30,7 +30,7 @@ public class OrderController : Controller
     }
     
     [HttpPost("/AddOrderItem")]
-    public async Task<IActionResult> AddOrder([FromBody] OrderItemRequestDto orderItem)
+    public async Task<IActionResult> AddOrder([FromBody] OrderItemPostDto orderItem)
     {
         if (!ModelState.IsValid)
         {
@@ -39,6 +39,6 @@ public class OrderController : Controller
         
         var newOrderItem = await _orderRepository.AddOrderItemAsync(orderItem);
         
-        return Ok(newOrderItem.ToOrderItemDto());
+        return Ok(newOrderItem.ToOrderItemRequestDto());
     }
 }
