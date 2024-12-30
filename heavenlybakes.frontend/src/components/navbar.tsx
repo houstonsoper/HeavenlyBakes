@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useRouter} from "next/navigation";
 import SearchBar from "@/components/searchBar";
 import BasketCount from "@/components/basketCount";
+import {useUser} from "@auth0/nextjs-auth0/client";
 
 export default function Navbar() {
+    const { user } = useUser();
+    
+    console.log(user);
     
     return (
         <nav className="bg-gray-200 shadow shadow-gray-300 w-100 px-8 md:px-auto">
@@ -28,7 +32,12 @@ export default function Navbar() {
                         <Link className="md:px-4 md:py-2 hover:text-orange-500" href="/bakes">VIEW PRODUCTS</Link>
                     </ul>
                 </div>
-                <div className="order-2 md:order-3">
+                <div className="flex order-2 md:order-3">
+                    <div className="flex px-2">
+                        {!user ? (
+                            <Link href="/api/auth/login">Login</Link>
+                        ) : <Link href="/api/auth/logout">Logout</Link>}
+                    </div>
                     <BasketCount/>
                 </div>
             </div>
