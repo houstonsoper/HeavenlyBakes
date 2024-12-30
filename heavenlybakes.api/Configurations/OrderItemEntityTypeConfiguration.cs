@@ -23,8 +23,7 @@ public class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<OrderIt
             .WithMany()
             .HasForeignKey(oi => oi.BakeId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Property(oi => oi.Quantity).HasMaxLength(2).IsRequired();
-        builder.Property(oi => oi.Price).HasPrecision(5,2).IsRequired();
+        
+        builder.Property(oi => oi.Price).HasPrecision(5,2);
     }
 }

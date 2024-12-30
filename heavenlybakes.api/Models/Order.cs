@@ -35,7 +35,7 @@ public class Order
     [StringLength(50, ErrorMessage = "Payment method cannot exceed 50 characters.")]
     public required string PaymentMethod { get; set; }
 
-    [Range(0, 5, ErrorMessage = "OrderStatus must be a valid status.")]
+    [Range(0, 3, ErrorMessage = "OrderStatus must be a valid status.")]
     public int OrderStatus { get; set; } = 0;
 
     public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
