@@ -29,16 +29,23 @@ public class OrderController : Controller
         return Ok(newOrder.ToOrderRequestDto());
     }
     
-    [HttpPost("/AddOrderItem")]
-    public async Task<IActionResult> AddOrder([FromBody] OrderItemPostDto orderItem)
+    [HttpPost("/AddOrderItems")]
+    public async Task<IActionResult> AddOrderItems([FromBody] List<OrderItemPostDto> orderItems)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState); 
         }
         
-        var newOrderItem = await _orderRepository.AddOrderItemAsync(orderItem);
-        
-        return Ok(newOrderItem.ToOrderItemRequestDto());
+        var newOrderItems = new List<OrderItemRequestDto>();
+
+        //Iterate through orderItems and add them to the database
+        foreach (var orderItem in orderItems)
+        {
+            var newOrderItem = await _orderRepository.AddOrderItemAsync(orderItem);
+            newOrderItems.Add(newOrderItem.ToOrderItemRequestDto());
+        }
+
+        return Ok(newOrderItems);
     }
 }
