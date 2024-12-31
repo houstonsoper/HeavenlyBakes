@@ -5,8 +5,8 @@ const BASE_URL = 'https://localhost:44367';
 
 export async function fetchBakes({searchTerm = "", limit = 0,  offset = 0} : BakeParams = {}) : Promise<Bake[]> {
     try{
-        const URL = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}`;
-        const response = await fetch(URL);
+        const url : string = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}`;
+        const response : Response = await fetch(url);
         
         if(!response.ok){
             throw new Error("Unable to retrieve Bakes from API");
@@ -28,7 +28,7 @@ export async function fetchPopularBakes(limit: number = 0) : Promise<Bake[]> {
     const bakes:Bake[] = await fetchBakes();
     
     //Sort bakes by rating 
-    const sortedBakes = bakes.sort((a, b) => b.rating - a.rating);
+    const sortedBakes : Bake[] = bakes.sort((a, b) => b.rating - a.rating);
 
     //Limit the number of bakes to return by the "limit" parameter if included
     return limit > 0 ? sortedBakes.slice(0, limit) : sortedBakes;
@@ -37,7 +37,7 @@ export async function fetchPopularBakes(limit: number = 0) : Promise<Bake[]> {
 export async function fetchBakeById(bakeId : string) : Promise<Bake | null>{
     try{
         const url = `${BASE_URL}/bakes/${bakeId}`;
-        const response = await fetch(url);
+        const response : Response = await fetch(url);
         
         if(!response.ok){
             throw new Error("Unable to retrieve Bake from API");
