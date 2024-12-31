@@ -18,7 +18,7 @@ public class OrderRequestDto
     
     public decimal Total { get; set;} = 0;
 
-    public string PaymentMethod { get; set;} = string.Empty;
+    public int PaymentMethodId { get; set; }
     
     public int OrderStatus { get; set;} = 0;
 }

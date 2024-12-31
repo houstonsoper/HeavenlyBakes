@@ -11,8 +11,6 @@ import {useUser} from "@auth0/nextjs-auth0/client";
 export default function Navbar() {
     const { user } = useUser();
     
-    console.log(user);
-    
     return (
         <nav className="bg-gray-200 shadow shadow-gray-300 w-100 px-8 md:px-auto">
             <div

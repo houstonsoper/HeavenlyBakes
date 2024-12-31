@@ -15,7 +15,7 @@ public static class OrderExtension
             ShippingPostalCode = order.ShippingPostalCode,
             ShippingCountry = order.ShippingCountry,
             Total = order.Total,
-            PaymentMethod = order.PaymentMethod
+            PaymentMethodId = order.PaymentMethodId
         };
     }
 }

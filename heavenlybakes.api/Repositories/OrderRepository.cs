@@ -25,7 +25,7 @@ public class OrderRepository : IOrderRepository
             ShippingPostalCode = order.ShippingPostalCode,
             ShippingCountry = order.ShippingCountry,
             Total = 0, //This will updated later when the order items are added
-            PaymentMethod = order.PaymentMethod,
+            PaymentMethodId = order.PaymentMethodId,
             OrderStatus = order.OrderStatus
         };
         
@@ -64,7 +64,7 @@ public class OrderRepository : IOrderRepository
             var newQuantity = bake.Stock - orderItem.Quantity;
 
             //Prevent stock from going below negative
-            if (newQuantity > 0)
+            if (newQuantity >= 0)
             {
                 bake.Stock = newQuantity;
             }

@@ -12,5 +12,13 @@ public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(o => o.OrderId);
         
         builder.Property(o => o.Total).HasPrecision(5, 2);
+        
+        builder.HasOne(o => o.PaymentMethod)
+            .WithMany()
+            .HasForeignKey(o => o.PaymentMethodId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(o => o.PaymentMethodId).HasDefaultValue(1);
+
     }
 }

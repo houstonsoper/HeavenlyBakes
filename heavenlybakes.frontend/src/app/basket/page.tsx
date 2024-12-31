@@ -1,13 +1,10 @@
 ﻿
 "use client";
 
-import React, {useState, useEffect} from "react";
 import BasketItem from "@/interfaces/basketItem";
-import {getCookie} from "@/services/cookieService";
 import BasketItemComponent from "@/components/basketItem";
-import {getExistingBasket} from "@/services/basketService";
-import Basket from "@/interfaces/basket";
 import {useBasket} from "@/contexts/basketContext";
+import Link from "next/link";
 
 export default function Page(){
     const { basket, basketCount, total} = useBasket();
@@ -29,7 +26,9 @@ export default function Page(){
                             <p>Items: {basketCount}</p>
                             <p className="font-bold">Total: £{total.toFixed(2)}</p>
                         </div>
-                            <button className="mt-2 bg-orange-300 w-full rounded">Checkout</button>
+                            <Link href="/checkout">
+                                <button className="mt-2 bg-orange-300 w-full rounded">Checkout</button>
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -28,7 +28,7 @@ public class OrderPostDto
 
     [Required(ErrorMessage = "PaymentMethod is required.")]
     [StringLength(50, ErrorMessage = "Payment method cannot exceed 50 characters.")]
-    public required string PaymentMethod { get; set; }
+    public required int PaymentMethodId { get; set; }
 
     [Range(0, 3, ErrorMessage = "OrderStatus must be a valid status.")]
     public int OrderStatus { get; set; } = 0;
