@@ -1,6 +1,7 @@
 ﻿import BasketItem from "@/interfaces/basketItem";
 import {createCookie, getCookie} from "@/services/cookieService";
 import Basket from "@/interfaces/basket";
+import {deleteCookie} from "undici-types";
 
 export function calculateBasketTotal(basketItems : BasketItem[]) : number {
     let total : number = 0;
@@ -63,4 +64,16 @@ export function getBasketCount() : number {
     })
     
     return count;
+}
+
+export function clearBasket (){
+    const existingBasket : Basket = getExistingBasket();
+    
+    if(!existingBasket){
+        console.log("No basket found!");
+        return;
+    }
+    
+    //Delete cookie
+    document.cookie = "basket=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }

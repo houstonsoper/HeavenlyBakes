@@ -5,7 +5,6 @@ const BASE_URL: string = 'https://localhost:44367';
 import {OrderForm} from "@/interfaces/orderForm";
 
 export async function postOrder(orderForm : OrderForm) : Promise<Order | null> {
-    debugger;
     try {
         const url = `${BASE_URL}/AddOrder`;
         const response = await fetch(url, {

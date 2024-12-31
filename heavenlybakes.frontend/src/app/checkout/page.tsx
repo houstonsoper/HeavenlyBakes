@@ -9,6 +9,7 @@ import {PaymentMethod} from "@/interfaces/paymentMethod";
 import {OrderForm} from "@/interfaces/orderForm";
 import {postOrder} from "@/services/orderService";
 import {Order} from "@/interfaces/order";
+import { clearBasket } from "@/services/basketService";
 
 export default function Page () {
     const { basket } = useBasket();
@@ -54,8 +55,9 @@ export default function Page () {
             
             if(!order)
                 return <p>Unable to process order, please try again</p>
-            
-            router.push(`/checkout?orderId=${order.orderId}`);
+
+            clearBasket();
+            router.push(`/order?orderId=${order.orderId}`);
         }
         else{
             return <p>Must be logged in to place an order</p>
