@@ -19,14 +19,14 @@ public class OrderRepository : IOrderRepository
         var newOrder = new Order
         {
             CustomerId = order.CustomerId,
-            OrderDate = order.OrderDate,
+            OrderDate = DateTime.Now,
             ShippingAddress = order.ShippingAddress,
             ShippingCity = order.ShippingCity,
             ShippingPostalCode = order.ShippingPostalCode,
             ShippingCountry = order.ShippingCountry,
             Total = 0, //This will updated later when the order items are added
             PaymentMethodId = order.PaymentMethodId,
-            OrderStatus = order.OrderStatus
+            OrderStatus = 0,
         };
         
         await _context.Orders.AddAsync(newOrder);

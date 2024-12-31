@@ -3,42 +3,99 @@
 import {useBasket} from "@/contexts/basketContext";
 import {useUser} from "@auth0/nextjs-auth0/client";
 import {useRouter} from "next/navigation";
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
+import {fetchPaymentMethods} from "@/services/paymentService";
+import {PaymentMethod} from "@/interfaces/paymentMethod";
+import {OrderForm} from "@/interfaces/orderForm";
+import {postOrder} from "@/services/orderService";
+import {Order} from "@/interfaces/order";
 
 export default function Page () {
-    const options = { clientSecret: process.env.NEXT_PUBLIC_STRIPE_SECRET }
     const { basket } = useBasket();
     const { user } = useUser();
     const router = useRouter();
+    const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+    const formRef = useRef<HTMLFormElement>(null);
     
-    //If user is not logged in redirect them to the login page
-    if(!user) {
-        const returnTo : string = encodeURIComponent(window.location.href);
-        router.push("/api/auth/login")//?returnTo=" + returnTo);
-        return null;
+    //Fetch payment methods from API on mount
+    useEffect(() => {
+        const controller = new AbortController();
+        const signal : AbortSignal = controller.signal;
+        
+        const getPaymentMethods = async () => {
+            const data : PaymentMethod[] = await fetchPaymentMethods(signal);
+            setPaymentMethods(data);
+            }
+        getPaymentMethods();
+        
+        //Cleanup function to abort fetch when component unmounts
+        return () => controller.abort();
+    }, []);
+    
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if(!formRef.current) return;
+        
+        //Capture the form data
+        const formData = new FormData(formRef.current);
+        
+        //Covert data to an object (User must be logged in)
+        if(user && user.sub) {
+            const data: OrderForm = {
+                customerId: user.sub,
+                shippingAddress: formData.get("street") as string,
+                shippingCity: formData.get("city") as string,
+                shippingCountry: formData.get("country") as string,
+                shippingPostalCode: formData.get("postcode") as string,
+                paymentMethodId: parseInt(formData.get("paymentMethod") as string),
+            };
+            //Post form data to API
+            const order : Order | null = await postOrder(data);
+            
+            if(!order)
+                return <p>Unable to process order, please try again</p>
+            
+            router.push(`/checkout?orderId=${order.orderId}`);
+        }
+        else{
+            return <p>Must be logged in to place an order</p>
+        }
     }
     
     return (
         <div>
             <div className="container m-auto">
-                    <form className="border border-black rounded my-6 p-4 m-auto w-1/2 justify-center flex-col">
-                        
+                <form 
+                    ref={formRef}
+                    onSubmit={handleFormSubmit}
+                    className="border border-black rounded my-6 p-4 m-auto w-1/2 justify-center flex-col">
+
                     <label htmlFor="Street">Street</label>
-                    <input className="block mb-3" id="street" type="text" placeholder="Street" required/>
-            
+                    <input className="block mb-3" name="street" type="text" placeholder="Street" required/>
+
                     <label htmlFor="Address">City</label>
-                    <input className="block mb-3" id="city" type="text" placeholder="City" required/>
-            
+                    <input className="block mb-3"name="city" type="text" placeholder="City" required/>
+
                     <label htmlFor="Postcode">Postcode</label>
-                    <input className="block mb-3" id="postcode" type="text" placeholder="Postcode" required/>
-            
+                    <input className="block mb-3" name="postcode" type="text" placeholder="Postcode" required/>
+
                     <label htmlFor="Country">Country</label>
-                    <input className="block mb-3" id="country" type="text" placeholder="Country" required/>
-            
+                    <input className="block mb-3" name="country" type="text" placeholder="Country" required/>
+
                     <label htmlFor="Payment Method">Payment Method</label>
-                    <input className="block mb-3" id="payment-method" type="text" placeholder="Payment Method" required/>
+
+                    <select className="block mb-3" name="paymentMethod" required>
+                        {/*Map payment options*/}
+                        {paymentMethods.map((method: PaymentMethod) => (
+                            <option key={method.id} value={method.id}>{method.method}</option>
+                        ))}
+                    </select>
+                    <div className="text-center">Total: {basket.total.toFixed(2)}</div>
+
+                    <div className="flex m-auto w-1/2 justify-center">
+                        <button className="bg-blue-400 text-white p-2 w-1/2 ">Checkout</button>
+                    </div>
                 </form>
-                <div className="text-center">Total: {basket.total.toFixed(2)}</div>
             </div>
         </div>
     )

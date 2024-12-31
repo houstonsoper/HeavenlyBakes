@@ -33,7 +33,6 @@ public class Order
     public decimal Total { get; set; } = 0;
 
     [Required(ErrorMessage = "PaymentMethod is required.")]
-    [StringLength(50, ErrorMessage = "Payment method cannot exceed 50 characters.")]
     public required int PaymentMethodId { get; set; } = 1;
 
     [Range(0, 3, ErrorMessage = "OrderStatus must be a valid status.")]

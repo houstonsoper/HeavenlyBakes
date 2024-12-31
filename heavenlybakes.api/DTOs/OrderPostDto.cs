@@ -6,10 +6,7 @@ public class OrderPostDto
 {
     [Required(ErrorMessage = "CustomerId is required.")]
     public required string CustomerId { get; set; }
-
-    [Required(ErrorMessage = "OrderDate is required.")]
-    public DateTime OrderDate { get; set; } = DateTime.Now;
-
+    
     [Required(ErrorMessage = "ShippingAddress is required.")]
     [StringLength(200, ErrorMessage = "Shipping address cannot cannot exceed than 200 characters.")]
     public required string ShippingAddress { get; set; }
@@ -27,9 +24,5 @@ public class OrderPostDto
     public required string ShippingCountry { get; set; }
 
     [Required(ErrorMessage = "PaymentMethod is required.")]
-    [StringLength(50, ErrorMessage = "Payment method cannot exceed 50 characters.")]
     public required int PaymentMethodId { get; set; }
-
-    [Range(0, 3, ErrorMessage = "OrderStatus must be a valid status.")]
-    public int OrderStatus { get; set; } = 0;
 }

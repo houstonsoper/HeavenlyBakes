@@ -9,6 +9,7 @@ public static class OrderExtension
     {
         return new OrderRequestDto
         {
+            OrderId = order.OrderId,
             CustomerId = order.CustomerId,
             ShippingAddress = order.ShippingAddress,
             ShippingCity = order.ShippingCity,

@@ -4,6 +4,7 @@ namespace heavenlybakes.api.DTOs;
 
 public class OrderRequestDto
 {
+    public int OrderId { get; set; }
     public string CustomerId { get; set; } = string.Empty;
     
     public DateTime OrderDate { get; set;} = DateTime.Now;
@@ -16,10 +17,10 @@ public class OrderRequestDto
     
     public string ShippingCountry { get; set; } = string.Empty;
     
-    public decimal Total { get; set;} = 0;
+    public decimal Total { get; set;}
 
     public int PaymentMethodId { get; set; }
     
-    public int OrderStatus { get; set;} = 0;
+    public int OrderStatus { get; set;} 
 }
 
