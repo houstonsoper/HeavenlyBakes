@@ -1,13 +1,14 @@
 ﻿import {Order} from "@/interfaces/order";
+import {OrderForm} from "@/interfaces/orderForm";
+import BasketItem from "@/interfaces/basketItem";
+import {OrderItem} from "@/interfaces/orderItem";
 
 const BASE_URL: string = 'https://localhost:44367';
-
-import {OrderForm} from "@/interfaces/orderForm";
 
 export async function postOrder(orderForm : OrderForm) : Promise<Order | null> {
     try {
         const url = `${BASE_URL}/AddOrder`;
-        const response = await fetch(url, {
+        const response : Response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,5 +25,25 @@ export async function postOrder(orderForm : OrderForm) : Promise<Order | null> {
     catch (error) {
         console.error(error);
         return null;
+    }
+}
+
+export async function postOrderItems(items : OrderItem[])  {
+    try {
+        const url = `${BASE_URL}/AddOrderItems`;
+        const response: Response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(items)
+        });
+        
+        if (!response.ok) {
+            throw new Error("Unable to Post items in order to API");
+        }
+    } 
+    catch(error){
+        console.error(error);
     }
 }

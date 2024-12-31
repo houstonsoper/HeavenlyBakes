@@ -7,9 +7,11 @@ import React, {useEffect, useRef, useState} from "react";
 import {fetchPaymentMethods} from "@/services/paymentService";
 import {PaymentMethod} from "@/interfaces/paymentMethod";
 import {OrderForm} from "@/interfaces/orderForm";
-import {postOrder} from "@/services/orderService";
+import {postOrder, postOrderItems} from "@/services/orderService";
 import {Order} from "@/interfaces/order";
-import { clearBasket } from "@/services/basketService";
+import {clearBasket, getExistingBasket} from "@/services/basketService";
+import BasketItem from "@/interfaces/basketItem";
+import {OrderItem} from "@/interfaces/orderItem";
 
 export default function Page () {
     const { basket } = useBasket();
@@ -50,12 +52,26 @@ export default function Page () {
                 shippingPostalCode: formData.get("postcode") as string,
                 paymentMethodId: parseInt(formData.get("paymentMethod") as string),
             };
-            //Post form data to API
+            //Post order data to API
             const order : Order | null = await postOrder(data);
+            if(!order) return <p>Unable to process order, please try again</p>
             
-            if(!order)
-                return <p>Unable to process order, please try again</p>
-
+            //Post order items to API
+            const basketItems : BasketItem[] = basket.items;
+            
+            let orderItems : OrderItem[] = [];
+            basketItems.forEach(item => {
+                const orderItem : OrderItem = {
+                    orderId: order.orderId,
+                    customerId: order.customer_id || data.customerId,
+                    bakeId: item.id,
+                    quantity: item.quantity,
+                }
+                orderItems.push(orderItem);
+            })
+            await postOrderItems(orderItems);
+            
+            //Clear basket and redirect the user to the order completion page
             clearBasket();
             router.push(`/order?orderId=${order.orderId}`);
         }
