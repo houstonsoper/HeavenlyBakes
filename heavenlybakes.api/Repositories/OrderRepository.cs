@@ -28,10 +28,24 @@ public class OrderRepository : IOrderRepository
             PaymentMethodId = order.PaymentMethodId,
             OrderStatus = 0,
         };
-        
         await _context.Orders.AddAsync(newOrder);
         await _context.SaveChangesAsync();
         
+        //Add the items for the order
+        foreach (var orderItem in order.OrderItems)
+        {
+            var bake  = await _context.Bakes.FindAsync(orderItem.BakeId);
+            if (bake == null) throw new Exception("Bake not found");
+            
+                var newOrderItem = new OrderItemPostDto
+                {
+                    OrderId = newOrder.OrderId,
+                    CustomerId = newOrder.CustomerId,
+                    BakeId = orderItem.BakeId,
+                    Quantity = orderItem.Quantity,
+                };
+                await AddOrderItemAsync(newOrderItem);
+        }
         return newOrder;
     }
 

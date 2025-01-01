@@ -16,4 +16,13 @@ public static class OrderItemExtension
             Price = orderItem.Price,
         };
     }
+
+    public static OrderItemForOrderPostDto ToOrderItemForOrderPostDto(this OrderItem orderItem)
+    {
+        return new OrderItemForOrderPostDto
+        {
+            BakeId = orderItem.BakeId,
+            Quantity = orderItem.Quantity,
+        };
+    }
 }

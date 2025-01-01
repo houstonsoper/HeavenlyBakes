@@ -25,4 +25,6 @@ public class OrderPostDto
 
     [Required(ErrorMessage = "PaymentMethod is required.")]
     public required int PaymentMethodId { get; set; }
+
+    public required List<OrderItemForOrderPostDto> OrderItems { get; set; }
 }
