@@ -5,4 +5,5 @@
     shippingPostalCode: string,
     shippingCountry: string,
     paymentMethodId: number,
+    orderItems : {bakeId : number, quantity: number}[],
 }

@@ -12,6 +12,7 @@ import {Order} from "@/interfaces/order";
 import {clearBasket, getExistingBasket} from "@/services/basketService";
 import BasketItem from "@/interfaces/basketItem";
 import {OrderItem} from "@/interfaces/orderItem";
+import OrderBasketItem from "@/interfaces/orderBasketItem";
 
 export default function Page () {
     const { basket } = useBasket();
@@ -42,8 +43,13 @@ export default function Page () {
         //Capture the form data
         const formData = new FormData(formRef.current);
         
-        //Covert data to an object (User must be logged in)
-        if(user && user.sub) {
+        //Get the items in the basket in the required format for the post
+        const basketItems : OrderBasketItem[] = basket.items.map((item : BasketItem) => {
+            return {bakeId: item.id, quantity:item.quantity}
+        });
+        
+        //Covert data to an object (User must be logged in and items must be in basket)
+        if(user && user.sub && basketItems) {
             const data: OrderForm = {
                 customerId: user.sub,
                 shippingAddress: formData.get("street") as string,
@@ -51,25 +57,11 @@ export default function Page () {
                 shippingCountry: formData.get("country") as string,
                 shippingPostalCode: formData.get("postcode") as string,
                 paymentMethodId: parseInt(formData.get("paymentMethod") as string),
+                orderItems: basketItems,
             };
             //Post order data to API
             const order : Order | null = await postOrder(data);
             if(!order) return <p>Unable to process order, please try again</p>
-            
-            //Post order items to API
-            const basketItems : BasketItem[] = basket.items;
-            
-            let orderItems : OrderItem[] = [];
-            basketItems.forEach(item => {
-                const orderItem : OrderItem = {
-                    orderId: order.orderId,
-                    customerId: order.customer_id || data.customerId,
-                    bakeId: item.id,
-                    quantity: item.quantity,
-                }
-                orderItems.push(orderItem);
-            })
-            await postOrderItems(orderItems);
             
             //Clear basket and redirect the user to the order completion page
             clearBasket();
