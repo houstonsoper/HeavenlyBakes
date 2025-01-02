@@ -7,6 +7,14 @@ import {useRouter} from "next/navigation";
 import SearchBar from "@/components/searchBar";
 import BasketCount from "@/components/basketCount";
 import {useUser} from "@auth0/nextjs-auth0/client";
+import Dropdown from "@/components/dropdown";
+import {
+    DropdownMenu,
+    DropdownMenuContent, DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
     const {user} = useUser();
@@ -26,12 +34,30 @@ export default function Navbar() {
                         <li><Link href="#contact" className="text-pink-600 hover:text-pink-800">Contact</Link></li>
                         <div className="flex space-x-2 ps-6">
                             {user ? (
-                                <li><Link href="/api/auth/logout" className="text-pink-600 hover:text-pink-800">
-                                    <span className="material-symbols-outlined">
-                                        account_circle
-                                </span>
-                                </Link></li>
-                            ) : <li><Link href="/api/auth/login"
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <li className="text-pink-600 hover:text-pink-800">
+                                            <span className="material-symbols-outlined">
+                                                account_circle
+                                            </span>
+                                        </li>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="bg-pink-50">
+                                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                        <DropdownMenuSeparator/>
+                                        <DropdownMenuItem>
+                                            My Orders
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>View Profile</DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem>
+                                            <Link href="/api/auth/logout">
+                                                Logout
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            ) : <li><Link href="/api/auth/login" 
                                           className="text-pink-600 hover:text-pink-800">Login</Link></li>
                             }
                             <BasketCount/>
