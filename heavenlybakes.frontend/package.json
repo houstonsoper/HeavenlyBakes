@@ -11,8 +11,6 @@
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
     "@radix-ui/react-slot": "^1.1.1",
-    "@stripe/react-stripe-js": "^3.1.1",
-    "@stripe/stripe-js": "^5.4.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.5.1",
@@ -22,7 +20,6 @@
     "react-dom": "^19.0.0",
     "react-square-web-payments-sdk": "^3.2.1",
     "square": "^39.1.1",
-    "stripe": "^17.5.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },

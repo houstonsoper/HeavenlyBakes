@@ -29,8 +29,8 @@ export default function Page() {
     }, [searchParams])
     
     return (
-        <div className="bg-pink-50">
-            <section className="py-12">
+        <div>
+            <section className="py-12 bg-pink-50 py-10">
                     <h2 className="text-3xl font-bold text-center text-pink-600 mb-8">Our Selections</h2>
                     <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
                         Indulge in our wide array of delectable treats. From classic cakes to mouthwatering pastries,
@@ -38,7 +38,7 @@ export default function Page() {
                     </p>
             </section>
             
-            <section>
+            <section className="py-10">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-y-12">
                     {bakes.map((bake: Bake) => (<BakeCard key={bake.id} bake={bake}/>
