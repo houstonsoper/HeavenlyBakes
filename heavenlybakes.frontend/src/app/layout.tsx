@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "../components/navbar";
+import Navbar from "@/components/navbar";
 import {BasketProvider} from "@/contexts/basketContext";
 import {UserProvider} from "@auth0/nextjs-auth0/client";
+import Footer from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,12 +30,13 @@ export default function RootLayout({
     <html lang="en">
     <UserProvider>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
       <BasketProvider>
-      <Navbar/>
+        <Navbar/>
         {children}
       </BasketProvider>
+        <Footer/>
       </body>
     </UserProvider>
     </html>

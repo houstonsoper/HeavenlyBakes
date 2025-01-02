@@ -3,6 +3,7 @@ import Bake from "@/interfaces/bake";
 import {fetchBakes, fetchPopularBakes} from "@/services/bakeService";
 import router from "next/router";
 import {useRouter} from "next/navigation";
+import {Button} from "@/components/ui/button";
 
 export default function SearchBar() {
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -26,16 +27,16 @@ export default function SearchBar() {
     }
     
     return (
-        <div className="flex justify-center">
+        <div className="flex overflow-hidden rounded">
             <input placeholder={"Search our selection"}
                    value={searchTerm}
                    onKeyDown={handleKeyDown}
                    onChange={handleSearchTerm}/>
-            <button onClick={handleSearch} className="flex">
-                <span className="material-symbols-outlined ms-2 bg-orange-300 rounded px-1">
+            <Button onClick={handleSearch} className="bg-pink-500 hover:bg-pink-600" size="sm">
+                <span className="material-symbols-outlined">
                     search
                 </span>
-            </button>
+            </Button>
         </div>
     )
 }

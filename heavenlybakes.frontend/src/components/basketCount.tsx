@@ -7,7 +7,7 @@ export default function BasketCount() {
     const {basketCount} = useBasket();
     
     return(
-    <Link className="relative flex" href="/basket">
+    <Link className="relative flex text-pink-600" href="/basket">
         <span className="material-symbols-outlined">
             shopping_bag
         </span>

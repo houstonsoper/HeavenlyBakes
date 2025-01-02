@@ -7,6 +7,8 @@ import Bake from "@/interfaces/bake";
 import BakeCard from "../../components/bakeCard";
 import {useSearchParams} from "next/navigation";
 import {Search} from "lucide-react";
+import BasketItem from "@/interfaces/basketItem";
+import {addToBasket} from "@/services/basketService";
 
 export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
@@ -25,16 +27,25 @@ export default function Page() {
         }
         getBakes();
     }, [searchParams])
-
+    
     return (
-        <div className="container m-auto py-12">
-            <div>
-                <h1 className="text-center pb-4">Popular</h1>
+        <div className="bg-pink-50">
+            <section className="py-12">
+                    <h2 className="text-3xl font-bold text-center text-pink-600 mb-8">Our Selections</h2>
+                    <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+                        Indulge in our wide array of delectable treats. From classic cakes to mouthwatering pastries,
+                        we have something to satisfy every sweet tooth.
+                    </p>
+            </section>
+            
+            <section>
+            <div className="container mx-auto px-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-y-12">
                     {bakes.map((bake: Bake) => (<BakeCard key={bake.id} bake={bake}/>
                     ))}
                 </div>
             </div>
+            </section>
         </div>
     );
 }
