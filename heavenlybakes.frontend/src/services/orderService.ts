@@ -2,6 +2,7 @@
 import {OrderForm} from "@/interfaces/orderForm";
 import BasketItem from "@/interfaces/basketItem";
 import {OrderItem} from "@/interfaces/orderItem";
+import OrderWithOrderItems from "@/interfaces/orderWithOrderItems";
 
 const BASE_URL: string = 'https://localhost:44367';
 
@@ -46,5 +47,22 @@ export async function postOrderItems(items : OrderItem[])  {
     } 
     catch(error){
         console.error(error);
+    }
+}
+
+export async function getOrdersByCustomerId(customerId: string | undefined) : Promise<OrderWithOrderItems[] | []> {
+    try {
+        const url = `${BASE_URL}/Order/${customerId}`;
+        const response : Response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error("Unable to get orders from API");
+        }
+        
+        return await response.json();
+    }
+    catch (error) {
+        console.error(error);
+        return [];
     }
 }

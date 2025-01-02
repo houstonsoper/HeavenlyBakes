@@ -55,6 +55,7 @@ public class OrderController : Controller
         var orders = await _orderRepository.GetCustomersOrders(customerId);
         var customerOrders = new List<CustomerOrdersRequestDto>();
 
+        //Iterate through orders and convert them to a 'CustomerOrdersRequestDto'
         foreach (var order in orders)
         {
             order.ToCustomerOrdersRequestDto();
