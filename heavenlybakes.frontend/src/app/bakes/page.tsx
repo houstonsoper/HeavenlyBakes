@@ -9,6 +9,7 @@ import {useSearchParams} from "next/navigation";
 import {Search} from "lucide-react";
 import BasketItem from "@/interfaces/basketItem";
 import {addToBasket} from "@/services/basketService";
+import PageHeader from "@/components/pageHeader";
 
 export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
@@ -30,13 +31,8 @@ export default function Page() {
     
     return (
         <div>
-            <section className="py-12 bg-pink-50 py-10">
-                    <h2 className="text-3xl font-bold text-center text-pink-600 mb-8">Our Selections</h2>
-                    <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-                        Indulge in our wide array of delectable treats. From classic cakes to mouthwatering pastries,
-                        we have something to satisfy every sweet tooth.
-                    </p>
-            </section>
+            <PageHeader title="Our Selections" description="Indulge in our wide array of delectable treats. From classic cakes to mouthwatering pastries,
+                        we have something to satisfy every sweet tooth." />
             
             <section className="py-10">
             <div className="container mx-auto px-4">

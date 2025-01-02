@@ -4,10 +4,10 @@
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap justify-between">
                     <div className="w-full md:w-1/3 mb-6 md:mb-0">
-                        <h3 className="text-xl font-semibold mb-2">Sweet Delights Bakery</h3>
-                        <p>123 Cake Street, Dessert Town, SW33T 1NG</p>
-                        <p>Phone: (123) 456-7890</p>
-                        <p>Email: info@sweetdelights.com</p>
+                        <h3 className="text-xl font-semibold mb-2">Heavenly Bakes</h3>
+                        <p>123 Bake Street, Bake Town, ST6 1NG</p>
+                        <p>Phone: 07391775642</p>
+                        <p>Email: info@heavenlybakes.com</p>
                     </div>
                     <div className="w-full md:w-1/3 mb-6 md:mb-0">
                         <h3 className="text-xl font-semibold mb-2">Opening Hours</h3>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div className="mt-8 text-center text-sm text-gray-600">
-                    © {new Date().getFullYear()} Sweet Delights Bakery. All rights reserved.
+                    © {new Date().getFullYear()} Heavenly Bakes. All rights reserved.
                 </div>
             </div>
         </footer>

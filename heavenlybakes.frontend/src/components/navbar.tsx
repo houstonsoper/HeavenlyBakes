@@ -7,7 +7,6 @@ import {useRouter} from "next/navigation";
 import SearchBar from "@/components/searchBar";
 import BasketCount from "@/components/basketCount";
 import {useUser} from "@auth0/nextjs-auth0/client";
-import Dropdown from "@/components/dropdown";
 import {
     DropdownMenu,
     DropdownMenuContent, DropdownMenuItem,
@@ -46,7 +45,9 @@ export default function Navbar() {
                                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                         <DropdownMenuSeparator/>
                                         <DropdownMenuItem>
-                                            My Orders
+                                            <Link href="/orders">
+                                                My Orders
+                                            </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>View Profile</DropdownMenuItem>
                                         <DropdownMenuSeparator />
