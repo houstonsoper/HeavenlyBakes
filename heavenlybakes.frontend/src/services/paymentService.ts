@@ -17,7 +17,7 @@ export async function fetchPaymentMethods(signal?: AbortSignal) : Promise<Paymen
         return data.filter(paymentMethod  => paymentMethod.id != 1);
     }
     catch(error){
-        if(error instanceof DOMException && error.name === "AbortError") {
+        if (error instanceof DOMException && error.name === "AbortError") {
             console.error("Fetch request aborted");
         } else if (error instanceof Error) {
             console.error(error.message);

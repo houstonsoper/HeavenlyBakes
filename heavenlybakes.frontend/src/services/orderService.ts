@@ -50,10 +50,10 @@ export async function postOrderItems(items : OrderItem[])  {
     }
 }
 
-export async function getOrdersByCustomerId(customerId: string | undefined) : Promise<OrderWithOrderItems[] | []> {
+export async function getOrdersByCustomerId(customerId: string | undefined, signal? : AbortSignal) : Promise<OrderWithOrderItems[] | []> {
     try {
         const url = `${BASE_URL}/Order/${customerId}`;
-        const response : Response = await fetch(url);
+        const response : Response = await fetch(url, {signal});
         
         if (!response.ok) {
             throw new Error("Unable to get orders from API");
@@ -62,6 +62,7 @@ export async function getOrdersByCustomerId(customerId: string | undefined) : Pr
         return await response.json();
     }
     catch (error) {
+        if (error instanceof AbortSignal ) {}
         console.error(error);
         return [];
     }
