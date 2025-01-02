@@ -10,7 +10,6 @@ public static class OrderItemExtension
         return new OrderItemRequestDto
         {
             OrderId = orderItem.OrderId,
-            CustomerId = orderItem.CustomerId,
             BakeId = orderItem.BakeId,
             Quantity = orderItem.Quantity,
             Price = orderItem.Price,
@@ -23,6 +22,16 @@ public static class OrderItemExtension
         {
             BakeId = orderItem.BakeId,
             Quantity = orderItem.Quantity,
+        };
+    }
+
+    public static AddOrderItemCustomerOrderRequestDto ToAddOrderItemCustomerOrderRequestDto(this OrderItem orderItem)
+    {
+        return new AddOrderItemCustomerOrderRequestDto
+        {
+            BakeId = orderItem.BakeId,
+            Quantity = orderItem.Quantity,
+            Price = orderItem.Price,
         };
     }
 }

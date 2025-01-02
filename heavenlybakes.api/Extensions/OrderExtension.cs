@@ -19,4 +19,27 @@ public static class OrderExtension
             PaymentMethodId = order.PaymentMethodId
         };
     }
+
+    public static CustomerOrdersRequestDto ToCustomerOrdersRequestDto(this Order order)
+    {
+        return new CustomerOrdersRequestDto
+        {
+            OrderId = order.OrderId,
+            CustomerId = order.CustomerId,
+            OrderDate = order.OrderDate,
+            ShippingAddress = order.ShippingAddress,
+            ShippingCity = order.ShippingCity,
+            ShippingPostalCode = order.ShippingPostalCode,
+            ShippingCountry = order.ShippingCountry,
+            Total = order.Total,
+            OrderStatus = order.OrderStatus,
+            PaymentMethod = order.PaymentMethodId,
+            OrderItems = order.OrderItems.Select(item => new AddOrderItemCustomerOrderRequestDto
+            {
+                BakeId = item.BakeId,
+                Quantity = item.Quantity,
+                Price = item.Price,
+            }).ToList()
+        };
+    }
 }

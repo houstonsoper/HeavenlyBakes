@@ -16,7 +16,7 @@ public class OrderController : Controller
         _orderRepository = orderRepository;
     }
     
-    [HttpPost("/AddOrder")]
+    [HttpPost]
     public async Task<IActionResult> AddOrder([FromBody] OrderPostDto order)
     {
         if (!ModelState.IsValid)
@@ -29,8 +29,8 @@ public class OrderController : Controller
         return Ok(newOrder.ToOrderRequestDto());
     }
     
-    [HttpPost("/AddOrderItems")]
-    public async Task<IActionResult> AddOrderItems([FromBody] List<OrderItemPostDto> orderItems)
+    [HttpPost("{orderId}/item")]
+    public async Task<IActionResult> AddOrderItems([FromRoute]int orderId, [FromBody] List<OrderItemPostDto> orderItems)
     {
         if (!ModelState.IsValid)
         {
@@ -42,10 +42,25 @@ public class OrderController : Controller
         //Iterate through orderItems and add them to the database
         foreach (var orderItem in orderItems)
         {
-            var newOrderItem = await _orderRepository.AddOrderItemAsync(orderItem);
+            var newOrderItem = await _orderRepository.AddOrderItemAsync(orderId, orderItem);
             newOrderItems.Add(newOrderItem.ToOrderItemRequestDto());
         }
 
         return Ok(newOrderItems);
+    }
+
+    [HttpGet("{customerId}")]
+    public async Task<IActionResult> GetCustomersOrders([FromRoute] string customerId)
+    {
+        var orders = await _orderRepository.GetCustomersOrders(customerId);
+        var customerOrders = new List<CustomerOrdersRequestDto>();
+
+        foreach (var order in orders)
+        {
+            order.ToCustomerOrdersRequestDto();
+            customerOrders.Add(order.ToCustomerOrdersRequestDto());
+        }
+        
+        return Ok(customerOrders);
     }
 }

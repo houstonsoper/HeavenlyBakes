@@ -7,7 +7,7 @@ const BASE_URL: string = 'https://localhost:44367';
 
 export async function postOrder(orderForm : OrderForm) : Promise<Order | null> {
     try {
-        const url = `${BASE_URL}/AddOrder`;
+        const url = `${BASE_URL}/Order`;
         const response : Response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -30,7 +30,8 @@ export async function postOrder(orderForm : OrderForm) : Promise<Order | null> {
 
 export async function postOrderItems(items : OrderItem[])  {
     try {
-        const url = `${BASE_URL}/AddOrderItems`;
+        const orderId : number = items[0].orderId;
+        const url = `${BASE_URL}/Order/${orderId}`;
         const response: Response = await fetch(url, {
             method: 'POST',
             headers: {

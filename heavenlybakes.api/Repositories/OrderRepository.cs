@@ -1,6 +1,7 @@
 ﻿using heavenlybakes.api.Context;
 using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace heavenlybakes.api.Repositories;
 
@@ -39,20 +40,18 @@ public class OrderRepository : IOrderRepository
             
                 var newOrderItem = new OrderItemPostDto
                 {
-                    OrderId = newOrder.OrderId,
-                    CustomerId = newOrder.CustomerId,
                     BakeId = orderItem.BakeId,
                     Quantity = orderItem.Quantity,
                 };
-                await AddOrderItemAsync(newOrderItem);
+                await AddOrderItemAsync(newOrder.OrderId, newOrderItem);
         }
         return newOrder;
     }
 
-    public async Task<OrderItem> AddOrderItemAsync(OrderItemPostDto orderItem)
+    public async Task<OrderItem> AddOrderItemAsync(int orderId, OrderItemPostDto orderItem)
     {
         var bake  = await _context.Bakes.FindAsync(orderItem.BakeId);
-        var order = await _context.Orders.FindAsync(orderItem.OrderId);
+        var order = await _context.Orders.FindAsync(orderId);
 
         //Throw error if bake is not found
         if (bake == null)
@@ -63,8 +62,7 @@ public class OrderRepository : IOrderRepository
         //Create a new OrderItem
         var newOrderItem = new OrderItem
         {
-            OrderId = orderItem.OrderId,
-            CustomerId = orderItem.CustomerId,
+            OrderId = orderId,
             BakeId = orderItem.BakeId,
             Quantity = orderItem.Quantity,
             Price = bake.Price * orderItem.Quantity,
@@ -97,5 +95,15 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
         
         return newOrderItem;
+    }
+
+    public async Task<IEnumerable<Order>> GetCustomersOrders(string customerId)
+    {
+        var customersOrders = await _context.Orders
+            .Include(o => o.OrderItems)
+            .Where(o => o.CustomerId == customerId)
+            .ToListAsync();
+        
+        return customersOrders;
     }
 }
