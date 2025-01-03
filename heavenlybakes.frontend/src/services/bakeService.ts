@@ -3,10 +3,10 @@ import BakeParams from "../interfaces/bakeParams";
 
 const BASE_URL = 'https://localhost:44367';
 
-export async function fetchBakes({searchTerm = "", limit = 0,  offset = 0} : BakeParams = {}) : Promise<Bake[]> {
+export async function fetchBakes({searchTerm = "", limit = 0,  offset = 0} : BakeParams, signal? : AbortSignal) : Promise<Bake[]> {
     try{
         const url : string = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}`;
-        const response : Response = await fetch(url);
+        const response : Response = await fetch(url, {signal});
         
         if(!response.ok){
             throw new Error("Unable to retrieve Bakes from API");
@@ -18,14 +18,19 @@ export async function fetchBakes({searchTerm = "", limit = 0,  offset = 0} : Bak
             .filter(bake => bake.inProduction && bake.stock > 0) //Filter by inProduction and in stock
             .filter(bake => bake.name.toLowerCase().includes((searchTerm || "").toLowerCase())); //Filter by search term
     }
-    catch(error : any){
-        console.error(error.message);
+    catch(error ){
+        if (error instanceof DOMException && error.message === "AbortError") {
+            console.log("Fetch request aborted");
+        }
+        else if (error instanceof Error && error.message !== "AbortError"){
+            console.error(error.message);
+        }
         return [];
     }
 }
 
-export async function fetchPopularBakes(limit: number = 0) : Promise<Bake[]> {
-    const bakes:Bake[] = await fetchBakes();
+export async function fetchPopularBakes(limit: number = 0, signal? : AbortSignal) : Promise<Bake[]> {
+    const bakes:Bake[] = await fetchBakes({}, signal);
     
     //Sort bakes by rating 
     const sortedBakes : Bake[] = bakes.sort((a, b) => b.rating - a.rating);
@@ -44,7 +49,7 @@ export async function fetchBakeById(bakeId : number, signal : AbortSignal) : Pro
         }
         return await response.json();
     } catch(error){
-        if(error instanceof DOMException && error.name === "AbortError"){
+        if(error instanceof DOMException){
             console.log("Fetch request aborted");
         } else if (error instanceof Error) {
             console.error(error.message);

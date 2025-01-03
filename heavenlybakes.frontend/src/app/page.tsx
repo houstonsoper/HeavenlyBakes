@@ -14,11 +14,17 @@ export default function Home() {
 
     //Fetch Popular Bakes from API on page load
     useEffect(() => {
+        const controller = new AbortController();
+        const signal : AbortSignal = controller.signal;
+        
         const getBakes = async () => {
-            const fetchedBakes: Bake[] = await fetchPopularBakes(20);
+            const fetchedBakes: Bake[] = await fetchPopularBakes(20, signal);
             setBakes(fetchedBakes);
         }
         getBakes();
+        
+        //Cleanup function to abort fetch when component unmounts
+        return () => controller.abort();
     }, [])
     
     

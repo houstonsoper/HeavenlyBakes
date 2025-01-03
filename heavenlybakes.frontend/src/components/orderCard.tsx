@@ -1,15 +1,29 @@
-﻿import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+﻿import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import OrderWithOrderItems from "@/interfaces/orderWithOrderItems";
 import Bake from "@/interfaces/bake";
-import { fetchBakeById } from "@/services/bakeService";
+import {fetchBakeById} from "@/services/bakeService";
+import Link from "next/link";
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {Button} from "@/components/ui/button";
 
 interface OrderCardProps {
     order: OrderWithOrderItems;
 }
 
-export default function OrderCard({ order }: OrderCardProps) {
+export default function OrderCard({order}: OrderCardProps) {
     const [bakes, setBakes] = useState<Bake[]>([]);
 
     useEffect(() => {
@@ -19,7 +33,7 @@ export default function OrderCard({ order }: OrderCardProps) {
         const getBakes = async () => {
             let bakesArray: Bake[] = [];
 
-            if(order.orderItems) {
+            if (order.orderItems) {
                 for (const item of order.orderItems) {
                     const bake: Bake | null = await fetchBakeById(item.bakeId, signal);
                     if (bake !== null) {
@@ -41,7 +55,48 @@ export default function OrderCard({ order }: OrderCardProps) {
                     <CardTitle className="text-pink-700">
                         {order.orderStatus}
                     </CardTitle>
-                    <CardTitle className="ms-auto text-pink-700">Order #{order.orderId}</CardTitle>
+                    {/*OrderID, with Modal that displays order details*/}
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <CardTitle className="ms-auto text-pink-700 hover:text-pink-800 cursor-pointer ">Order #{order.orderId}</CardTitle>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle className="flex">
+                                    <div className="text-pink-700">Order details</div>
+                                    <AlertDialogCancel className="ms-auto">
+                                        <span className="material-symbols-outlined">
+                                            close
+                                        </span>
+                                    </AlertDialogCancel>
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    <ul>
+                                        <li>
+                                            <strong>Address: </strong>
+                                            {order.shippingAddress}
+                                        </li>
+                                        <li>
+                                            <strong>City: </strong>
+                                            {order.shippingCity}
+                                        </li>
+                                        <li>
+                                            <strong>Postcode: </strong>
+                                            {order.shippingPostCode}
+                                        </li>
+                                        <li>
+                                            <strong>Country: </strong>
+                                            {order.shippingCountry}
+                                        </li>
+                                        <li>
+                                            <strong>Payment Method: </strong>
+                                            {order.paymentMethod}
+                                        </li>
+                                    </ul>
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             </CardHeader>
             <CardContent className="p-4">
@@ -50,13 +105,15 @@ export default function OrderCard({ order }: OrderCardProps) {
                         {bakes.map((bake: Bake) => (
                             <div key={bake.id} className="flex items-center space-x-4 py-2">
                                 <div className="flex-shrink-0">
-                                    <Image
-                                        src={bake.imageUrl}
-                                        alt={bake.name}
-                                        width={80}
-                                        height={80}
-                                        className="rounded-md object-cover"
-                                    />
+                                    <Link href={`/bakes/${bake.id}`}>
+                                        <Image
+                                            src={bake.imageUrl}
+                                            alt={bake.name}
+                                            width={80}
+                                            height={80}
+                                            className="rounded-md object-cover"
+                                        />
+                                    </Link>
                                 </div>
                                 <div className="flex-grow">
                                     <h3 className="font-medium text-pink-600">{bake.name}</h3>

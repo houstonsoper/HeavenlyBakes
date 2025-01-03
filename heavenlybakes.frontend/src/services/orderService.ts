@@ -72,7 +72,12 @@ export async function getOrdersByCustomerId(customerId: string | undefined, sign
         });
     }
     catch (error) {
-        console.error(error);
+        if(error instanceof DOMException && error.message === "AbortError"){
+            console.log("Fetch request aborted");
+        }
+        else if (error instanceof Error){
+            console.error(error);
+        }
         return [];
     }
 }

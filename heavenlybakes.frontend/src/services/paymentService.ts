@@ -18,7 +18,7 @@ export async function fetchPaymentMethods(signal?: AbortSignal) : Promise<Paymen
     }
     catch(error){
         if (error instanceof DOMException && error.name === "AbortError") {
-            console.error("Fetch request aborted");
+            console.log("Fetch request aborted");
         } else if (error instanceof Error) {
             console.error(error.message);
         }
