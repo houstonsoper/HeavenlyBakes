@@ -1,4 +1,5 @@
-﻿using heavenlybakes.api.Migrations;
+﻿using heavenlybakes.api.Enums;
+using heavenlybakes.api.Migrations;
 using heavenlybakes.api.Models;
 
 namespace heavenlybakes.api.DTOs;
@@ -13,7 +14,7 @@ public class CustomerOrdersRequestDto
     public string ShippingPostalCode { get; set; } = string.Empty;
     public string ShippingCountry { get; set; } = string.Empty;
     public decimal Total { get; set; } 
-    public int OrderStatus { get; set; }
+    public string OrderStatus { get; set; } = OrderStatusEnum.InProgress.ToString();
     public int PaymentMethod { get; set; }
     public List<AddOrderItemCustomerOrderRequestDto> OrderItems { get; set; } = [];
 }

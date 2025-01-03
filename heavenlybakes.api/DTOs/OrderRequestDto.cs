@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using heavenlybakes.api.Enums;
 
 namespace heavenlybakes.api.DTOs;
 
@@ -21,6 +22,6 @@ public class OrderRequestDto
 
     public int PaymentMethodId { get; set; }
     
-    public int OrderStatus { get; set;} 
+    public OrderStatusEnum OrderStatus { get; set;} 
 }
 

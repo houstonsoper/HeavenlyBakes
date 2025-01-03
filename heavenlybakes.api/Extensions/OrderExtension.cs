@@ -1,4 +1,5 @@
 ﻿using heavenlybakes.api.DTOs;
+using heavenlybakes.api.Enums;
 using heavenlybakes.api.Models;
 
 namespace heavenlybakes.api.Extensions;
@@ -32,7 +33,7 @@ public static class OrderExtension
             ShippingPostalCode = order.ShippingPostalCode,
             ShippingCountry = order.ShippingCountry,
             Total = order.Total,
-            OrderStatus = order.OrderStatus,
+            OrderStatus = order.OrderStatus.ToString(),
             PaymentMethod = order.PaymentMethodId,
             OrderItems = order.OrderItems.Select(item => new AddOrderItemCustomerOrderRequestDto
             {
