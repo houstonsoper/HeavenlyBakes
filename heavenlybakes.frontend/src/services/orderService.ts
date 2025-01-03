@@ -3,6 +3,7 @@ import {OrderForm} from "@/interfaces/orderForm";
 import BasketItem from "@/interfaces/basketItem";
 import {OrderItem} from "@/interfaces/orderItem";
 import OrderWithOrderItems from "@/interfaces/orderWithOrderItems";
+import GroupedOrders from "@/interfaces/groupedOrders";
 
 const BASE_URL: string = 'https://localhost:44367';
 
@@ -59,11 +60,39 @@ export async function getOrdersByCustomerId(customerId: string | undefined, sign
             throw new Error("Unable to get orders from API");
         }
         
-        return await response.json();
+        const data : OrderWithOrderItems[] = await response.json();
+        
+        return data.map((order : OrderWithOrderItems) : OrderWithOrderItems => {
+            const date = new Date(order.orderDate);
+            const dateOnly : string = date.toDateString(); 
+            const timeOnly : string = date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}); 
+            
+            return{...order, orderDate: dateOnly, orderTime: timeOnly};
+        });
     }
     catch (error) {
-        if (error instanceof AbortSignal ) {}
         console.error(error);
         return [];
     }
+}
+
+export function groupOrdersByDate (orders : OrderWithOrderItems[]) : GroupedOrders[]{
+    const groupedOrders : GroupedOrders[] = orders.reduce((acc : GroupedOrders[], order : OrderWithOrderItems) => {
+        
+        //Find if a group for this date already exists
+        const existingGroup : GroupedOrders | undefined = acc.find(group => group.date === order.orderDate);
+        
+        //If the group exists push the order into it
+        if(existingGroup) {
+            existingGroup.orders.push(order);
+        } else {
+            //If no group exists, create one
+            acc.push({date : order.orderDate, orders: [order]});
+        }
+        return acc;
+    }, []);
+    //Sort the groups by date
+    return groupedOrders.sort((a : GroupedOrders, b : GroupedOrders) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 }

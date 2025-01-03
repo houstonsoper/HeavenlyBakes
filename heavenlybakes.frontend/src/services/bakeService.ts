@@ -34,18 +34,21 @@ export async function fetchPopularBakes(limit: number = 0) : Promise<Bake[]> {
     return limit > 0 ? sortedBakes.slice(0, limit) : sortedBakes;
 }
 
-export async function fetchBakeById(bakeId : string) : Promise<Bake | null>{
+export async function fetchBakeById(bakeId : number, signal : AbortSignal) : Promise<Bake | null>{
     try{
         const url = `${BASE_URL}/bakes/${bakeId}`;
-        const response : Response = await fetch(url);
+        const response : Response = await fetch(url, {signal});
         
         if(!response.ok){
             throw new Error("Unable to retrieve Bake from API");
         }
-        
         return await response.json();
-    } catch(error : any){
-        console.error(error.message);
-        return Promise.resolve(null);
+    } catch(error){
+        if(error instanceof DOMException && error.name === "AbortError"){
+            console.log("Fetch request aborted");
+        } else if (error instanceof Error) {
+            console.error(error.message);
+        }
+        return null;
     }
 }

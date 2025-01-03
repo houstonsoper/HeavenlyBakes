@@ -7,7 +7,8 @@
 export default interface OrderWithOrderItems {
     orderId : number,
     customerId : string,
-    orderDate : Date,
+    orderDate : string,
+    orderTime : string,
     shippingAddress: string,
     shippingCity: string,
     shippingPostCode: string,
@@ -15,5 +16,5 @@ export default interface OrderWithOrderItems {
     total : number,
     orderStatus: number,
     paymentMethod : number,
-    OrderItems : OrderItem[],
+    orderItems : OrderItem[],
 }
