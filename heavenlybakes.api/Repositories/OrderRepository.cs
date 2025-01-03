@@ -99,11 +99,10 @@ public class OrderRepository : IOrderRepository
 
     public async Task<IEnumerable<Order>> GetCustomersOrders(string customerId)
     {
-        var customersOrders = await _context.Orders
+        //Return the customers orders (including items) 
+        return await _context.Orders
             .Include(o => o.OrderItems)
-            .Where(o => o.CustomerId == customerId)
+            .Where(o => o.CustomerId == customerId && o.OrderItems.Count > 0) 
             .ToListAsync();
-        
-        return customersOrders;
     }
 }

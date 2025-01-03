@@ -62,6 +62,7 @@ export async function getOrdersByCustomerId(customerId: string | undefined, sign
         
         const data : OrderWithOrderItems[] = await response.json();
         
+        //Map over each order to format the data and time properties, then return a new order object
         return data.map((order : OrderWithOrderItems) : OrderWithOrderItems => {
             const date = new Date(order.orderDate);
             const dateOnly : string = date.toDateString(); 

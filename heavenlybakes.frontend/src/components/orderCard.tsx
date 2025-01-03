@@ -37,9 +37,12 @@ export default function OrderCard({ order }: OrderCardProps) {
     return (
         <Card className="w-full overflow-hidden border-gray-100 rounded-none shadow-card my-4">
             <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-semibold text-pink-600">
-                    Order #{order.orderId}
-                </CardTitle>
+                <div className="flex">
+                    <CardTitle className="text-pink-700">
+                        {order.orderStatus}
+                    </CardTitle>
+                    <CardTitle className="ms-auto text-pink-700">Order #{order.orderId}</CardTitle>
+                </div>
             </CardHeader>
             <CardContent className="p-4">
                 {bakes.length > 0 ? (
