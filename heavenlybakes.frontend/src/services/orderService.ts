@@ -91,8 +91,18 @@ export function groupOrdersByDate (orders : OrderWithOrderItems[]) : GroupedOrde
         }
         return acc;
     }, []);
+    
     //Sort the groups by date
-    return groupedOrders.sort((a : GroupedOrders, b : GroupedOrders) => {
+    const groupedOrdersSortedByDate : GroupedOrders[] =  groupedOrders.sort((a : GroupedOrders, b : GroupedOrders) => {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
+    
+    // Sort the orders in the groups by orderId
+    groupedOrdersSortedByDate.forEach(groupedOrders => {
+        groupedOrders.orders.sort((a: OrderWithOrderItems, b: OrderWithOrderItems) => {
+            return b.orderId - a.orderId;
+        });
+    });
+
+    return groupedOrdersSortedByDate;
 }
