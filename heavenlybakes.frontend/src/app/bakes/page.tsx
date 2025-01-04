@@ -35,12 +35,12 @@ export default function Page() {
                         we have something to satisfy every sweet tooth." />
             
             <section className="py-10">
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-y-12">
-                    {bakes.map((bake: Bake) => (<BakeCard key={bake.id} bake={bake}/>
-                    ))}
+                <div className="container mx-auto px-4 ">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-12">
+                        {bakes.map((bake: Bake) => (<BakeCard key={bake.id} bake={bake}/>
+                        ))}
+                    </div>
                 </div>
-            </div>
             </section>
         </div>
     );

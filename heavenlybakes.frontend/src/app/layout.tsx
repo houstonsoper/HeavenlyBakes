@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import {BasketProvider} from "@/contexts/basketContext";
 import {UserProvider} from "@auth0/nextjs-auth0/client";
 import Footer from "@/components/footer";
+import {Toaster} from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
       <BasketProvider>
         <Navbar/>
         {children}
+        <Toaster />
       </BasketProvider>
         <Footer/>
       </body>

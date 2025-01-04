@@ -5,6 +5,7 @@ import {Button} from "@/components/ui/button";
 import BasketItem from "@/interfaces/basketItem";
 import {useBasket} from "@/contexts/basketContext";
 import {BasketContextType} from "@/interfaces/basketContextType";
+import {useToast} from "@/hooks/use-toast";
 
 interface BakeCardProps{
     bake: Bake;
@@ -12,6 +13,7 @@ interface BakeCardProps{
 
 export default function BakeCard({bake} : BakeCardProps){
     const {addToBasket} : BasketContextType = useBasket();
+    const {toast} = useToast();
     
     const addToBasketHandler = () =>{
 
@@ -26,6 +28,13 @@ export default function BakeCard({bake} : BakeCardProps){
                 totalPrice: bake.price,
             };
             addToBasket(basketItem);
+
+            //Alert the user that the item has been added to basket
+            toast ({
+                title: "Added to Basket",
+                description: `${bake.name} x1`,
+                duration: 20000,
+            })
         }
     }
     
