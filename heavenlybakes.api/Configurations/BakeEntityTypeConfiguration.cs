@@ -11,5 +11,12 @@ public class BakeEntityTypeConfiguration : IEntityTypeConfiguration<Bake>
         builder.HasKey(b => b.Id);
         builder.Property(b => b.Price).HasPrecision(5,2).IsRequired();
         builder.Property(b => b.Rating).HasPrecision(3,2).IsRequired();
+        builder.ToTable(tableBuilder =>
+        {
+            tableBuilder.HasCheckConstraint(
+                "CK_Bakes_Discount_Range",
+                "[Discount] >= 0 AND [Discount] <= 100"
+            );
+        });
     }
 }
