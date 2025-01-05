@@ -33,7 +33,7 @@ export default function BakeCard({bake} : BakeCardProps){
             toast ({
                 title: "Added to Basket",
                 description: `${bake.name} x1`,
-                duration: 20000,
+                duration: 2000,
             })
         }
     }
