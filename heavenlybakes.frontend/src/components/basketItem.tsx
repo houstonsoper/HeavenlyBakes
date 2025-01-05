@@ -39,7 +39,14 @@ export default function BasketItemComponent({item} :BasketItemComponentProps) {
                 />
                 <div className="flex-grow">
                     <h3 className="text-lg font-semibold text-pink-600">{item.name}</h3>
-                    <p className="text-gray-600">£{item.price.toFixed(2)} each</p>
+                    <div className="flex">
+                        {item.discount ? (
+                            <p className="text-red-600 line-through me-1 font-semibold">
+                                £{item.basePrice.toFixed(2)}
+                            </p>
+                        ) : null}
+                        <p>£{item.price.toFixed(2)}</p>
+                    </div>
                     <div className="flex items-center mt-2">
                         <Button
                             variant="outline"
@@ -66,7 +73,14 @@ export default function BasketItemComponent({item} :BasketItemComponentProps) {
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="font-semibold text-pink-600">£{item.totalPrice.toFixed(2)}</p>
+                    {/*If there is a discount, display the price of the item before the discount*/}
+                    {item.discount ? (
+                        <p className="line-through">
+                            £{(item.quantity * item.basePrice).toFixed(2)}
+                        </p>
+                    ): null}
+                    {/*If there is a discount, display the price of the item after the discount*/}
+                    <p className={item.discount ? "text-red-600 font-semibold" : ""}>£{item.totalPrice.toFixed(2)}</p>
                     <Button
                         variant="ghost"
                         size="sm"

@@ -26,10 +26,22 @@ export default function Page(){
                         <h1>Order details</h1>
                         <div className="leading-loose">
                             <p>Items: {basketCount}</p>
+                            {/*If there is a discount, display total amount saved*/}
+                            {basket.items.some(item => item.discount) && (
+                                <p className="text-red-600 font-semibold">
+                                    Saved: £{(
+                                    basket.items.reduce(
+                                        (acc: number, item: BasketItem) =>
+                                            acc + item.basePrice * item.quantity,
+                                        0
+                                    ) - basket.total
+                                ).toFixed(2)}
+                                </p>
+                            )}
                             <p className="font-bold">Total: £{total.toFixed(2)}</p>
                         </div>
-                            <Link href="/checkout">
-                                <Button className="mt-2 bg-pink-500 hover:bg-pink-600 w-full rounded">Checkout</Button>
+                        <Link href="/checkout">
+                        <Button className="mt-2 bg-pink-500 hover:bg-pink-600 w-full rounded">Checkout</Button>
                             </Link>
                         </div>
                     </div>

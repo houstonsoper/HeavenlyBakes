@@ -23,9 +23,11 @@ export default function BakeCard({bake} : BakeCardProps){
                 id: bake.id,
                 name: bake.name,
                 price: bake.price,
+                basePrice: bake.basePrice,
                 quantity: 1,
                 imageUrl: bake.imageUrl,
                 totalPrice: bake.price,
+                discount: bake.discount,
             };
             addToBasket(basketItem);
 
@@ -46,7 +48,14 @@ export default function BakeCard({bake} : BakeCardProps){
                 </div>
                 <div className="card-bottom rounded pt-2 px-2 text-gray-700">
                     <h2>{bake.name}</h2>
-                    <p>£{bake.price.toFixed(2)}</p>
+                    <div className="flex">
+                        {bake.discount ? (
+                            <p className="text-red-600 line-through me-1 font-semibold">
+                                £{bake.basePrice.toFixed(2)}
+                            </p>
+                        ) : null}
+                        <p>£{bake.price.toFixed(2)}</p>
+                    </div>
                 </div>
             </Link>
             <div className="flex justify-center p-2">

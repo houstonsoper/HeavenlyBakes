@@ -50,7 +50,7 @@ export default function Page() {
                     break;
                 //Discount 
                 case "f":
-                    bakes.sort((a, b) => b.price - a.price);
+                    bakes.sort((a, b) => b.discount - a.discount);
                     break;
                 default:
                     break;
