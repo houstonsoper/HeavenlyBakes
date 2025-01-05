@@ -5,7 +5,7 @@ public class BakeRequestDto
     public int Id { get; set; }
     public required string Name { get; set; } = string.Empty;
     
-    public required decimal Price { get; set; } = 0;
+    public required decimal BasePrice { get; set; } = 0;
     
     public required string Type { get; set; } = string.Empty;   
     
@@ -16,6 +16,8 @@ public class BakeRequestDto
     public decimal Rating { get; set; } = 0;    
     
     public int Stock { get; set; } = 0;
+    public int Discount { get; set; } = 0;
+    public decimal Price { get; set; } = 0;
 
     public bool InProduction { get; set; } = false;
 }
