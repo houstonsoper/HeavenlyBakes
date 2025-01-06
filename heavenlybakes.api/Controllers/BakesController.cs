@@ -58,7 +58,15 @@ public class BakesController : ControllerBase
     public async Task<IActionResult> GetBakesByType([FromRoute] string type)
     {
         var bakes = await _bakesRepository.GetBakeByTypeAsync(type);
+        var bakesDto = new List<BakeRequestDto>();
+        
+        //Iterate through each bake and format them as BakeRequestDto
+        foreach (var bake in bakes) 
+        { 
+            bake.ToBakeRequestDto();
+            bakesDto.Add(bake.ToBakeRequestDto());
+        }
 
-        return Ok(bakes);
+        return Ok(bakesDto);
     }
 }

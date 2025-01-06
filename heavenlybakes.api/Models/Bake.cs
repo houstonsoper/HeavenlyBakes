@@ -14,9 +14,8 @@ public class Bake
     [Range(0.01, 999.99, ErrorMessage = "Price must be between 0.01 and 999.99.")]
     public required decimal Price { get; set; } = 0;
 
-    [Required(ErrorMessage = "Type is required.")]
-    [StringLength(20, ErrorMessage = "Type cannot exceed 20 characters.")]
-    public required string Type { get; set; } = string.Empty;
+    [Required(ErrorMessage = "BakeTypeId is required.")]
+    public required int BakeTypeId { get; set; }
 
     [Required(ErrorMessage = "ImageUrl is required.")]
     [StringLength(500, ErrorMessage = "ImageUrl cannot exceed 500 characters.")]
@@ -36,4 +35,6 @@ public class Bake
     public int Discount { get; set; } = 0;
 
     public bool InProduction { get; set; } = false;
+    
+    public BakeType BakeType { get; set; } = new BakeType();
 }

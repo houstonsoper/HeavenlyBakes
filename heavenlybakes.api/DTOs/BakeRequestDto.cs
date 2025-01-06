@@ -7,7 +7,7 @@ public class BakeRequestDto
     
     public required decimal BasePrice { get; set; } = 0;
     
-    public required string Type { get; set; } = string.Empty;   
+    public required int BakeTypeId { get; set; } 
     
     public required string ImageUrl { get; set; } = string.Empty;  
     

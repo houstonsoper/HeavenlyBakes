@@ -10,6 +10,7 @@ public class HeavenlyBakesDbContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
+    public DbSet<BakeType> BakeTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

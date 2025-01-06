@@ -33,7 +33,8 @@ public class BakesRepository : IBakesRepository
     public async Task<IEnumerable<Bake>> GetBakeByTypeAsync(string type)
     {
         return await _context.Bakes
-            .Where(bake => bake.Type == type)
+            .Include(b => b.BakeType)
+            .Where(b => b.BakeType.Type == type)
             .ToListAsync();
     }
 }
