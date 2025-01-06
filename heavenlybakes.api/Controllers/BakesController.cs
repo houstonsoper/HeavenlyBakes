@@ -41,8 +41,8 @@ public class BakesController : ControllerBase
         return Ok(bakeDto);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetBakeByIdAsync(int id)
+    [HttpGet("id/{id}")]
+    public async Task<IActionResult> GetBakeById([FromRoute] int id)
     {
         var bake = await _bakesRepository.GetBakeByIdAsync(id);
 
@@ -52,5 +52,13 @@ public class BakesController : ControllerBase
         }
         
         return Ok(bake.ToBakeRequestDto());
+    }
+
+    [HttpGet("type/{type}")]
+    public async Task<IActionResult> GetBakesByType([FromRoute] string type)
+    {
+        var bakes = await _bakesRepository.GetBakeByTypeAsync(type);
+
+        return Ok(bakes);
     }
 }

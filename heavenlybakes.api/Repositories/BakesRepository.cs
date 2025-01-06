@@ -1,6 +1,7 @@
 ﻿using heavenlybakes.api.Context;
 using heavenlybakes.api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace heavenlybakes.api.Repositories;
 
@@ -27,5 +28,12 @@ public class BakesRepository : IBakesRepository
             return null;
         }
         return bake;
+    }
+
+    public async Task<IEnumerable<Bake>> GetBakeByTypeAsync(string type)
+    {
+        return await _context.Bakes
+            .Where(bake => bake.Type == type)
+            .ToListAsync();
     }
 }

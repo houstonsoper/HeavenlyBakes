@@ -41,7 +41,7 @@ export async function fetchPopularBakes(limit: number = 0, signal? : AbortSignal
 
 export async function fetchBakeById(bakeId : number, signal : AbortSignal) : Promise<Bake | null>{
     try{
-        const url = `${BASE_URL}/bakes/${bakeId}`;
+        const url = `${BASE_URL}/bakes/id/${bakeId}`;
         const response : Response = await fetch(url, {signal});
         
         if(!response.ok){

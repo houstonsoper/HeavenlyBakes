@@ -7,6 +7,7 @@ import {useBasket} from "@/contexts/basketContext";
 import { Card } from "./ui/card";
 import {CardContent} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
+import Link from "next/link";
 
 interface BasketItemComponentProps{
     item: BasketItem,
@@ -26,17 +27,19 @@ export default function BasketItemComponent({item} :BasketItemComponentProps) {
     const handleRemoveItem = () => {
         removeFromBasket(item);
     }
-
+    
     return (
         <Card className="mb-4">
             <CardContent className="p-4 flex items-center">
-                <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    width={80}
-                    height={80}
-                    className="rounded-md mr-4"
-                />
+                <Link href={`bakes/${item.id}`}>
+                    <Image
+                        src={item.imageUrl}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                        className="rounded-md mr-4"
+                    />
+                </Link>
                 <div className="flex-grow">
                     <h3 className="text-lg font-semibold text-pink-600">{item.name}</h3>
                     <div className="flex">
