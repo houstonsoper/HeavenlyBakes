@@ -52,14 +52,18 @@ export default function Navbar() {
                                 <li className="text-pink-600 hover:text-pink-800">Our Selections</li>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
+                                <Link href="/bakes">
+                                    <DropdownMenuItem className="hover:cursor-pointer">All</DropdownMenuItem>
+                                </Link>
+                                <DropdownMenuSeparator/>
                                 {/* Map each bake type to a dropdown item */}
                                 {bakeTypes.map((bakeType : BakeType) => (
                                     <div key={bakeType.id}>
-                                        <DropdownMenuItem>
-                                            <Link href={`/bakes/?type=${bakeType.type}`}>
+                                        <Link href={`/bakes/?type=${bakeType.type}`}>
+                                            <DropdownMenuItem className="hover:cursor-pointer">
                                                 {bakeType.type}
-                                            </Link>
-                                        </DropdownMenuItem>
+                                            </DropdownMenuItem>
+                                        </Link>
                                         <DropdownMenuSeparator />
                                     </div>
                                 ))}
