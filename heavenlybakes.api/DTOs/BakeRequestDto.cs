@@ -1,17 +1,19 @@
-﻿namespace heavenlybakes.api.DTOs;
+﻿using heavenlybakes.api.Models;
+
+namespace heavenlybakes.api.DTOs;
 
 public class BakeRequestDto
 {
     public int Id { get; set; }
-    public required string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
     
-    public required decimal BasePrice { get; set; } = 0;
+    public decimal BasePrice { get; set; } = 0;
     
-    public required int BakeTypeId { get; set; } 
+    public BakeType BakeType { get; set; } 
     
-    public required string ImageUrl { get; set; } = string.Empty;  
+    public string ImageUrl { get; set; } = string.Empty;  
     
-    public required string Description { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     
     public decimal Rating { get; set; } = 0;    
     

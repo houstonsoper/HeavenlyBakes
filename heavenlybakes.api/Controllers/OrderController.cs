@@ -37,31 +37,24 @@ public class OrderController : Controller
             return BadRequest(ModelState); 
         }
         
-        var newOrderItems = new List<OrderItemRequestDto>();
+        var orderItemsDto = new List<OrderItemRequestDto>();
 
         //Iterate through orderItems and add them to the database
         foreach (var orderItem in orderItems)
         {
             var newOrderItem = await _orderRepository.AddOrderItemAsync(orderId, orderItem);
-            newOrderItems.Add(newOrderItem.ToOrderItemRequestDto());
+            orderItemsDto.Add(newOrderItem.ToOrderItemRequestDto());
         }
 
-        return Ok(newOrderItems);
+        return Ok(orderItemsDto);
     }
 
     [HttpGet("{customerId}")]
     public async Task<IActionResult> GetCustomersOrders([FromRoute] string customerId)
     {
         var orders = await _orderRepository.GetCustomersOrders(customerId);
-        var customerOrders = new List<CustomerOrdersRequestDto>();
-
-        //Iterate through orders and convert them to a 'CustomerOrdersRequestDto'
-        foreach (var order in orders)
-        {
-            order.ToCustomerOrdersRequestDto();
-            customerOrders.Add(order.ToCustomerOrdersRequestDto());
-        }
+        var ordersDto = orders.Select(o => o.ToOrderRequestDto());
         
-        return Ok(customerOrders);
+        return Ok(ordersDto);
     }
 }

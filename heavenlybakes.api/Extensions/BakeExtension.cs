@@ -12,7 +12,7 @@ public static class BakeExtension
             Id = bake.Id,
             Name = bake.Name,
             BasePrice = bake.Price,
-            BakeTypeId = bake.BakeTypeId,
+            BakeType = bake.BakeType,
             ImageUrl = bake.ImageUrl,
             Description = bake.Description,
             Rating = bake.Rating,

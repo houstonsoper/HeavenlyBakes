@@ -16,17 +16,17 @@ public class BakesRepository : IBakesRepository
 
     public async Task<IEnumerable<Bake>> GetAllBakesAsync()
     {
-        return await _context.Bakes.ToListAsync();
+        return await _context.Bakes
+            .Include(b => b.BakeType)
+            .ToListAsync();
     }
 
-    public async Task<Bake> GetBakeByIdAsync(int bakeId)
+    public async Task<Bake?> GetBakeByIdAsync(int bakeId)
     {
-        var bake = await _context.Bakes.FindAsync(bakeId);
-
-        if (bake == null)
-        {
-            return null;
-        }
+        var bake = await _context.Bakes
+            .Include(b => b.BakeType)
+            .FirstOrDefaultAsync(b => b.Id == bakeId); 
+        
         return bake;
     }
 
@@ -36,5 +36,10 @@ public class BakesRepository : IBakesRepository
             .Include(b => b.BakeType)
             .Where(b => b.BakeType.Type == type)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<BakeType>> GetBakeTypesAsync()
+    {
+        return await _context.BakeTypes.ToListAsync();
     }
 }
