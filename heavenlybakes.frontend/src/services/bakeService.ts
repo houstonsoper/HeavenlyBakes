@@ -1,11 +1,12 @@
 ﻿import Bake from "../interfaces/bake";
 import BakeParams from "../interfaces/bakeParams";
+import {BakeType} from "@/interfaces/bakeType";
 
 const BASE_URL = 'https://localhost:44367';
 
-export async function fetchBakes({searchTerm = "", limit = 0,  offset = 0} : BakeParams, signal? : AbortSignal) : Promise<Bake[]> {
+export async function fetchBakes({searchTerm = "", type ="", limit = 0,  offset = 0} : BakeParams, signal? : AbortSignal) : Promise<Bake[]> {
     try{
-        const url : string = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}`;
+        const url : string = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}&type=${type}`;
         const response : Response = await fetch(url, {signal});
         
         if(!response.ok){
@@ -55,5 +56,25 @@ export async function fetchBakeById(bakeId : number, signal : AbortSignal) : Pro
             console.error(error.message);
         }
         return null;
+    }
+}
+
+export async function fetchBakeTypes(signal : AbortSignal) : Promise <BakeType[] | []> {
+    try {
+        const url = `${BASE_URL}/bakes/types`;
+        const response: Response = await fetch(url, {signal});
+
+        if (!response.ok) {
+            throw new Error("Unable to retrieve Bake types");
+        }
+        return await response.json();
+    }
+    catch(error){
+        if(error instanceof DOMException && error.message === "AbortError") {
+            console.log ("Fetch request aborted");
+        } else if (error instanceof Error){
+            console.error(error.message);
+        }
+        return [];
     }
 }

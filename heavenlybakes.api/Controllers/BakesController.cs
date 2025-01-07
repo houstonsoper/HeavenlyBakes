@@ -20,7 +20,7 @@ public class BakesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetBakes([FromQuery] int? limit, [FromQuery] int? offset)
+    public async Task<IActionResult> GetBakes([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? type)
     {
         var bakes = await _bakesRepository.GetAllBakesAsync();
         
@@ -33,6 +33,11 @@ public class BakesController : ControllerBase
         if (limit.HasValue && limit != 0)
         { 
             bakes = bakes.Take(limit.Value);
+        }
+
+        if (type != null)
+        {
+            bakes = await _bakesRepository.GetBakeByTypeAsync(type);
         }
         
         //Map data to the Bake DTO
@@ -53,16 +58,7 @@ public class BakesController : ControllerBase
         
         return Ok(bake.ToBakeRequestDto());
     }
-
-    [HttpGet("type/{type}")]
-    public async Task<IActionResult> GetBakesByType([FromRoute] string type)
-    {
-        var bakes = await _bakesRepository.GetBakeByTypeAsync(type);
-        var bakesDto = bakes.Select(b => b.ToBakeRequestDto());
-        
-        return Ok(bakesDto);
-    }
-
+    
     [HttpGet("types")]
     public async Task<IActionResult> GetBakeTypes()
     {

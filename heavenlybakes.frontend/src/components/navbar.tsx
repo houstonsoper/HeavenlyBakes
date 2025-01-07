@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import SearchBar from "@/components/searchBar";
 import BasketCount from "@/components/basketCount";
@@ -14,12 +14,29 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import {BakeType} from "@/interfaces/bakeType";
+import {fetchBakeTypes} from "@/services/bakeService";
 
 export default function Navbar() {
     const {user} = useUser();
+    const [bakeTypes, setBakeTypes] = useState<BakeType[]>([]);
+    
+    //Fetch bake types from API
+    useEffect(() => {
+        const controller = new AbortController();
+        const signal : AbortSignal = controller.signal;
+        
+        const GetBakeTypes  = async () => {
+            setBakeTypes(await fetchBakeTypes(signal))
+        }
 
-    console.log(user);
-
+        GetBakeTypes();
+        
+        //Abort fetch request if component unmounts
+        return () => controller.abort();
+    }, [])
+    
+    console.log(bakeTypes);
     return (
         <header className="bg-pink-100 py-4">
             <div className="container mx-auto px-4 flex justify-between items-center">
@@ -28,10 +45,32 @@ export default function Navbar() {
                 <nav>
                     <ul className="flex space-x-4">
                         <li><Link href="/" className="text-pink-600 hover:text-pink-800">Home</Link></li>
-                        <li><Link href="/bakes" className="text-pink-600 hover:text-pink-800">Our Selection</Link></li>
+                        {/* Our Selections Dropdown */}
+                        {bakeTypes.length > 0 ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <li className="text-pink-600 hover:text-pink-800">Our Selections</li>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                {/* Map each bake type to a dropdown item */}
+                                {bakeTypes.map((bakeType : BakeType) => (
+                                    <div key={bakeType.id}>
+                                        <DropdownMenuItem>
+                                            <Link href={`/bakes/?type=${bakeType.type}`}>
+                                                {bakeType.type}
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                    </div>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                            ) : <li> <Link href="/bakes" className="text-pink-600 hover:text-pink-800">Our Selections </Link></li>
+                        }
                         <li><Link href="#about" className="text-pink-600 hover:text-pink-800">About</Link></li>
                         <li><Link href="#contact" className="text-pink-600 hover:text-pink-800">Contact</Link></li>
                         <div className="flex space-x-2 ps-6">
+                            {/* User Dropdown */}
                             {user ? (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>

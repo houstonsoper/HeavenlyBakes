@@ -12,19 +12,28 @@ export default function Page() {
     const searchParams = useSearchParams();
     const [filter, setFilter] = useState("");
     
+    console.log(searchParams.get("type"));
+    
     //Fetch Bakes
     useEffect(() => {
         const getBakes = async () => {
 
-            //Get the search string from the search Params
+            //Get the searchParam for search term and type
             const searchTerm: string | null = searchParams.get("search");
+            const type: string | null = searchParams.get("type");
             
-            //Fetch bakes by search term if included, else fetch all
-            const fetchedBakes: Bake[] = await fetchBakes(searchTerm ? {searchTerm} : {});
+            //Fetch bakes by search term/type if included, else fetch all
+            const fetchedBakes: Bake[] = await fetchBakes({
+                searchTerm: searchTerm || undefined, 
+                type: type || undefined
+            });
             setBakes(fetchedBakes);
         }
         getBakes();
     }, [searchParams])
+    
+    //Filter Bakes by BakeType if there is a search param
+    
     
     const handleFilter = (event : React.ChangeEvent<HTMLSelectElement>) => {
             switch(event.target.value) {
