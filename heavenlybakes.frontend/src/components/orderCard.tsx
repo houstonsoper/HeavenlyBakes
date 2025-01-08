@@ -90,7 +90,7 @@ export default function OrderCard({order}: OrderCardProps) {
                                         </li>
                                         <li>
                                             <strong>Payment Method: </strong>
-                                            {order.paymentMethod}
+                                            {order.paymentMethod.method}
                                         </li>
                                     </ul>
                                 </AlertDialogDescription>

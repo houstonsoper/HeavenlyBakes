@@ -1,4 +1,6 @@
-﻿export interface OrderItem {
+﻿import {PaymentMethod} from "@/interfaces/paymentMethod";
+
+export interface OrderItem {
     bakeId : number,
     quantity: number,
     price: number,
@@ -15,6 +17,6 @@ export default interface OrderWithOrderItems {
     shippingCountry: string,
     total : number,
     orderStatus: number,
-    paymentMethod : number,
+    paymentMethod : PaymentMethod,
     orderItems : OrderItem[],
 }

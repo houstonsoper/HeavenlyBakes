@@ -102,6 +102,7 @@ public class OrderRepository : IOrderRepository
         //Return the customers orders (including items) 
         return await _context.Orders
             .Include(o => o.OrderItems)
+            .Include(o => o.PaymentMethod)
             .Where(o => o.CustomerId == customerId && o.OrderItems.Count > 0) 
             .ToListAsync();
     }
