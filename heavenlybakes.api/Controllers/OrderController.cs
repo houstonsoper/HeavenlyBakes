@@ -53,7 +53,7 @@ public class OrderController : Controller
     public async Task<IActionResult> GetCustomersOrders([FromRoute] string customerId)
     {
         var orders = await _orderRepository.GetCustomersOrders(customerId);
-        var ordersDto = orders.Select(o => o.ToOrderRequestDto());
+        var ordersDto = orders.Select(o => o.ToCustomerOrdersRequestDto());
         
         return Ok(ordersDto);
     }

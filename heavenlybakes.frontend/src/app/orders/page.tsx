@@ -22,6 +22,7 @@ export default function orders(){
                 const data : orderWithOrderItems[] | [] = await getOrdersByCustomerId(user.sub, signal);
                 const groupedOrders : GroupedOrders[] = groupOrdersByDate(data); //Group the orders by date
                 setOrders(groupedOrders);
+                console.log("grouped orders", groupedOrders);
             }
         }
         getOrders();

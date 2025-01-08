@@ -32,7 +32,7 @@ export default function OrderCard({order}: OrderCardProps) {
 
         const getBakes = async () => {
             let bakesArray: Bake[] = [];
-
+            
             if (order.orderItems) {
                 for (const item of order.orderItems) {
                     const bake: Bake | null = await fetchBakeById(item.bakeId, signal);
