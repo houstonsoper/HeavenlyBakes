@@ -6,6 +6,7 @@ public class ReviewRequestDto
 
     public string CustomerId { get; set; } = string.Empty;
     
+    public int BakeId { get; set; }
     public string Title { get; set; } = string.Empty;
     
     public string Feedback { get; set; } = string.Empty;
@@ -14,5 +15,4 @@ public class ReviewRequestDto
     
     public DateTime CreateDateTime { get; set; }
     
-    public BakeRequestDto? Bake { get; set; } 
 }

@@ -11,11 +11,11 @@ public static class ReviewExtension
         {
             Id = review.Id,
             CustomerId = review.CustomerId,
+            BakeId = review.BakeId,
             Title = review.Title,
             Feedback = review.Feedback,
             Rating = review.Rating,
             CreateDateTime = review.CreateDateTime,
-            Bake = review.Bake?.ToBakeRequestDto()
         };
     }
 }
