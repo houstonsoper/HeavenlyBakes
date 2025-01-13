@@ -14,5 +14,4 @@ public class ReviewRequestDto
     public int Rating { get; set; }
     
     public DateTime CreateDateTime { get; set; }
-    
 }

@@ -13,17 +13,20 @@ public class ReviewRepository : IReviewRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Review>> GetReviewsByBake(int bakeId)
+    public async Task<IEnumerable<Review>> GetReviews(int? bakeId, string? customerId)
     {
-            return await _context.Reviews
-                .Where(r => r.BakeId == bakeId)
-                .ToListAsync();
-    }
-    
-    public async Task<IEnumerable<Review>> GetReviewByCustomerIdAsync(string customerId)
-    {
-        return await _context.Reviews
-            .Where(r => r.CustomerId == customerId)
-            .ToListAsync(); 
+        var query = _context.Reviews.AsQueryable();
+
+        if (bakeId != null)
+        {
+            query = query.Where(r => r.BakeId == bakeId);
+        }
+
+        if (customerId != null)
+        {
+            query = query.Where(r => r.CustomerId == customerId);
+        }
+        
+        return await query.ToListAsync();
     }
 }
