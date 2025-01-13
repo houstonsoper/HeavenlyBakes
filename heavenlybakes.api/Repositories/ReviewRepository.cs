@@ -29,4 +29,13 @@ public class ReviewRepository : IReviewRepository
         
         return await query.ToListAsync();
     }
+
+    public async Task<double> GetRating(int bakeId)
+    {
+        var averageRating = await _context.Reviews
+            .Where(r => r.BakeId == bakeId)
+            .AverageAsync(r => r.Rating);
+        
+        return Math.Round(averageRating, 2);
+    }
 }
