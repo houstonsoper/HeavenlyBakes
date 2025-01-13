@@ -15,7 +15,6 @@ public static class BakeExtension
             BakeType = bake.BakeType,
             ImageUrl = bake.ImageUrl,
             Description = bake.Description,
-            Rating = bake.Rating,
             Stock = bake.Stock,
             Discount = bake.Discount,  
             Price = decimal.Round(((100 - bake.Discount) * bake.Price) / 100,2),

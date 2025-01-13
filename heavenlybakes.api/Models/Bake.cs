@@ -25,9 +25,6 @@ public class Bake
     [StringLength(200, ErrorMessage = "Description cannot exceed 200 characters.")]
     public required string Description { get; set; } = string.Empty;
 
-    [Range(0, 5, ErrorMessage = "Rating must be between 0 and 5.")]
-    public decimal Rating { get; set; } = 0;
-
     [Range(0, int.MaxValue, ErrorMessage = "Stock exceeded maximum value.")]
     public int Stock { get; set; } = 0;
     

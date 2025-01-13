@@ -12,8 +12,6 @@ public class BakeEntityTypeConfiguration : IEntityTypeConfiguration<Bake>
         
         builder.Property(b => b.Price).HasPrecision(5,2).IsRequired();
         
-        builder.Property(b => b.Rating).HasPrecision(3,2).IsRequired();
-        
         builder.ToTable(tableBuilder =>
         {
             tableBuilder.HasCheckConstraint(

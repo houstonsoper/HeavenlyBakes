@@ -11,6 +11,7 @@ public class HeavenlyBakesDbContext : DbContext
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
     public DbSet<BakeType> BakeTypes { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -24,6 +25,7 @@ public class HeavenlyBakesDbContext : DbContext
         modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new PaymentMethodEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ReviewEntityTypeConfiguration());
     }
 
     public HeavenlyBakesDbContext(DbContextOptions options) : base(options)
