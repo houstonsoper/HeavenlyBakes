@@ -6,4 +6,5 @@
     feedback: string,
     rating: number
     createDateTime: Date,
+    formattedDate? : string,
 }

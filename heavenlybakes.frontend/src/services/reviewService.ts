@@ -16,7 +16,14 @@ export async function fetchReviews({bakeId, customerId} : ReviewParams, signal :
             throw new Error("Unable to retrieve reviews from API");
         }
         
-        return await response.json();
+        const reviews : Review[] =  await response.json();
+        
+        //Formatting the date 
+        for (const review of reviews){
+            review.formattedDate = new Date(review.createDateTime).toDateString();
+        }
+        
+        return reviews;
         
     } catch (error){
         if (error instanceof DOMException && error.name === "AbortError") {
