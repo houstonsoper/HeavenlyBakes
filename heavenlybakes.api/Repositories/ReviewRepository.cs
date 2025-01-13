@@ -13,7 +13,7 @@ public class ReviewRepository : IReviewRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Review>> GetReviews(int? bakeId, string? customerId)
+    public async Task<IEnumerable<Review>> GetReviewsAsync(int? bakeId, string? customerId)
     {
         var query = _context.Reviews.AsQueryable();
 
@@ -30,7 +30,7 @@ public class ReviewRepository : IReviewRepository
         return await query.ToListAsync();
     }
 
-    public async Task<double> GetRating(int bakeId)
+    public async Task<double> GetRatingAsync(int bakeId)
     {
         var averageRating = await _context.Reviews
             .Where(r => r.BakeId == bakeId)

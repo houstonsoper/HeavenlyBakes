@@ -4,6 +4,6 @@ namespace heavenlybakes.api.Repositories;
 
 public interface IReviewRepository
 {
-    Task<IEnumerable<Review>> GetReviews(int? bakeId, string? customerId);
-    Task<double> GetRating(int bakeId);
+    Task<IEnumerable<Review>> GetReviewsAsync(int? bakeId, string? customerId);
+    Task<double> GetRatingAsync(int bakeId);
 }

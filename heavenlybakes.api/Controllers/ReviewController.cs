@@ -19,7 +19,7 @@ public class ReviewController : Controller
     [HttpGet ("/Reviews")]
     public async Task<IActionResult> GetReviews([FromQuery] int? bakeId, [FromQuery] string? customerId)
     {
-        var reviews = await _reviewRepository.GetReviews(bakeId, customerId);
+        var reviews = await _reviewRepository.GetReviewsAsync(bakeId, customerId);
         
         var reviewsDto = reviews.Select(r => r.ToReviewRequestDto());
         
@@ -29,7 +29,7 @@ public class ReviewController : Controller
     [HttpGet("/Rating/{bakeId}")]
     public async Task<IActionResult> GetRating(int bakeId)
     {
-        var rating = await _reviewRepository.GetRating(bakeId);
+        var rating = await _reviewRepository.GetRatingAsync(bakeId);
         
         return Ok(rating);
     }
