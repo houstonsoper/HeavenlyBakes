@@ -15,7 +15,7 @@ export default function ReviewCard({review} : ReviewCardProps) {
                     <div className="flex">
                         <h2 className="font-semibold">{review.title}</h2>
                         <div className="flex ms-auto">
-                            {/*Users rating */}
+                            {/*Users rating*/}
                             {Array.from({length: stars.current}).map((_, i) => (
                                 <span key={i} className={`material-symbols-outlined ${
                                     i < review.rating ? `text-pink-600` : `text-gray-100`

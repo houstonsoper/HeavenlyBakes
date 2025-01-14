@@ -2,7 +2,7 @@
 import ReviewParams from "@/interfaces/reviewParams";
 const BASE_URL : string =  `https://localhost:44367`;
     
-export async function fetchReviews({bakeId, customerId} : ReviewParams, signal : AbortSignal) {
+export async function fetchReviews({bakeId, customerId} : ReviewParams, signal : AbortSignal) : Promise<Review[]>  {
     try{
         let url : string = `${BASE_URL}/reviews`;
         
@@ -32,5 +32,27 @@ export async function fetchReviews({bakeId, customerId} : ReviewParams, signal :
         else if (error instanceof Error){
             console.error(error.message);
         }
+        return [];
+    }
+}
+
+export async function fetchRating(bakeId : number, signal : AbortSignal) : Promise<number>  {
+    try {
+        const url: string = `${BASE_URL}/rating/${bakeId}`;
+        const response: Response = await fetch(url, {signal})
+
+        if (!response.ok) {
+            throw new Error("Unable to retrieve reviews from API");
+        }
+        
+        return await response.json();
+    }
+    catch(error){
+        if (error instanceof DOMException && error.name === "AbortError") {
+            console.log(error.message);
+        } else if (error instanceof Error){
+            console.error(error.message);
+        }
+        return 0;
     }
 }
