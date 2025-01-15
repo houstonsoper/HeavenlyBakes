@@ -14,6 +14,7 @@ import {Params} from "next/dist/server/request/params";
 import Review from "@/interfaces/review";
 import {fetchRating, fetchReviews} from "@/services/reviewService";
 import ReviewCard from "@/components/reviewCard";
+import Stars from "@/components/stars";
 
 export default function Details() {
     const [bake, setBake] = useState<Bake | null>(null);
@@ -23,7 +24,6 @@ export default function Details() {
     const {addToBasket} = useBasket();
     const [reviews, setReviews] = useState<Review[]>([]);
     const [rating, setRating] = useState<number>(0);
-    const stars : RefObject<number> = useRef<number>(5);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -87,15 +87,7 @@ export default function Details() {
                         <div className="bake-details-container">
                             <h1 className="text-3xl font-bold text-pink-600">{bake.name}</h1>
                             <div className="flex mb-2">
-                                {/*Bake rating*/}
-                                {Array.from({length: stars.current}).map((_, i) => (
-                                    <span key={i} className={`material-symbols-outlined ${
-                                        i < rating ? `text-pink-600` : `text-gray-100`
-                                    }`}
-                                    >
-                                    star</span>
-                                ))
-                                }
+                                <Stars rating={rating} />
                                 <p className="ms-1 text-gray-400">{reviews.length}</p>
                             </div>
                             <div>
@@ -136,7 +128,7 @@ export default function Details() {
                         </div>
                     </div>
                     <div>
-                        <h1 className="pt-12 text-center">Reviews</h1>
+                        <h1 className="pt-12 text-center">Customer reviews</h1>
                         <div className="w-3/4 m-auto">
                             {reviews.length > 1 ? (
                                 reviews.map((review: Review) => (

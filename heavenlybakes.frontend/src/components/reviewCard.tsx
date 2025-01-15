@@ -1,6 +1,7 @@
 ﻿import Review from "@/interfaces/review";
 import React, {RefObject, useRef, useState} from "react";
 import {NumberArray} from "lru-cache";
+import Stars from "@/components/stars";
 
 interface ReviewCardProps {
     review : Review;
@@ -15,15 +16,7 @@ export default function ReviewCard({review} : ReviewCardProps) {
                     <div className="flex">
                         <h2 className="font-semibold">{review.title}</h2>
                         <div className="flex ms-auto">
-                            {/*Users rating*/}
-                            {Array.from({length: stars.current}).map((_, i) => (
-                                <span key={i} className={`material-symbols-outlined ${
-                                    i < review.rating ? `text-pink-600` : `text-gray-100`
-                                }`}
-                                >
-                                    star</span>
-                            ))
-                            }
+                            <Stars rating={review.rating} />
                         </div>
                     </div>
                     <p className="text-gray-600"> {review.formattedDate}</p>
