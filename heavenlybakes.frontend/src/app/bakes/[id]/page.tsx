@@ -128,7 +128,13 @@ export default function Details() {
                         </div>
                     </div>
                     <div>
-                        <h1 className="pt-12 text-center">Customer reviews</h1>
+                        <div className="text-center">
+                            <h1 className="pt-12">Customer reviews</h1>
+                            <div className="inline-flex">
+                                <Stars rating={rating} />
+                                <p className="px-1 my-auto">{rating} out of 5</p>
+                            </div>
+                        </div>
                         <div className="w-3/4 m-auto">
                             {reviews.length > 1 ? (
                                 reviews.map((review: Review) => (

@@ -4,7 +4,7 @@ export default function Stars({ rating }: { rating: number }) {
     const stars = 5;
 
     return (
-        <div>
+        <div className="flex">
             {Array.from({ length: stars }).map((_, i) => (
                 <span
                     key={i}
