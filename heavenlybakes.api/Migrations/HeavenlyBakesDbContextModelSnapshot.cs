@@ -208,15 +208,14 @@ namespace heavenlybakes.api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BakeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDateTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Feedback")
                         .IsRequired()
@@ -231,7 +230,7 @@ namespace heavenlybakes.api.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "CustomerId", "BakeId");
 
                     b.HasIndex("BakeId");
 

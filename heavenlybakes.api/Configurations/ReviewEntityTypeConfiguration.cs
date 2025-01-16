@@ -9,9 +9,17 @@ public class ReviewEntityTypeConfiguration : IEntityTypeConfiguration<Review>
 {
     public void Configure(EntityTypeBuilder<Review> builder)
     {
+        //Foreign key relationship for Bake
         builder.HasOne(r => r.Bake)
             .WithMany()
             .HasForeignKey(r => r.BakeId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        //Composite key
+        builder.HasKey(r => new { r.Id, r.CustomerId, r.BakeId });
+        
+        //Configure ID as an identity column
+        builder.Property(r => r.Id)
+            .ValueGeneratedOnAdd();
     }
 }
