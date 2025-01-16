@@ -68,28 +68,30 @@ export default function Page() {
     }
     
     return (
-        <div>
-            <PageHeader title="Our Selections" description="Indulge in our wide array of delectable treats. From classic cakes to mouthwatering pastries,
-                        we have something to satisfy every sweet tooth." />
-            
-            <section className="py-10">
-                <div className="container mx-auto px-4 ">
-                    <div>
-                        <select onChange={handleFilter} defaultValue="a">
-                            <option value="a">Most Popular</option>
-                            <option value="b">Price (Low To High)</option>
-                            <option value="c">Price (High to Low)</option>
-                            <option value="d">Name (A To Z) </option>
-                            <option value="e">Name (Z To A) </option>
-                            <option value="f">Discount</option>
-                        </select>
+        <main>
+            <div>
+                <PageHeader title="Our Selections" description="Indulge in our wide array of delectable treats. From classic cakes to mouthwatering pastries,
+                            we have something to satisfy every sweet tooth." />
+                
+                <section className="py-10">
+                    <div className="container mx-auto px-4 ">
+                        <div className="py-3">
+                            <select onChange={handleFilter} defaultValue="a">
+                                <option value="a">Most Popular</option>
+                                <option value="b">Price (Low To High)</option>
+                                <option value="c">Price (High to Low)</option>
+                                <option value="d">Name (A To Z) </option>
+                                <option value="e">Name (Z To A) </option>
+                                <option value="f">Discount</option>
+                            </select>
+                        </div>
+                        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-12">
+                            {bakes.map((bake: Bake) => (<BakeCard key={bake.id} bake={bake}/>
+                            ))}
+                        </div>
                     </div>
-                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-12">
-                        {bakes.map((bake: Bake) => (<BakeCard key={bake.id} bake={bake}/>
-                        ))}
-                    </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
+        </main>
     );
 }

@@ -155,7 +155,7 @@ export default function Details() {
                             </div>
                         </div>
                         <div className="w-3/4 m-auto">
-                            {reviews.length > 1 ? (
+                            {reviews.length > 0 ? (
                                 reviews.map((review: Review) => (
                                     <ReviewCard review={review} key={review.id}/>
                                 ))
