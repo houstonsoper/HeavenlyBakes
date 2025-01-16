@@ -61,10 +61,10 @@ public class ReviewController : Controller
         catch (InvalidDataException ex)
         {
             return StatusCode(500, new
-            {
+            { 
                 message = ex.Message,
-                details = ex.InnerException?.Message,
-                stackTrace = ex.StackTrace
+                details = ex.InnerException?.Message ?? "No inner exception thrown.",
+                stackTrace = ex.StackTrace ?? "No stack trace avaliable."
             });
         }
     }
