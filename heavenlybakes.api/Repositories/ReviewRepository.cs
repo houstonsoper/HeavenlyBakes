@@ -1,4 +1,6 @@
 ﻿using heavenlybakes.api.Context;
+using heavenlybakes.api.DTOs;
+using heavenlybakes.api.Extensions;
 using heavenlybakes.api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,5 +39,14 @@ public class ReviewRepository : IReviewRepository
             .AverageAsync(r => r.Rating);
         
         return Math.Round(averageRating, 2);
+    }
+
+    public async Task<ReviewRequestDto> AddReviewAsync(ReviewPostDto review)
+    {
+        var newReview = review.ToReviewFromPostDto();
+        await _context.Reviews.AddAsync(newReview);
+        await _context.SaveChangesAsync();
+
+        return newReview.ToReviewRequestDto();
     }
 }

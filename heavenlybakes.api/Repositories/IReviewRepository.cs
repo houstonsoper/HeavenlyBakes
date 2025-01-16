@@ -1,4 +1,5 @@
-﻿using heavenlybakes.api.Models;
+﻿using heavenlybakes.api.DTOs;
+using heavenlybakes.api.Models;
 
 namespace heavenlybakes.api.Repositories;
 
@@ -6,4 +7,5 @@ public interface IReviewRepository
 {
     Task<IEnumerable<Review>> GetReviewsAsync(int? bakeId, string? customerId);
     Task<double> GetRatingAsync(int bakeId);
+    Task<ReviewRequestDto> AddReviewAsync(ReviewPostDto review);
 }
