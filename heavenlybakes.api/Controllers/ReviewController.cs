@@ -46,15 +46,26 @@ public class ReviewController : Controller
         //Map DTO to Review 
         var review = reviewPostDto.ToReviewFromPostDto();
         
-        //Add Review to Repo
-        var newReview = await _reviewRepository.AddReviewAsync(review);
-        
-        
-        if (newReview == null)
+        //Add Review
+        try
         {
-            return BadRequest("Could not create the review.");
-        }
+            var newReview = await _reviewRepository.AddReviewAsync(review);
 
-        return Ok(newReview.ToReviewRequestDto());
+            if (newReview == null)
+            {
+                return BadRequest("Could not add review.");
+            }
+            
+            return Ok(newReview.ToReviewRequestDto());
+        }
+        catch (InvalidDataException ex)
+        {
+            return StatusCode(500, new
+            {
+                message = ex.Message,
+                details = ex.InnerException?.Message,
+                stackTrace = ex.StackTrace
+            });
+        }
     }
 }
