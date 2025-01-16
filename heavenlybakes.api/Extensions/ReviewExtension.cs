@@ -9,7 +9,6 @@ public static class ReviewExtension
     {
         return new ReviewRequestDto
         {
-            Id = review.Id,
             CustomerId = review.CustomerId,
             BakeId = review.BakeId,
             Title = review.Title,

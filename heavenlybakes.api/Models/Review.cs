@@ -6,8 +6,6 @@ namespace heavenlybakes.api.Models;
 
 public class Review
 {
-    public int Id { get; set; }
-    
     [Required(ErrorMessage = "CustomerId is required.")]
     public required string CustomerId { get; set; }
     

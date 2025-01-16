@@ -202,12 +202,6 @@ namespace heavenlybakes.api.Migrations
 
             modelBuilder.Entity("heavenlybakes.api.Models.Review", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(450)");
 
@@ -230,7 +224,7 @@ namespace heavenlybakes.api.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id", "CustomerId", "BakeId");
+                    b.HasKey("CustomerId", "BakeId");
 
                     b.HasIndex("BakeId");
 

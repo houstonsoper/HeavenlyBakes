@@ -1,5 +1,4 @@
 ﻿export default interface Review {
-    id: number,
     customerId: string,
     bakeId: number,
     title: string,

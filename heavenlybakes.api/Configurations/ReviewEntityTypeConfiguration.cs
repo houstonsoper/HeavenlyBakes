@@ -16,10 +16,7 @@ public class ReviewEntityTypeConfiguration : IEntityTypeConfiguration<Review>
             .OnDelete(DeleteBehavior.Restrict);
         
         //Composite key
-        builder.HasKey(r => new { r.Id, r.CustomerId, r.BakeId });
+        builder.HasKey(r => new {r.CustomerId, r.BakeId });
         
-        //Configure ID as an identity column
-        builder.Property(r => r.Id)
-            .ValueGeneratedOnAdd();
     }
 }
