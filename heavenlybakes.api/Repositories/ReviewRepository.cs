@@ -41,12 +41,11 @@ public class ReviewRepository : IReviewRepository
         return Math.Round(averageRating, 2);
     }
 
-    public async Task<ReviewRequestDto> AddReviewAsync(ReviewPostDto review)
+    public async Task<Review?> AddReviewAsync(Review review)
     {
-        var newReview = review.ToReviewFromPostDto();
-        await _context.Reviews.AddAsync(newReview);
+        await _context.Reviews.AddAsync(review);
         await _context.SaveChangesAsync();
 
-        return newReview.ToReviewRequestDto();
+        return review;
     }
 }

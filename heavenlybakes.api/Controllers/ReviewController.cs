@@ -1,4 +1,5 @@
-﻿using heavenlybakes.api.Extensions;
+﻿using heavenlybakes.api.DTOs;
+using heavenlybakes.api.Extensions;
 using heavenlybakes.api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,5 +33,28 @@ public class ReviewController : Controller
         var rating = await _reviewRepository.GetRatingAsync(bakeId);
         
         return Ok(rating);
+    }
+
+    [HttpPost("/Review")]
+    public async Task<IActionResult> PostReview([FromBody] ReviewPostDto reviewPostDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        //Map DTO to Review 
+        var review = reviewPostDto.ToReviewFromPostDto();
+        
+        //Add Review to Repo
+        var newReview = await _reviewRepository.AddReviewAsync(review);
+        
+        
+        if (newReview == null)
+        {
+            return BadRequest("Could not create the review.");
+        }
+
+        return Ok(newReview.ToReviewRequestDto());
     }
 }

@@ -7,5 +7,5 @@ public interface IReviewRepository
 {
     Task<IEnumerable<Review>> GetReviewsAsync(int? bakeId, string? customerId);
     Task<double> GetRatingAsync(int bakeId);
-    Task<ReviewRequestDto> AddReviewAsync(ReviewPostDto review);
+    Task<Review?> AddReviewAsync(Review review);
 }
