@@ -1,4 +1,6 @@
-﻿import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+﻿"use client"
+
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import Image from "next/image";
 import React, {useEffect, useState} from "react";
 import OrderWithOrderItems from "@/interfaces/orderWithOrderItems";
@@ -16,10 +18,10 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {Button} from "@/components/ui/button";
-import {fetchBakeReviews, fetchCustomerReviews} from "@/services/reviewService";
-import {useUser} from "@auth0/nextjs-auth0/client";
 import Review from "@/interfaces/review";
+import {useRouter} from "next/navigation";
+import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
+import router from "next/navigation";
 
 interface OrderCardProps {
     order: OrderWithOrderItems;
@@ -28,8 +30,7 @@ interface OrderCardProps {
 
 export default function OrderCard({order, reviews}: OrderCardProps) {
     const [bakes, setBakes] = useState<Bake[]>([]);
-    
-    console.log("reviews test", order.orderId, reviews);
+    const router : AppRouterInstance = useRouter();
 
     useEffect(() => {
         const controller = new AbortController();
@@ -51,7 +52,11 @@ export default function OrderCard({order, reviews}: OrderCardProps) {
         getBakes();
         return () => controller.abort();
     }, [order]);
-
+    
+    const handleReview = () => {
+        const orderString : string = encodeURIComponent(JSON.stringify(order.orderItems.map(o => o.bakeId)));
+        router.push(`/reviews?items=${orderString}`);
+    }
     return (
         <Card className="w-full overflow-hidden  rounded shadow-card my-4">
             <CardHeader className="pb-2">
@@ -138,9 +143,9 @@ export default function OrderCard({order, reviews}: OrderCardProps) {
                     <p className="text-center text-gray-500 py-4">No bakes in this order</p>
                 )}
                 <div>
-                    <Link href="/">
-                        Write a review
-                    </Link>
+                    <button onClick={handleReview}>
+                        <p>Write a review</p>
+                    </button>
                 </div>
                 <div className="mt-4 pt-4 flex justify-between items-center">
                     <p className="text-sm text-gray-500">Order Total:</p>

@@ -9,7 +9,6 @@ import GroupedOrders from "@/interfaces/groupedOrders";
 import OrderCard from "@/components/orderCard";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import Review from "@/interfaces/review";
-import {fetchCustomerReviews} from "@/services/reviewService";
 
 export default function orders(){
     const [orders, setOrders] = useState<GroupedOrders[]>([]);
@@ -27,22 +26,11 @@ export default function orders(){
                 setOrders(groupedOrders);
             }
         }
-        const getCustomersReviews = async() => {
-            if(user && user.sub) {
-                const reviews: Review[] = await fetchCustomerReviews(user.sub, signal);
-                setReviews(reviews);
-                console.log("reviews", reviews);
-            }
-        }
-        getCustomersReviews();
         getOrders();
 
         //Cleanup function to abort fetch when component unmounts
         return () => controller.abort();
     }, [user])
-
-    console.log("orders", orders);
-
 
     return (
         <main className="bg-gray-50">
