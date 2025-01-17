@@ -5,7 +5,6 @@ import OrderWithOrderItems from "@/interfaces/orderWithOrderItems";
 import Bake from "@/interfaces/bake";
 import {fetchBakeById} from "@/services/bakeService";
 import Link from "next/link";
-
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,13 +17,19 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import {Button} from "@/components/ui/button";
+import {fetchBakeReviews, fetchCustomerReviews} from "@/services/reviewService";
+import {useUser} from "@auth0/nextjs-auth0/client";
+import Review from "@/interfaces/review";
 
 interface OrderCardProps {
     order: OrderWithOrderItems;
+    reviews: Review[];
 }
 
-export default function OrderCard({order}: OrderCardProps) {
+export default function OrderCard({order, reviews}: OrderCardProps) {
     const [bakes, setBakes] = useState<Bake[]>([]);
+    
+    console.log("reviews test", order.orderId, reviews);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -44,12 +49,11 @@ export default function OrderCard({order}: OrderCardProps) {
             setBakes(bakesArray);
         }
         getBakes();
-
         return () => controller.abort();
     }, [order]);
 
     return (
-        <Card className="w-full overflow-hidden border-gray-100 rounded-none shadow-card my-4">
+        <Card className="w-full overflow-hidden  rounded shadow-card my-4">
             <CardHeader className="pb-2">
                 <div className="flex">
                     <CardTitle className="text-pink-700">
@@ -58,7 +62,8 @@ export default function OrderCard({order}: OrderCardProps) {
                     {/*OrderID, with Modal that displays order details*/}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <CardTitle className="ms-auto text-pink-700 hover:text-pink-800 cursor-pointer ">Order #{order.orderId}</CardTitle>
+                            <CardTitle className="ms-auto text-pink-700 hover:text-pink-800 cursor-pointer ">Order
+                                #{order.orderId}</CardTitle>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
@@ -132,6 +137,11 @@ export default function OrderCard({order}: OrderCardProps) {
                 ) : (
                     <p className="text-center text-gray-500 py-4">No bakes in this order</p>
                 )}
+                <div>
+                    <Link href="/">
+                        Write a review
+                    </Link>
+                </div>
                 <div className="mt-4 pt-4 flex justify-between items-center">
                     <p className="text-sm text-gray-500">Order Total:</p>
                     <p className="text-lg font-bold text-pink-600">£{order.total.toFixed(2)}</p>

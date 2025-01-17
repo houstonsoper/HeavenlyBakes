@@ -12,7 +12,7 @@ import BasketItem from "@/interfaces/basketItem"
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {Params} from "next/dist/server/request/params";
 import Review from "@/interfaces/review";
-import {fetchRating, fetchReviews} from "@/services/reviewService";
+import {fetchRating, fetchBakeReviews} from "@/services/reviewService";
 import ReviewCard from "@/components/reviewCard";
 import Stars from "@/components/stars";
 
@@ -35,9 +35,10 @@ export default function Details() {
             const fetchedBake: Bake | null = await fetchBakeById(Number(params.id), signal);
             if (fetchedBake) {
                 setBake(fetchedBake);
+                const bakeId : number = fetchedBake.id;
 
                 //Fetch reviews
-                const fetchedReviews: Review[] = await fetchReviews({bakeId: fetchedBake.id}, signal);
+                const fetchedReviews: Review[] = await fetchBakeReviews(bakeId, signal);
                 if (fetchedReviews) setReviews(fetchedReviews)
 
                 //Fetch rating

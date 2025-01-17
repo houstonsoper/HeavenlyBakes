@@ -8,10 +8,13 @@ import {useUser} from "@auth0/nextjs-auth0/client";
 import GroupedOrders from "@/interfaces/groupedOrders";
 import OrderCard from "@/components/orderCard";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import Review from "@/interfaces/review";
+import {fetchCustomerReviews} from "@/services/reviewService";
 
 export default function orders(){
     const [orders, setOrders] = useState<GroupedOrders[]>([]);
     const {user} = useUser();
+    const [reviews, setReviews] = useState<Review[]>([]);
     
     //Fetch orders
     useEffect(() => {
@@ -22,9 +25,16 @@ export default function orders(){
                 const data : orderWithOrderItems[] | [] = await getOrdersByCustomerId(user.sub, signal);
                 const groupedOrders : GroupedOrders[] = groupOrdersByDate(data); //Group the orders by date
                 setOrders(groupedOrders);
-                console.log("grouped orders", groupedOrders);
             }
         }
+        const getCustomersReviews = async() => {
+            if(user && user.sub) {
+                const reviews: Review[] = await fetchCustomerReviews(user.sub, signal);
+                setReviews(reviews);
+                console.log("reviews", reviews);
+            }
+        }
+        getCustomersReviews();
         getOrders();
 
         //Cleanup function to abort fetch when component unmounts
@@ -39,7 +49,7 @@ export default function orders(){
             <PageHeader title="Your Orders" description="Keep track of all your delicious purchases in one place." />
             <div className="container mx-auto px-4 py-8">
                 {orders.length > 0 ? (
-                    orders.map((groupedOrder) => (
+                    orders.map((groupedOrder : GroupedOrders) => (
                         <Card className="mb-8 overflow-hidden bg-white" key={groupedOrder.date}>
                             <CardHeader className="bg-pink-50">
                                 <CardTitle className="text-xl font-semibold text-pink-600">
@@ -50,7 +60,10 @@ export default function orders(){
                                 {groupedOrder.orders.map((order: orderWithOrderItems) => (
                                     <div key={order.orderId}>
                                         <CardContent className="p-4">
-                                            <OrderCard order={order} />
+                                            <OrderCard 
+                                                order={order} 
+                                                reviews={reviews.filter(r => order.orderItems.some(i => i.bakeId == r.bakeId))}
+                                            />
                                         </CardContent>
                                     </div>
                                 ))}
