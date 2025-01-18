@@ -1,5 +1,6 @@
 ﻿using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Extensions;
+using heavenlybakes.api.Models;
 using heavenlybakes.api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,5 +68,32 @@ public class ReviewController : Controller
                 stackTrace = ex.StackTrace ?? "No stack trace avaliable."
             });
         }
+    }
+
+    [HttpPut("/Review/{customerId}/{bakeId}")]
+    public async Task<IActionResult> UpdateReview(string customerId, int bakeId, [FromBody] ReviewUpdateDto reviewUpdateDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        var review = new Review
+        {
+            CustomerId = customerId,
+            BakeId = bakeId,
+            Title = reviewUpdateDto.Title,
+            Feedback = reviewUpdateDto.Feedback,
+            Rating = reviewUpdateDto.Rating,
+        };
+        
+        var updatedReview = await _reviewRepository.UpdateReviewAsync(review);
+
+        if (updatedReview == null)
+        {
+            return BadRequest("Could not update review.");
+        }
+        
+        return Ok(updatedReview.ToReviewRequestDto());
     }
 }
