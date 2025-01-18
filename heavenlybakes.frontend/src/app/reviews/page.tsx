@@ -8,10 +8,10 @@ import {ReadonlyURLSearchParams, useSearchParams} from "next/navigation";
 import Bake from "@/interfaces/bake";
 import {fetchBakeById} from "@/services/bakeService";
 import ReviewWithBake from "@/interfaces/reviewWithBake";
+import ReviewForm from "@/components/reviewForm";
 
 export default function Page (){
-    const [existingReviews, setExistingReviews] = useState<ReviewWithBake[]>([]);
-    const [bakesForReview, setBakesForReview] = useState<Bake[]>([]);
+    const [bakesForReview, setBakesForReview] = useState<ReviewWithBake[]>([]);
     const {user} = useUser();
     const searchParams : ReadonlyURLSearchParams = useSearchParams();
     
@@ -27,31 +27,20 @@ export default function Page (){
                 const itemParam : string | null = searchParams.get("items");
                 const bakeIds : number[] = itemParam ? JSON.parse(decodeURIComponent(itemParam)) : [];
                 
-                const existingReviewsArray : ReviewWithBake[] = [];
-                const bakesForReviewArray : Bake[] = [];
+                const bakesForReviewArray : ReviewWithBake[] = [];
                 
-                //Iterate through BakesIds and fetch existing reviews for the bake and customer
+                //Iterate through BakesIds and fetch reviews for the bake and customer
                 for(const bakeId of bakeIds){
-                    const review : Review = (await fetchReviews({bakeId, customerId : user.sub}, signal))[0];
+                    const review : Review = (await fetchReviews({bakeId, customerId : user.sub}, signal))[0] ?? [];
                     
-                    //If customer already has a review for the bake then add it to the existingReviewsArray
-                    if(review) {
-                        const bake : Bake | null = await fetchBakeById(review.bakeId, signal)
-                        if(bake){
-                            existingReviewsArray.push({ bake, review} );
-                        }
-                    }
-                    //Else get the details of the bake they haven't done a review for
-                    else {
-                        const bake : Bake | null = await fetchBakeById(bakeId, signal);
-                        if (bake) {
-                            bakesForReviewArray.push(bake);
-                        }
+                    //Fetch bake details 
+                    const bake : Bake | null = await fetchBakeById(bakeId, signal)
+                    if(bake){
+                        bakesForReviewArray.push({ review, bake} );
                     }
                 }
-                console.log("existing reviews", existingReviewsArray);
-                console.log("new reviews", bakesForReviewArray);
-                setExistingReviews(existingReviewsArray);
+                console.log("reviews", bakesForReviewArray);
+                setBakesForReview(bakesForReviewArray);
             }
         }
         getCustomersReviews();
@@ -61,7 +50,15 @@ export default function Page (){
     
     
     return (
-        <h1>Hello</h1>
+        <div className="container m-auto">
+        {bakesForReview.length > 0 ? (
+            bakesForReview.map((bakeForReview : ReviewWithBake) => (
+                <ReviewForm bakeForReview={bakeForReview} key={bakeForReview.bake.id} />
+            ))
+            ) : (
+                []
+            )}
+        </div>
     )
 }
 
