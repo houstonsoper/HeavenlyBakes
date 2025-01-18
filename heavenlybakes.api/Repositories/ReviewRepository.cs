@@ -28,7 +28,7 @@ public class ReviewRepository : IReviewRepository
         {
             query = query.Where(r => r.CustomerId == customerId);
         }
-        
+
         return await query.ToListAsync();
     }
 
@@ -37,7 +37,7 @@ public class ReviewRepository : IReviewRepository
         var averageRating = await _context.Reviews
             .Where(r => r.BakeId == bakeId)
             .AverageAsync(r => r.Rating);
-        
+
         return Math.Round(averageRating, 2);
     }
 
@@ -52,6 +52,30 @@ public class ReviewRepository : IReviewRepository
         {
             throw new InvalidOperationException("An error occured while adding review.", ex);
         }
+
         return review;
+    }
+
+    public async Task<Review?> UpdateReviewAsync(Review updatedReview)
+    {
+        //Get the existing review
+        var existingReview = await _context.Reviews
+            .Where(r => r.CustomerId == updatedReview.CustomerId && r.BakeId == updatedReview.BakeId)
+            .FirstOrDefaultAsync();
+        
+        if (existingReview == null) 
+            return null;
+        
+        //Update the existing review if there are changes made to it
+        if (updatedReview.Title != existingReview.Title ||
+            updatedReview.Feedback != existingReview.Feedback ||
+            updatedReview.Rating != existingReview.Rating)
+        {
+            existingReview.Title = updatedReview.Title;
+            existingReview.Feedback = updatedReview.Feedback;
+            existingReview.Rating = updatedReview.Rating;
+        }
+        await _context.SaveChangesAsync();
+        return updatedReview;
     }
 }
