@@ -29,7 +29,7 @@ export default function Page() {
                 type: type || undefined
             });
             setBakes(fetchedBakes);
-            type && setBakeType(type);
+            type ? setBakeType(type) : setBakeType("All");
             
         }
         getBakes();
