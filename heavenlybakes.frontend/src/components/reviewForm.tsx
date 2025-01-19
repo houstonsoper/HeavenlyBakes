@@ -42,7 +42,7 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
                             <div>
                                 <label className="block" htmlFor="feedback">Feedback: </label>
                                 {bakeForReview.review.feedback ? (
-                                    <textarea className="w-full" name="feedback" value={bakeForReview.review.feedback} disabled/>
+                                    <textarea className="w-full" name="feedback" value={bakeForReview.review.feedback}/>
                                 ) : (
                                     <textarea className="w-full" name="feedback"/>
                                 )}

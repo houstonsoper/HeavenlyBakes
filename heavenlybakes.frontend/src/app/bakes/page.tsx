@@ -11,6 +11,7 @@ export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
     const searchParams = useSearchParams();
     const [filter, setFilter] = useState("");
+    const [bakeType, setBakeType] = useState<string>("");
     
     console.log(searchParams.get("type"));
     
@@ -28,12 +29,11 @@ export default function Page() {
                 type: type || undefined
             });
             setBakes(fetchedBakes);
+            type && setBakeType(type);
+            
         }
         getBakes();
     }, [searchParams])
-    
-    //Filter Bakes by BakeType if there is a search param
-    
     
     const handleFilter = (event : React.ChangeEvent<HTMLSelectElement>) => {
             switch(event.target.value) {
@@ -75,6 +75,7 @@ export default function Page() {
                 
                 <section className="py-10">
                     <div className="container mx-auto px-4 ">
+                        <h1 className="text-center">{bakeType}</h1>
                         <div className="py-3">
                             <select onChange={handleFilter} defaultValue="a">
                                 <option value="a">Most Popular</option>
