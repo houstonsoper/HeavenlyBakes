@@ -41,13 +41,13 @@ export default function BakeCard({bake} : BakeCardProps){
     }
     
     return(
-        <div className="card m-auto bg-white rounded overflow-hidden shadow-md">
+        <div className="card m-auto bg-white rounded overflow-hidden shadow-md max-w-48">
             <Link href={"/bakes/"+bake.id}>
                 <div className="card-top">
                     <Image src={bake.imageUrl} alt={bake.name} width={200} height={200} />
                 </div>
                 <div className="card-bottom rounded pt-2 px-2 text-gray-700">
-                    <h2>{bake.name}</h2>
+                    <h2 className="truncate">{bake.name}</h2>
                     <div className="flex">
                         {bake.discount ? (
                             <p className="text-red-600 line-through me-1 font-semibold">
