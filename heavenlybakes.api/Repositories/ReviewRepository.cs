@@ -42,17 +42,10 @@ public class ReviewRepository : IReviewRepository
     }
 
     public async Task<Review?> AddReviewAsync(Review review)
-    {
-        try
-        {
-            await _context.Reviews.AddAsync(review);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException("An error occured while adding review.", ex);
-        }
-
+    { 
+        await _context.Reviews.AddAsync(review); 
+        await _context.SaveChangesAsync();
+        
         return review;
     }
 
