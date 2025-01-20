@@ -96,4 +96,17 @@ public class ReviewController : Controller
         
         return Ok(updatedReview.ToReviewRequestDto());
     }
+
+    [HttpDelete("/Review/{customerId}/{bakeId}")]
+    public async Task<IActionResult> DeleteReview(string customerId, int bakeId)
+    {
+        var response = await _reviewRepository.DeleteReviewAsync(customerId, bakeId);
+
+        if (response == null)
+        {
+            return BadRequest("Could not delete review.");
+        }
+        
+        return Ok(response);
+    }
 }

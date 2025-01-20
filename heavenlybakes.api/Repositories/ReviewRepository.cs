@@ -71,4 +71,18 @@ public class ReviewRepository : IReviewRepository
         await _context.SaveChangesAsync();
         return updatedReview;
     }
+
+    public async Task<string> DeleteReviewAsync(string customerId, int bakeId)
+    {
+        var review = await _context.Reviews
+            .FirstOrDefaultAsync(r => r.BakeId == bakeId && r.CustomerId == customerId);
+
+        if (review == null)
+            return null;
+        
+        _context.Reviews.Remove(review);
+        await _context.SaveChangesAsync();
+        
+        return $"Review for bakeId: {bakeId} and customerId: {customerId} has been deleted";
+    }
 }
