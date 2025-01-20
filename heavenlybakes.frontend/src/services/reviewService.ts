@@ -64,3 +64,25 @@ export async function fetchRating(bakeId : number, signal : AbortSignal) : Promi
         return 0;
     }
 }
+
+export async function postReview (review : Review) {
+    try {
+        const url = `${BASE_URL}/review`;
+        
+        const response : Response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({review}),
+            headers: {'Content-Type': 'application/json'}
+        });
+        
+        if (!response.ok){
+            throw new Error("Unable to post review");
+        }
+        
+        return await response.json();
+    } catch(error){
+        if (error instanceof Error){
+            console.error(error.message);
+        }
+    }
+}
