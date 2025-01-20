@@ -3,20 +3,21 @@
 import Bake from "@/interfaces/bake";
 import ReviewWithBake from "@/interfaces/reviewWithBake";
 import Review from "@/interfaces/review";
-import React, {FormEvent, RefObject, useRef} from "react";
+import React, {FormEvent, RefObject, useRef, useState} from "react";
 import Image from "next/image";
 import {UserContext, useUser} from "@auth0/nextjs-auth0/client";
-import {postReview, updateReview} from "@/services/reviewService";
+import {deleteReview, postReview, updateReview} from "@/services/reviewService";
 import Link from "next/link";
 
 interface ReviewFormProps {
     bakeForReview: ReviewWithBake,
+    updatePageAction: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export default function ReviewForm({bakeForReview}: ReviewFormProps) {
+export default function ReviewForm({bakeForReview, updatePageAction}: ReviewFormProps) {
     const bake: Bake = bakeForReview.bake;
     const review: Review | null = bakeForReview.review;
-    const [rating, setRating] = React.useState(1);
+    const [rating, setRating] = useState<number>(1);
     const formRef = useRef<HTMLFormElement>(null);
     const {user} : UserContext = useUser();
 
@@ -29,7 +30,7 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
         setRating(value);
     }
 
-    const handleReview = async (e : React.FormEvent) => {
+    const handleAddReview = async (e : React.FormEvent) => {
         e.preventDefault();
         if(!formRef.current) return;
         
@@ -52,6 +53,15 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
             } else {
                 await postReview(newReview);
             }
+            
+            updatePageAction(true);
+        }
+    }
+    
+    const handleDeleteReview = async () => {
+        if (review) {
+            await deleteReview(review);
+            updatePageAction(true);
         }
     }
     
@@ -68,22 +78,31 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
                     </div>
                     <div>
                         <form
-                            onSubmit={handleReview}
+                            onSubmit={handleAddReview}
                             ref={formRef}>
 
                             <label className="block" htmlFor="title">Title: </label>
-                            <input className="mb-4 w-full border" name="title" type="text" defaultValue={review?.title ?? ''} required/>
+                            <input className="mb-4 w-full border" name="title" type="text"
+                                   defaultValue={review?.title ?? ''} required/>
 
                             <label className="block" htmlFor="feedback">Share your review about this product: </label>
-                            <textarea className="w-full mb-4 border" name="feedback" defaultValue={review?.feedback ?? ''}
+                            <textarea className="w-full mb-4 border" name="feedback"
+                                      defaultValue={review?.feedback ?? ''}
                                       required/>
 
                             <label className="block" htmlFor="rating">Rating: </label>
-                            <input className="w-full border mb-4" name="rating" type="number" value={rating} onChange={handleRating}
+                            <input className="w-full border mb-4" name="rating" type="number" value={rating}
+                                   onChange={handleRating}
                                    defaultValue={review?.rating ?? ''} required/>
-                            <button
-                                className="bg-pink-500 hover:bg-pink-600 text-white p-2 block w-1/4">{review ? ("Update Review") : ("Add Review")}
-                            </button>
+                            <div className="flex gap-6">
+                                <button type="submit" className="bg-pink-500 hover:bg-pink-600 text-white p-2 block w-1/4">
+                                    {review ? ("Update Review") : ("Add Review")}
+                                </button>
+                                {review ? (
+                                <button onClick={handleDeleteReview} type="button" className="bg-red-500 hover:bg-red-600 text-white p-2 block w-1/4"> 
+                                    Delete Review
+                                </button> ) : null }
+                            </div>
                         </form>
                     </div>
                 </div>

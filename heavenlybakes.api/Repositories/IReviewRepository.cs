@@ -9,5 +9,5 @@ public interface IReviewRepository
     Task<double> GetRatingAsync(int bakeId);
     Task<Review?> AddReviewAsync(Review review);
     Task<Review?> UpdateReviewAsync(Review updatedReview);
-    Task<string> DeleteReviewAsync(string customerId, int bakeId);
+    Task<bool> DeleteReviewAsync(string customerId, int bakeId);
 }

@@ -98,11 +98,32 @@ export async function updateReview (review : Review) {
             method: 'PUT',
             body: JSON.stringify(updatedReview),
             headers: {'Content-Type': 'application/json'}
-        })
+        });
 
         if (!response.ok) {
             throw new Error("Unable to update review");
         }
+    } catch (error){
+        if (error instanceof Error){
+            console.error(error.message);
+        }
+    }
+}
+
+export async function deleteReview (review : Review) {
+    try {
+        const url = `${BASE_URL}/Review/${review.customerId}/${review.bakeId}`;
+        
+        const response: Response = await fetch(url, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'}
+        });
+        
+        if (!response.ok){
+            throw new Error("Unable to delete review");
+        }
+        
+        return await response.json();
     } catch (error){
         if (error instanceof Error){
             console.error(error.message);

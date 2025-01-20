@@ -100,13 +100,13 @@ public class ReviewController : Controller
     [HttpDelete("/Review/{customerId}/{bakeId}")]
     public async Task<IActionResult> DeleteReview(string customerId, int bakeId)
     {
-        var response = await _reviewRepository.DeleteReviewAsync(customerId, bakeId);
+        var isDeleted = await _reviewRepository.DeleteReviewAsync(customerId, bakeId);
 
-        if (response == null)
+        if (!isDeleted)
         {
-            return BadRequest("Could not delete review.");
+            return NotFound(new { message = $"No review found for bakeId: {bakeId} and customerId: {customerId}." });
         }
         
-        return Ok(response);
+        return Ok(new { message = $"Review for bakeId: {bakeId} and customerId: {customerId} has been deleted." });
     }
 }

@@ -14,6 +14,7 @@ export default function Page (){
     const [bakesForReview, setBakesForReview] = useState<(ReviewWithBake)[]>([]);
     const {user} = useUser();
     const searchParams : ReadonlyURLSearchParams = useSearchParams();
+    const [updatePage, setUpdatePage] = useState<boolean>(false);
     
     useEffect(() => {
         const controller = new AbortController();
@@ -54,15 +55,16 @@ export default function Page (){
             }
         }
         getCustomersReviews();
+        setUpdatePage(false);
         
         return () => controller.abort();
-    }, [searchParams, user]);
+    }, [searchParams, user, updatePage]);
     
     return (
         <div className="container m-auto">
         {bakesForReview.length > 0 ? (
             bakesForReview.map((bakeForReview : ReviewWithBake) => (
-                    <ReviewForm bakeForReview={bakeForReview} key={bakeForReview.bake.id} />
+                    <ReviewForm bakeForReview={bakeForReview} updatePageAction={setUpdatePage} key={bakeForReview.bake.id} />
             ))
             ) : (
                 []
