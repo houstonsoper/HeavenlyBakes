@@ -6,7 +6,7 @@ import Review from "@/interfaces/review";
 import React, {FormEvent, RefObject, useRef} from "react";
 import Image from "next/image";
 import {UserContext, useUser} from "@auth0/nextjs-auth0/client";
-import {postReview} from "@/services/reviewService";
+import {postReview, updateReview} from "@/services/reviewService";
 
 interface ReviewFormProps {
     bakeForReview: ReviewWithBake,
@@ -28,7 +28,7 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
         setRating(value);
     }
 
-    const handleAddReview = async (e : React.FormEvent) => {
+    const handleReview = async (e : React.FormEvent) => {
         e.preventDefault();
         if(!formRef.current) return;
         
@@ -36,7 +36,7 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
         const formData = new FormData(formRef.current);
         
         if(user && user.sub) {
-            const data: Review = {
+            const newReview : Review = {
                 customerId: user?.sub,
                 bakeId: bake.id,
                 title: formData.get("title") as string,
@@ -44,40 +44,46 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
                 rating: Number(formData.get("rating")),
                 createDateTime: new Date(),
             }
-            console.log(data);
-            await postReview(data);
+            
+            //Update review if already exists, else add a new one
+            if (review) {
+                await updateReview(newReview);
+            } else {
+                await postReview(newReview);
+            }
         }
     }
-
-
+    
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center py-8">
             {bakeForReview ? (
-                <div className="grid grid-cols-[1fr_2fr] border justify-center p-4 gap-6">
+                <div className="border justify-center p-4 gap-6 w-3/4 rounded">
+                <h1>{bake.name}</h1>
+                <div className="grid grid-cols-[1fr_2fr]">
                     <div>
-                        <h1>{bake.name}</h1>
-                        <Image src={bake.imageUrl} width="200" height="200" alt={bake.name}/>
+                        <Image src={bake.imageUrl} width="200" height="200" alt={bake.name} />
                     </div>
                     <div>
-                        <form 
-                            onSubmit={handleAddReview} 
+                        <form
+                            onSubmit={handleReview}
                             ref={formRef}>
-                            
-                                <label className="block" htmlFor="title">Title: </label>
-                                <input name="title" type="text" required/>
-                            
-                                <label className="block" htmlFor="feedback">Feedback: </label>
-                                {review ? (
-                                    <textarea className="w-full" name="feedback" value={review.feedback} required/>
-                                ) : (
-                                    <textarea className="w-full" name="feedback" required/>
-                                )}
-                            
-                                <label className="block" htmlFor="rating">Rating: </label>
-                                <input name="rating" type="number" value={rating} onChange={handleRating} required/>
-                            <button className="bg-pink-600 text-white p-2">Add Review</button>
+
+                            <label className="block" htmlFor="title">Title: </label>
+                            <input className="mb-4 w-full border" name="title" type="text" defaultValue={review?.title ?? ''} required/>
+
+                            <label className="block" htmlFor="feedback">Share your review about this product: </label>
+                            <textarea className="w-full mb-4 border" name="feedback" defaultValue={review?.feedback ?? ''}
+                                      required/>
+
+                            <label className="block" htmlFor="rating">Rating: </label>
+                            <input className="w-full border mb-4" name="rating" type="number" value={rating} onChange={handleRating}
+                                   defaultValue={review?.rating ?? ''} required/>
+                            <button
+                                className="bg-pink-600 text-white p-2 block w-1/2 m-auto">{review ? ("Update Review") : ("Add Review")}
+                            </button>
                         </form>
                     </div>
+                </div>
                 </div>
             ) : null}
         </div>

@@ -84,3 +84,28 @@ export async function postReview (review : Review) {
         }
     }
 }
+
+export async function updateReview (review : Review) {
+    try {
+        const updatedReview = {
+            title: review.title,
+            feedback: review.feedback,
+            rating: review.rating,
+        }
+        
+        const url = `${BASE_URL}/Review/${review.customerId}/${review.bakeId}`;
+        const response: Response = await fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(updatedReview),
+            headers: {'Content-Type': 'application/json'}
+        })
+
+        if (!response.ok) {
+            throw new Error("Unable to update review");
+        }
+    } catch (error){
+        if (error instanceof Error){
+            console.error(error.message);
+        }
+    }
+}
