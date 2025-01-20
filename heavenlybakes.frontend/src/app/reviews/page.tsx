@@ -11,7 +11,7 @@ import ReviewWithBake from "@/interfaces/reviewWithBake";
 import ReviewForm from "@/components/reviewForm";
 
 export default function Page (){
-    const [bakesForReview, setBakesForReview] = useState<ReviewWithBake[]>([]);
+    const [bakesForReview, setBakesForReview] = useState<(ReviewWithBake)[]>([]);
     const {user} = useUser();
     const searchParams : ReadonlyURLSearchParams = useSearchParams();
     
@@ -22,25 +22,26 @@ export default function Page (){
         //Get existing reviews for the customer based on the item(s) they have selected to review
         //This is to prevent the user from reviewing the same item twice
         const getCustomersReviews = async() => {
-            if(user && user.sub) {
+            if(user?.sub) {
                 //Get bakes from search param
-                const itemParam : string | null = searchParams.get("items");
-                const bakeIds : number[] = itemParam ? JSON.parse(decodeURIComponent(itemParam)) : [];
+                const bakeParam : string | null = searchParams.get("items");
+                const bakeIds : number[] = bakeParam ? JSON.parse(decodeURIComponent(bakeParam)) : [];
                 
-                const bakesForReviewArray : ReviewWithBake[] = [];
-                
-                //Iterate through BakesIds and fetch reviews for the bake and customer
-                for(const bakeId of bakeIds){
-                    const review : Review = (await fetchReviews({bakeId, customerId : user.sub}, signal))[0] ?? [];
-                    
-                    //Fetch bake details 
-                    const bake : Bake | null = await fetchBakeById(bakeId, signal)
-                    if(bake){
-                        bakesForReviewArray.push({ review, bake} );
-                    }
-                }
-                console.log("reviews", bakesForReviewArray);
-                setBakesForReview(bakesForReviewArray);
+                //Create an array of promises to fetch reviews and bakes for each bakeId
+                const bakesForReviewArray : (ReviewWithBake | null)[]  = await Promise.all (
+                    bakeIds.map(async bakeId => {
+                        const review : Review = (await fetchReviews({ bakeId, customerId: user.sub ?? undefined }, signal))[0] ?? null;
+                        const bake : Bake | null = await fetchBakeById(bakeId, signal);
+                        
+                        //If the bake exists, return the bake and existing reviews (if exists), otherwise return null
+                        if (bake !== null){
+                            return { review, bake }
+                        }
+                        return null;
+                    })
+                );
+                //Update the state, filtering out any null values.
+                setBakesForReview(bakesForReviewArray.filter(bfr => bfr !== null));
             }
         }
         getCustomersReviews();
@@ -53,7 +54,7 @@ export default function Page (){
         <div className="container m-auto">
         {bakesForReview.length > 0 ? (
             bakesForReview.map((bakeForReview : ReviewWithBake) => (
-                <ReviewForm bakeForReview={bakeForReview} key={bakeForReview.bake.id} />
+                    <ReviewForm bakeForReview={bakeForReview} key={bakeForReview.bake.id} />
             ))
             ) : (
                 []

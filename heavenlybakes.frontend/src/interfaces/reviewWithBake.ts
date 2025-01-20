@@ -2,6 +2,6 @@
 import Bake from "@/interfaces/bake";
 
 export default interface ReviewWithBake {
-    review: Review,
-    bake: Bake
+    review: Review | null,
+    bake: Bake; 
 }

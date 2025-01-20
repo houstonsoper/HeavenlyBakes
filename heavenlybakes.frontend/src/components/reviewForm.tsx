@@ -12,7 +12,7 @@ interface ReviewFormProps {
 
 export default function ReviewForm({bakeForReview}: ReviewFormProps) {
     const bake: Bake = bakeForReview.bake;
-    const review: Review = bakeForReview.review;
+    const review: Review | null = bakeForReview.review;
     const [rating, setRating] = React.useState(1);
 
     const handleRating = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +41,8 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
     
                             <div>
                                 <label className="block" htmlFor="feedback">Feedback: </label>
-                                {bakeForReview.review.feedback ? (
-                                    <textarea className="w-full" name="feedback" value={bakeForReview.review.feedback}/>
+                                {review ? (
+                                    <textarea className="w-full" name="feedback" value={review.feedback}/>
                                 ) : (
                                     <textarea className="w-full" name="feedback"/>
                                 )}
