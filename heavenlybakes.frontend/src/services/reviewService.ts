@@ -67,19 +67,17 @@ export async function fetchRating(bakeId : number, signal : AbortSignal) : Promi
 
 export async function postReview (review : Review) {
     try {
-        const url = `${BASE_URL}/review`;
+        const url = `${BASE_URL}/Review`;
         
         const response : Response = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify({review}),
+            body: JSON.stringify(review),
             headers: {'Content-Type': 'application/json'}
         });
         
         if (!response.ok){
             throw new Error("Unable to post review");
         }
-        
-        return await response.json();
     } catch(error){
         if (error instanceof Error){
             console.error(error.message);

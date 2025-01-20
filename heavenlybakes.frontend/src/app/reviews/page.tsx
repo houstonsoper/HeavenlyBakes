@@ -49,7 +49,6 @@ export default function Page (){
         return () => controller.abort();
     }, [searchParams, user]);
     
-    
     return (
         <div className="container m-auto">
         {bakesForReview.length > 0 ? (
