@@ -40,8 +40,17 @@ export default function Page (){
                         return null;
                     })
                 );
-                //Update the state, filtering out any null values.
-                setBakesForReview(bakesForReviewArray.filter(bfr => bfr !== null));
+                //Update the state, filtering out any null values
+                //and sorting the array so items without a review are at the top.
+                setBakesForReview(
+                    bakesForReviewArray
+                        .filter(bfr => bfr !== null)
+                        .sort((a : ReviewWithBake, b : ReviewWithBake) : 0 | 1 | -1 => {
+                            if (a.review !== null && b.review === null) return 1;
+                            if (a.review === null && b.review !== null) return -1;
+                            return 0;
+                        })
+                );
             }
         }
         getCustomersReviews();

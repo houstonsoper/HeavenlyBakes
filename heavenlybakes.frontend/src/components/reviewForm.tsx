@@ -7,6 +7,7 @@ import React, {FormEvent, RefObject, useRef} from "react";
 import Image from "next/image";
 import {UserContext, useUser} from "@auth0/nextjs-auth0/client";
 import {postReview, updateReview} from "@/services/reviewService";
+import Link from "next/link";
 
 interface ReviewFormProps {
     bakeForReview: ReviewWithBake,
@@ -61,7 +62,9 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
                 <h1>{bake.name}</h1>
                 <div className="grid grid-cols-[1fr_2fr]">
                     <div>
-                        <Image src={bake.imageUrl} width="200" height="200" alt={bake.name} />
+                        <Link href={`/bakes/${bake.id}`}>
+                            <Image src={bake.imageUrl} width="200" height="200" alt={bake.name} />
+                        </Link>
                     </div>
                     <div>
                         <form
@@ -79,7 +82,7 @@ export default function ReviewForm({bakeForReview}: ReviewFormProps) {
                             <input className="w-full border mb-4" name="rating" type="number" value={rating} onChange={handleRating}
                                    defaultValue={review?.rating ?? ''} required/>
                             <button
-                                className="bg-pink-600 text-white p-2 block w-1/2 m-auto">{review ? ("Update Review") : ("Add Review")}
+                                className="bg-pink-500 hover:bg-pink-600 text-white p-2 block w-1/4">{review ? ("Update Review") : ("Add Review")}
                             </button>
                         </form>
                     </div>
