@@ -3,7 +3,7 @@
 import Bake from "@/interfaces/bake";
 import ReviewWithBake from "@/interfaces/reviewWithBake";
 import Review from "@/interfaces/review";
-import React, {ChangeEvent, FormEvent, RefObject, useRef, useState} from "react";
+import React, {ChangeEvent, FormEvent, RefObject, useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {UserContext, useUser} from "@auth0/nextjs-auth0/client";
 import {deleteReview, postReview, updateReview} from "@/services/reviewService";
@@ -23,6 +23,16 @@ export default function ReviewForm({bakeForReview, updatePageAction}: ReviewForm
     const [title, setTitle] = useState<string>("");
     const [feedback, setFeedback] = useState<string>("");
 
+    useEffect(() => {
+        const review : Review | null = bakeForReview.review;
+        
+        if (review ) {
+            setFeedback(review.feedback)
+            setTitle(review.title)
+            setRating(review.rating)
+        }
+    }, []);
+    
     const handleRating = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: number = Number(event.target.value);
 
@@ -117,7 +127,7 @@ export default function ReviewForm({bakeForReview, updatePageAction}: ReviewForm
                                     product: </label>
                                 <textarea className="w-full mb-4 border" 
                                           name="feedback"
-                                          defaultValue={review?.feedback ?? ''}
+                                          defaultValue={review?.feedback ?? feedback}
                                           onChange={handleFeedback}
                                           value={feedback}
                                           required
