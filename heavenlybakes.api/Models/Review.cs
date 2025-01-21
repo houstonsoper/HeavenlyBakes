@@ -13,7 +13,7 @@ public class Review
     public required int BakeId { get; set; }
     
     [Required(ErrorMessage = "Title is required.")]
-    [MaxLength(100, ErrorMessage = "Maximum length is 50 characters.")]
+    [MaxLength(50, ErrorMessage = "Maximum length is 50 characters.")]
     public required string Title { get; set; } 
     
     [Required(ErrorMessage = "Feedback is required.")]

@@ -3,7 +3,7 @@
 import Bake from "@/interfaces/bake";
 import ReviewWithBake from "@/interfaces/reviewWithBake";
 import Review from "@/interfaces/review";
-import React, {FormEvent, RefObject, useRef, useState} from "react";
+import React, {ChangeEvent, FormEvent, RefObject, useRef, useState} from "react";
 import Image from "next/image";
 import {UserContext, useUser} from "@auth0/nextjs-auth0/client";
 import {deleteReview, postReview, updateReview} from "@/services/reviewService";
@@ -20,6 +20,8 @@ export default function ReviewForm({bakeForReview, updatePageAction}: ReviewForm
     const [rating, setRating] = useState<number>(1);
     const formRef = useRef<HTMLFormElement>(null);
     const {user} : UserContext = useUser();
+    const [title, setTitle] = useState<string>("");
+    const [feedback, setFeedback] = useState<string>("");
 
     const handleRating = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: number = Number(event.target.value);
@@ -28,6 +30,24 @@ export default function ReviewForm({bakeForReview, updatePageAction}: ReviewForm
         if (value <= 1) value = 1;
 
         setRating(value);
+    }
+    
+    const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const input : string = event.target.value;
+        if (input.length > 50) {
+            setTitle(input.substring(0, 50));
+        } else {
+            setTitle(input);
+        }
+    }
+
+    const handleFeedback = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const input : string = event.target.value;
+        if (input.length > 500) {
+            setFeedback(input.substring(0, 500));
+        } else {
+            setFeedback(input);
+        }
     }
 
     const handleAddReview = async (e : React.FormEvent) => {
@@ -68,44 +88,64 @@ export default function ReviewForm({bakeForReview, updatePageAction}: ReviewForm
     return (
         <div className="flex justify-center py-8">
             {bakeForReview ? (
-                <div className="border justify-center p-4 gap-6 w-3/4 rounded">
-                <h1>{bake.name}</h1>
-                <div className="grid grid-cols-[1fr_2fr]">
-                    <div>
-                        <Link href={`/bakes/${bake.id}`}>
-                            <Image src={bake.imageUrl} width="200" height="200" alt={bake.name} />
-                        </Link>
+                <div className="border justify-center gap-6 w-3/4 rounded p-3">
+                    <h2 className="text-pink-700 font-semibold mb-2">{bake.name}</h2>
+                    <div className="grid grid-cols-[1fr_2fr]">
+                        <div>
+                            <Link href={`/bakes/${bake.id}`}>
+                                <Image className="rounded" src={bake.imageUrl} width="200" height="200" alt={bake.name}/>
+                            </Link>
+                        </div>
+                        <div>
+                            <form
+                                onSubmit={handleAddReview}
+                                ref={formRef}>
+
+                                {/* Review Title */}
+                                <label className="block text-pink-700" htmlFor="title">Review title: </label>
+                                <input className="mb-4 w-full border"
+                                       name="title"
+                                       type="text"
+                                       defaultValue={review?.title ?? ''}
+                                       onChange={handleTitle}
+                                       value={title}
+                                       required
+                                />
+
+                                {/* Review Feedback */}
+                                <label className="block text-pink-700" htmlFor="feedback">Share your review about this
+                                    product: </label>
+                                <textarea className="w-full mb-4 border" 
+                                          name="feedback"
+                                          defaultValue={review?.feedback ?? ''}
+                                          onChange={handleFeedback}
+                                          value={feedback}
+                                          required
+                                />
+
+                                {/* Review Rating */}
+                                <label className="block text-pink-700" htmlFor="rating">Rating: </label>
+                                <input className="w-full border mb-4"
+                                       name="rating" type="number"
+                                       onChange={handleRating}
+                                       defaultValue={review?.rating ?? 1}
+                                       required
+                                />
+                                
+                                <div className="flex gap-6">
+                                    <button type="submit"
+                                            className="bg-pink-500 hover:bg-pink-600 text-white p-2 block w-1/4">
+                                        {review ? ("Update Review") : ("Add Review")}
+                                    </button>
+                                    {review ? (
+                                        <button onClick={handleDeleteReview} type="button"
+                                                className="bg-red-500 hover:bg-red-600 text-white p-2 block w-1/4">
+                                            Delete Review
+                                        </button>) : null}
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div>
-                        <form
-                            onSubmit={handleAddReview}
-                            ref={formRef}>
-
-                            <label className="block" htmlFor="title">Title: </label>
-                            <input className="mb-4 w-full border" name="title" type="text"
-                                   defaultValue={review?.title ?? ''} required/>
-
-                            <label className="block" htmlFor="feedback">Share your review about this product: </label>
-                            <textarea className="w-full mb-4 border" name="feedback"
-                                      defaultValue={review?.feedback ?? ''}
-                                      required/>
-
-                            <label className="block" htmlFor="rating">Rating: </label>
-                            <input className="w-full border mb-4" name="rating" type="number" value={rating}
-                                   onChange={handleRating}
-                                   defaultValue={review?.rating ?? ''} required/>
-                            <div className="flex gap-6">
-                                <button type="submit" className="bg-pink-500 hover:bg-pink-600 text-white p-2 block w-1/4">
-                                    {review ? ("Update Review") : ("Add Review")}
-                                </button>
-                                {review ? (
-                                <button onClick={handleDeleteReview} type="button" className="bg-red-500 hover:bg-red-600 text-white p-2 block w-1/4"> 
-                                    Delete Review
-                                </button> ) : null }
-                            </div>
-                        </form>
-                    </div>
-                </div>
                 </div>
             ) : null}
         </div>
