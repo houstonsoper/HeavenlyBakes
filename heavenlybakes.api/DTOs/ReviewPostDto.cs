@@ -4,8 +4,8 @@ namespace heavenlybakes.api.DTOs;
 
 public class ReviewPostDto
 {
-    [Required(ErrorMessage = "CustomerId is required.")]
-    public required string CustomerId { get; set; }
+    [Required(ErrorMessage = "UserId is required.")]
+    public Guid UserId { get; set; }
     
     [Required(ErrorMessage = "BakeId is required.")]
     public required int BakeId { get; set; }

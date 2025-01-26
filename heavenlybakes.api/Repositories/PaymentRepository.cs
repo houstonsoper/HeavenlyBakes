@@ -1,4 +1,4 @@
-﻿using heavenlybakes.api.Context;
+﻿using heavenlybakes.api.Contexts;
 using heavenlybakes.api.Models;
 using Microsoft.EntityFrameworkCore;
 

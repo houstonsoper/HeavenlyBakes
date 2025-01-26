@@ -1,4 +1,4 @@
-﻿using heavenlybakes.api.Context;
+﻿using heavenlybakes.api.Contexts;
 using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +19,7 @@ public class OrderRepository : IOrderRepository
         //Create a new Order
         var newOrder = new Order
         {
-            CustomerId = order.CustomerId,
+            UserId = order.UserId,
             OrderDate = DateTime.Now,
             ShippingAddress = order.ShippingAddress,
             ShippingCity = order.ShippingCity,
@@ -97,13 +97,13 @@ public class OrderRepository : IOrderRepository
         return newOrderItem;
     }
 
-    public async Task<IEnumerable<Order>> GetCustomersOrders(string customerId)
+    public async Task<IEnumerable<Order>> GetCustomersOrders(string userId)
     {
         //Return the customers orders (including items) 
         return await _context.Orders
             .Include(o => o.OrderItems)
             .Include(o => o.PaymentMethod)
-            .Where(o => o.CustomerId == customerId && o.OrderItems.Count > 0) 
+            .Where(o => o.UserId == Guid.Parse(userId) && o.OrderItems.Count > 0) 
             .ToListAsync();
     }
 }

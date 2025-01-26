@@ -3,19 +3,19 @@ const BASE_URL : string =  `https://localhost:44367`;
 
 interface ReviewParams {
     bakeId?: number;
-    customerId?: string;
+    userId?: string;
 }
-export async function fetchReviews({bakeId, customerId} : ReviewParams, signal : AbortSignal) : Promise<Review[]>  {
+export async function fetchReviews({bakeId, userId} : ReviewParams, signal : AbortSignal) : Promise<Review[]>  {
     try{
         let url : string = `${BASE_URL}/reviews`;
         
         //Set url based on the params supplied
-        if(bakeId && customerId) {
-            url += `?bakeId=${bakeId}&customerId=${customerId}`;
+        if(bakeId && userId) {
+            url += `?bakeId=${bakeId}&customerId=${userId}`;
         } else if (bakeId) {
             url += `?bakeId=${bakeId}`;
-        } else if (customerId){
-            url += `?customerId=${customerId}`;
+        } else if (userId){
+            url += `?customerId=${userId}`;
         }
         
         const response : Response = await fetch(url, {signal});
@@ -93,7 +93,7 @@ export async function updateReview (review : Review) {
             rating: review.rating,
         }
         
-        const url = `${BASE_URL}/Review/${review.customerId}/${review.bakeId}`;
+        const url = `${BASE_URL}/Review/${review.userId}/${review.bakeId}`;
         const response: Response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify(updatedReview),
@@ -112,7 +112,7 @@ export async function updateReview (review : Review) {
 
 export async function deleteReview (review : Review) {
     try {
-        const url = `${BASE_URL}/Review/${review.customerId}/${review.bakeId}`;
+        const url = `${BASE_URL}/Review/${review.userId}/${review.bakeId}`;
         
         const response: Response = await fetch(url, {
             method: 'DELETE',

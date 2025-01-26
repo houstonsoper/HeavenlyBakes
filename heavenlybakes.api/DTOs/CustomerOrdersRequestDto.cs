@@ -1,14 +1,12 @@
 ﻿using heavenlybakes.api.Enums;
-using heavenlybakes.api.Migrations;
 using heavenlybakes.api.Models;
-using PaymentMethod = heavenlybakes.api.Migrations.PaymentMethod;
 
 namespace heavenlybakes.api.DTOs;
 
 public class CustomerOrdersRequestDto
 {
     public int OrderId { get; set; }
-    public string CustomerId { get; set; } = string.Empty;
+    public Guid UserId { get; set; }
     public DateTime OrderDate { get; set; } 
     public string ShippingAddress { get; set; } = string.Empty;
     public string ShippingCity { get; set; } = string.Empty;

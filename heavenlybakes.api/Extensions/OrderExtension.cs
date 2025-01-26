@@ -1,7 +1,6 @@
 ﻿using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Enums;
 using heavenlybakes.api.Models;
-using PaymentMethod = heavenlybakes.api.Migrations.PaymentMethod;
 
 namespace heavenlybakes.api.Extensions;
 
@@ -12,7 +11,7 @@ public static class OrderExtension
         return new OrderRequestDto
         {
             OrderId = order.OrderId,
-            CustomerId = order.CustomerId,
+            UserId = order.UserId,
             ShippingAddress = order.ShippingAddress,
             ShippingCity = order.ShippingCity,
             ShippingPostalCode = order.ShippingPostalCode,
@@ -27,7 +26,7 @@ public static class OrderExtension
         return new CustomerOrdersRequestDto
         {
             OrderId = order.OrderId,
-            CustomerId = order.CustomerId,
+            UserId = order.UserId,
             OrderDate = order.OrderDate,
             ShippingAddress = order.ShippingAddress,
             ShippingCity = order.ShippingCity,

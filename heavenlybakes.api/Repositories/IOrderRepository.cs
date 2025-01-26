@@ -7,5 +7,5 @@ public interface IOrderRepository
 {
     public Task<Order> AddOrderAsync(OrderPostDto order);
     public Task<OrderItem> AddOrderItemAsync(int orderId, OrderItemPostDto orderItem);
-    public Task<IEnumerable<Order>> GetCustomersOrders(string customerId);
+    public Task<IEnumerable<Order>> GetCustomersOrders(string userId);
 }

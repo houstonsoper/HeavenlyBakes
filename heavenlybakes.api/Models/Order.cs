@@ -8,8 +8,8 @@ public class Order
 {
     public int OrderId { get; set; }
 
-    [Required(ErrorMessage = "CustomerId is required.")]
-    public required string CustomerId { get; set; }
+    [Required(ErrorMessage = "UserId is required.")]
+    public required Guid UserId { get; set; }
 
     [Required(ErrorMessage = "OrderDate is required.")]
     public DateTime OrderDate { get; set; } = DateTime.Now;
@@ -42,5 +42,8 @@ public class Order
 
     public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     [Required(ErrorMessage = "PaymentMethod is required.")]
-    public PaymentMethod PaymentMethod { get; set; }
+    
+    //Navigation
+    public PaymentMethod? PaymentMethod { get; set; }
+    public User? User { get; set; }
 }

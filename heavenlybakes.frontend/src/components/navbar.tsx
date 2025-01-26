@@ -6,7 +6,6 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import SearchBar from "@/components/searchBar";
 import BasketCount from "@/components/basketCount";
-import {useUser} from "@auth0/nextjs-auth0/client";
 import {
     DropdownMenu,
     DropdownMenuContent, DropdownMenuItem,
@@ -16,11 +15,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {BakeType} from "@/interfaces/bakeType";
 import {fetchBakeTypes} from "@/services/bakeService";
+import {useUser} from "@/contexts/userContext";
+import {userLogout} from "@/services/userService";
 
 export default function Navbar() {
-    const {user} = useUser();
     const [bakeTypes, setBakeTypes] = useState<BakeType[]>([]);
+    const {user, logout} = useUser();
     
+    console.log("user", user);
     //Fetch bake types from API
     useEffect(() => {
         const controller = new AbortController();
@@ -95,13 +97,13 @@ export default function Navbar() {
                                         <DropdownMenuItem>View Profile</DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem>
-                                            <Link href="/api/auth/logout">
+                                            <button onClick={async () => {await logout()}}>
                                                 Logout
-                                            </Link>
+                                            </button>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
-                            ) : <li><Link href="/api/auth/login" 
+                            ) : <li><Link href="/login" 
                                           className="text-pink-600 hover:text-pink-800">Login</Link></li>
                             }
                             <BasketCount/>

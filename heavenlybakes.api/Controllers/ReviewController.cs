@@ -19,9 +19,9 @@ public class ReviewController : Controller
     }
     
     [HttpGet ("/Reviews")]
-    public async Task<IActionResult> GetReviews([FromQuery] int? bakeId, [FromQuery] string? customerId)
+    public async Task<IActionResult> GetReviews([FromQuery] int? bakeId, [FromQuery] string? userId)
     {
-        var reviews = await _reviewRepository.GetReviewsAsync(bakeId, customerId);
+        var reviews = await _reviewRepository.GetReviewsAsync(bakeId, userId);
         
         var reviewsDto = reviews.Select(r => r.ToReviewRequestDto());
         
@@ -70,8 +70,8 @@ public class ReviewController : Controller
         }
     }
 
-    [HttpPut("/Review/{customerId}/{bakeId}")]
-    public async Task<IActionResult> UpdateReview(string customerId, int bakeId, [FromBody] ReviewUpdateDto reviewUpdateDto)
+    [HttpPut("/Review/{userId}/{bakeId}")]
+    public async Task<IActionResult> UpdateReview(string userId, int bakeId, [FromBody] ReviewUpdateDto reviewUpdateDto)
     {
         if (!ModelState.IsValid)
         {
@@ -80,7 +80,7 @@ public class ReviewController : Controller
         
         var review = new Review
         {
-            CustomerId = customerId,
+            UserId = Guid.Parse(userId),
             BakeId = bakeId,
             Title = reviewUpdateDto.Title,
             Feedback = reviewUpdateDto.Feedback,
@@ -97,16 +97,16 @@ public class ReviewController : Controller
         return Ok(updatedReview.ToReviewRequestDto());
     }
 
-    [HttpDelete("/Review/{customerId}/{bakeId}")]
-    public async Task<IActionResult> DeleteReview(string customerId, int bakeId)
+    [HttpDelete("/Review/{userId}/{bakeId}")]
+    public async Task<IActionResult> DeleteReview(string userId, int bakeId)
     {
-        var isDeleted = await _reviewRepository.DeleteReviewAsync(customerId, bakeId);
+        var isDeleted = await _reviewRepository.DeleteReviewAsync(userId, bakeId);
 
         if (!isDeleted)
         {
-            return NotFound(new { message = $"No review found for bakeId: {bakeId} and customerId: {customerId}." });
+            return NotFound(new { message = $"No review found for bakeId: {bakeId} and userId: {userId}." });
         }
         
-        return Ok(new { message = $"Review for bakeId: {bakeId} and customerId: {customerId} has been deleted." });
+        return Ok(new { message = $"Review for bakeId: {bakeId} and userId: {userId} has been deleted." });
     }
 }

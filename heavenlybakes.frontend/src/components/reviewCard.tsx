@@ -20,7 +20,7 @@ export default function ReviewCard({review} : ReviewCardProps) {
                         </div>
                     </div>
                     <p className="text-gray-600"> {review.formattedDate}</p>
-                    <p className="text-gray-600">{review.customerId}</p>
+                    <p className="text-gray-600">{review.userId}</p>
                 </div>
                 <div className="pt-3">
                 <p>{review.feedback}</p>

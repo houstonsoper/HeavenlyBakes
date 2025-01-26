@@ -1,4 +1,4 @@
-﻿using heavenlybakes.api.Context;
+﻿using heavenlybakes.api.Contexts;
 using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Extensions;
 using heavenlybakes.api.Models;
@@ -15,7 +15,7 @@ public class ReviewRepository : IReviewRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Review>> GetReviewsAsync(int? bakeId, string? customerId)
+    public async Task<IEnumerable<Review>> GetReviewsAsync(int? bakeId, string? userId)
     {
         var query = _context.Reviews.AsQueryable();
 
@@ -24,9 +24,9 @@ public class ReviewRepository : IReviewRepository
             query = query.Where(r => r.BakeId == bakeId);
         }
 
-        if (customerId != null)
+        if (userId != null)
         {
-            query = query.Where(r => r.CustomerId == customerId);
+            query = query.Where(r => r.UserId == Guid.Parse(userId));
         }
 
         return await query.ToListAsync();
@@ -53,7 +53,7 @@ public class ReviewRepository : IReviewRepository
     {
         //Get the existing review
         var existingReview = await _context.Reviews
-            .Where(r => r.CustomerId == updatedReview.CustomerId && r.BakeId == updatedReview.BakeId)
+            .Where(r => r.UserId == updatedReview.UserId && r.BakeId == updatedReview.BakeId)
             .FirstOrDefaultAsync();
         
         if (existingReview == null) 
@@ -72,10 +72,10 @@ public class ReviewRepository : IReviewRepository
         return updatedReview;
     }
 
-    public async Task<bool> DeleteReviewAsync(string customerId, int bakeId)
+    public async Task<bool> DeleteReviewAsync(string userId, int bakeId)
     {
         var review = await _context.Reviews
-            .FirstOrDefaultAsync(r => r.BakeId == bakeId && r.CustomerId == customerId);
+            .FirstOrDefaultAsync(r => r.BakeId == bakeId && r.UserId == Guid.Parse(userId));
 
         if (review == null)
             return false;

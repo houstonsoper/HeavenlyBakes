@@ -2,7 +2,7 @@
 using heavenlybakes.api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace heavenlybakes.api.Context;
+namespace heavenlybakes.api.Contexts;
 
 public class HeavenlyBakesDbContext : DbContext
 {
@@ -12,6 +12,10 @@ public class HeavenlyBakesDbContext : DbContext
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
     public DbSet<BakeType> BakeTypes { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    
+    public DbSet<User> Users { get; set; }
+    
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -26,6 +30,9 @@ public class HeavenlyBakesDbContext : DbContext
         modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new PaymentMethodEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ReviewEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new UserGroupEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new PasswordResetTokenEntityTypeConfiguration());
     }
 
     public HeavenlyBakesDbContext(DbContextOptions options) : base(options)

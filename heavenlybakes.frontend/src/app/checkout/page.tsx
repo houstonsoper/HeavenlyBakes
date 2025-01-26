@@ -1,7 +1,6 @@
 ﻿"use client"
 
 import {useBasket} from "@/contexts/basketContext";
-import {useUser} from "@auth0/nextjs-auth0/client";
 import {useRouter} from "next/navigation";
 import React, {useEffect, useRef, useState} from "react";
 import {fetchPaymentMethods} from "@/services/paymentService";
@@ -11,15 +10,15 @@ import {postOrder, postOrderItems} from "@/services/orderService";
 import {Order} from "@/interfaces/order";
 import {clearBasket, getExistingBasket} from "@/services/basketService";
 import BasketItem from "@/interfaces/basketItem";
-import {OrderItem} from "@/interfaces/orderItem";
 import OrderBasketItem from "@/interfaces/orderBasketItem";
+import {useUser} from "@/contexts/userContext";
 
 export default function Page () {
     const { basket } = useBasket();
-    const { user } = useUser();
     const router = useRouter();
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
     const formRef = useRef<HTMLFormElement>(null);
+    const {user} = useUser();
     
     //Fetch payment methods from API on mount
     useEffect(() => {
@@ -49,9 +48,9 @@ export default function Page () {
         });
         
         //Covert data to an object (User must be logged in and items must be in basket)
-        if(user && user.sub && basketItems) {
+        if(user && basketItems) {
             const data: OrderForm = {
-                customerId: user.sub,
+                userId: user.userId,
                 shippingAddress: formData.get("street") as string,
                 shippingCity: formData.get("city") as string,
                 shippingCountry: formData.get("country") as string,

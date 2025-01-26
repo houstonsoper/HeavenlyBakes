@@ -4,8 +4,8 @@ namespace heavenlybakes.api.DTOs;
 
 public class OrderPostDto
 {
-    [Required(ErrorMessage = "CustomerId is required.")]
-    public required string CustomerId { get; set; }
+    [Required(ErrorMessage = "UserId is required.")]
+    public required Guid UserId { get; set; }
     
     [Required(ErrorMessage = "ShippingAddress is required.")]
     [StringLength(200, ErrorMessage = "Shipping address cannot cannot exceed than 200 characters.")]

@@ -1,27 +1,27 @@
 ﻿"use client"
 
 import PageHeader from "@/components/pageHeader";
-import {getOrdersByCustomerId, groupOrdersByDate} from "@/services/orderService";
+import {getOrdersByUserId, groupOrdersByDate} from "@/services/orderService";
 import React, {useEffect, useState} from "react";
 import orderWithOrderItems from "@/interfaces/orderWithOrderItems";
-import {useUser} from "@auth0/nextjs-auth0/client";
 import GroupedOrders from "@/interfaces/groupedOrders";
 import OrderCard from "@/components/orderCard";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import Review from "@/interfaces/review";
+import {useUser} from "@/contexts/userContext";
 
 export default function orders(){
     const [orders, setOrders] = useState<GroupedOrders[]>([]);
-    const {user} = useUser();
     const [reviews, setReviews] = useState<Review[]>([]);
+    const {user} = useUser();
     
     //Fetch orders
     useEffect(() => {
         const controller = new AbortController();
         const signal : AbortSignal = controller.signal;
         const getOrders  = async () => {
-            if (user && user.sub != null) {
-                const data : orderWithOrderItems[] | [] = await getOrdersByCustomerId(user.sub, signal);
+            if (user != null) {
+                const data : orderWithOrderItems[] | [] = await getOrdersByUserId(user.userId, signal);
                 const groupedOrders : GroupedOrders[] = groupOrdersByDate(data); //Group the orders by date
                 setOrders(groupedOrders);
             }

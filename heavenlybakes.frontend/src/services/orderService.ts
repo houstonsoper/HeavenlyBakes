@@ -51,9 +51,9 @@ export async function postOrderItems(items : OrderItem[])  {
     }
 }
 
-export async function getOrdersByCustomerId(customerId: string | undefined, signal? : AbortSignal) : Promise<OrderWithOrderItems[] | []> {
+export async function getOrdersByUserId(userId: string | undefined, signal? : AbortSignal) : Promise<OrderWithOrderItems[] | []> {
     try {
-        const url = `${BASE_URL}/Order/${customerId}`;
+        const url = `${BASE_URL}/Order/${userId}`;
         const response : Response = await fetch(url, {signal});
         
         if (!response.ok) {

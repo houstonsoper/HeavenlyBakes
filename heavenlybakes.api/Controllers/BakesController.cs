@@ -1,5 +1,4 @@
-﻿using heavenlybakes.api.Context;
-using heavenlybakes.api.DTOs;
+﻿using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Extensions;
 using heavenlybakes.api.Models;
 using heavenlybakes.api.Repositories;

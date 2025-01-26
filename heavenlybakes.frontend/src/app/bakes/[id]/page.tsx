@@ -158,7 +158,7 @@ export default function Details() {
                         <div className="w-3/4 m-auto">
                             {reviews.length > 0 ? (
                                 reviews.map((review: Review) => (
-                                    <ReviewCard review={review} key={review.customerId}/>
+                                    <ReviewCard review={review} key={review.userId}/>
                                 ))
                             ) : (<p>No Reviews</p>)}
                         </div>

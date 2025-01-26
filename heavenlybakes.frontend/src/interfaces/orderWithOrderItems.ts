@@ -8,7 +8,7 @@ export interface OrderItem {
 
 export default interface OrderWithOrderItems {
     orderId : number,
-    customerId : string,
+    userId : string,
     orderDate : string,
     orderTime : string,
     shippingAddress: string,

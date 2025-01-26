@@ -3,11 +3,11 @@
 import Bake from "@/interfaces/bake";
 import ReviewWithBake from "@/interfaces/reviewWithBake";
 import Review from "@/interfaces/review";
-import React, {ChangeEvent, FormEvent, RefObject, useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState} from "react";
 import Image from "next/image";
-import {UserContext, useUser} from "@auth0/nextjs-auth0/client";
 import {deleteReview, postReview, updateReview} from "@/services/reviewService";
 import Link from "next/link";
+import {useUser} from "@/contexts/userContext";
 
 interface ReviewFormProps {
     bakeForReview: ReviewWithBake,
@@ -19,9 +19,9 @@ export default function ReviewForm({bakeForReview, updatePageAction}: ReviewForm
     const review: Review | null = bakeForReview.review;
     const [rating, setRating] = useState<number>(1);
     const formRef = useRef<HTMLFormElement>(null);
-    const {user} : UserContext = useUser();
     const [title, setTitle] = useState<string>("");
     const [feedback, setFeedback] = useState<string>("");
+    const {user} = useUser();
 
     useEffect(() => {
         const review : Review | null = bakeForReview.review;
@@ -67,9 +67,9 @@ export default function ReviewForm({bakeForReview, updatePageAction}: ReviewForm
         //Capture form data
         const formData = new FormData(formRef.current);
         
-        if(user && user.sub) {
+        if(user) {
             const newReview : Review = {
-                customerId: user?.sub,
+                userId: user.userId,
                 bakeId: bake.id,
                 title: formData.get("title") as string,
                 feedback: formData.get("feedback") as string,

@@ -1,5 +1,5 @@
 ﻿export default interface Review {
-    customerId: string,
+    userId: string,
     bakeId: number,
     title: string,
     feedback: string,

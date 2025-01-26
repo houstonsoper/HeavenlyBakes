@@ -3,18 +3,18 @@
 import Review from "@/interfaces/review";
 import {fetchReviews} from "@/services/reviewService";
 import {useEffect, useState} from "react";
-import {useUser} from "@auth0/nextjs-auth0/client";
 import {ReadonlyURLSearchParams, useSearchParams} from "next/navigation";
 import Bake from "@/interfaces/bake";
 import {fetchBakeById} from "@/services/bakeService";
 import ReviewWithBake from "@/interfaces/reviewWithBake";
 import ReviewForm from "@/components/reviewForm";
+import {useUser} from "@/contexts/userContext";
 
 export default function Page (){
     const [bakesForReview, setBakesForReview] = useState<(ReviewWithBake)[]>([]);
-    const {user} = useUser();
     const searchParams : ReadonlyURLSearchParams = useSearchParams();
     const [updatePage, setUpdatePage] = useState<boolean>(false);
+    const {user} = useUser();
     
     useEffect(() => {
         const controller = new AbortController();
@@ -23,7 +23,7 @@ export default function Page (){
         //Get existing reviews for the customer based on the item(s) they have selected to review
         //This is to prevent the user from reviewing the same item twice
         const getCustomersReviews = async() => {
-            if(user?.sub) {
+            if(user) {
                 //Get bakes from search param
                 const bakeParam : string | null = searchParams.get("items");
                 const bakeIds : number[] = bakeParam ? JSON.parse(decodeURIComponent(bakeParam)) : [];
@@ -31,7 +31,7 @@ export default function Page (){
                 //Create an array of promises to fetch reviews and bakes for each bakeId
                 const bakesForReviewArray : (ReviewWithBake | null)[]  = await Promise.all (
                     bakeIds.map(async bakeId => {
-                        const review : Review = (await fetchReviews({ bakeId, customerId: user.sub ?? undefined }, signal))[0] ?? null;
+                        const review : Review = (await fetchReviews({ bakeId, userId: user.userId }, signal))[0] ?? null;
                         const bake : Bake | null = await fetchBakeById(bakeId, signal);
                         
                         //If the bake exists, return the bake and existing reviews (if exists), otherwise return null

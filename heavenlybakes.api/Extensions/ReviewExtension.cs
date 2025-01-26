@@ -9,7 +9,7 @@ public static class ReviewExtension
     {
         return new ReviewRequestDto
         {
-            CustomerId = review.CustomerId,
+            UserId = review.UserId,
             BakeId = review.BakeId,
             Title = review.Title,
             Feedback = review.Feedback,
@@ -22,7 +22,7 @@ public static class ReviewExtension
     {
         return new ReviewPostDto
         {
-            CustomerId = review.CustomerId,
+            UserId = review.UserId,
             BakeId = review.BakeId,
             Title = review.Title,
             Feedback = review.Feedback,
@@ -35,7 +35,7 @@ public static class ReviewExtension
     {
         return new Review
         {
-            CustomerId = reviewPostDto.CustomerId,
+            UserId = reviewPostDto.UserId,
             BakeId = reviewPostDto.BakeId,
             Title = reviewPostDto.Title,
             Feedback = reviewPostDto.Feedback,

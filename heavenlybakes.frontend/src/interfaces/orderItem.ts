@@ -1,6 +1,6 @@
 ﻿export interface OrderItem {
     orderId: number,
-    customerId: string,
+    userId : string,
     bakeId: number,
     quantity: number,
 }

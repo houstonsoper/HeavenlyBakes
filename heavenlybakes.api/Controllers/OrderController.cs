@@ -49,10 +49,10 @@ public class OrderController : Controller
         return Ok(orderItemsDto);
     }
 
-    [HttpGet("{customerId}")]
-    public async Task<IActionResult> GetCustomersOrders([FromRoute] string customerId)
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetCustomersOrders([FromRoute] string userId)
     {
-        var orders = await _orderRepository.GetCustomersOrders(customerId);
+        var orders = await _orderRepository.GetCustomersOrders(userId);
         var ordersDto = orders.Select(o => o.ToCustomerOrdersRequestDto());
         
         return Ok(ordersDto);

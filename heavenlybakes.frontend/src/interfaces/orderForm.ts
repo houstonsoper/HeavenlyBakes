@@ -1,5 +1,5 @@
 ﻿export interface OrderForm {
-    customerId: string,
+    userId : string,
     shippingAddress: string,
     shippingCity: string,
     shippingPostalCode: string,

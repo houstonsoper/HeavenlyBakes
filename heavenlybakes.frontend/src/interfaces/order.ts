@@ -1,6 +1,6 @@
 ﻿export interface Order {
     orderId: number;
-    customer_id: string,
+    userId : string,
     orderDate: Date,
     orderStatus: number,
     paymentMethodId: number,
