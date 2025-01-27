@@ -128,16 +128,41 @@ public class UserController : Controller
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUserById(string userId)
     {
-        if (!Guid.TryParse(userId, out var userIdGuid))
+        if (!Guid.TryParse(userId, out var userGuid))
         {
             return BadRequest(new { message = "Please enter a valid Guid" });
         }
         
-        var user = await _userService.GetUserByIdAsync(userIdGuid);
+        var user = await _userService.GetUserByIdAsync(userGuid);
         
         if (user == null) 
             return BadRequest(new { message = "Unable to find user" });
         
         return Ok(user.ToUserRequestDto());
+    }
+
+    [HttpPut("{userId}/Group")]
+    public async Task<IActionResult> UpdateUsersGroup([FromRoute] string userId, [FromBody] UserGroupUpdateDto userGroupUpdateDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        if (!Guid.TryParse(userId, out var userGuid))
+        {
+            return BadRequest(new { message = "Please enter a valid Guid" });
+        }
+        
+        //Try to update the users group
+        try
+        {
+            await _userService.UpdateUsersGroupAsync(userGuid, userGroupUpdateDto.GroupId);
+            return Ok("User group updated successfully");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }

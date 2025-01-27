@@ -22,7 +22,6 @@ export default function Navbar() {
     const [bakeTypes, setBakeTypes] = useState<BakeType[]>([]);
     const {user, logout} = useUser();
     
-    console.log("user", user);
     //Fetch bake types from API
     useEffect(() => {
         const controller = new AbortController();
@@ -38,7 +37,7 @@ export default function Navbar() {
         return () => controller.abort();
     }, [])
     
-    console.log(bakeTypes);
+    console.log("user", user);
     return (
         <header className="bg-pink-100 py-4">
             <div className="container mx-auto px-4 flex justify-between items-center">
@@ -85,7 +84,7 @@ export default function Navbar() {
                                                 account_circle
                                             </span>
                                         </li>
-                                    </DropdownMenuTrigger>
+                                    </DropdownMenuTrigger >
                                     <DropdownMenuContent className="bg-pink-50">
                                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                         <DropdownMenuSeparator/>
@@ -95,6 +94,9 @@ export default function Navbar() {
                                             </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>View Profile</DropdownMenuItem>
+                                        {/*If the user is admin then display "Admin Panel"*/}
+                                        {user.userGroup.groupName === "Admin" && 
+                                            <DropdownMenuItem>View Profile</DropdownMenuItem>}
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem>
                                             <button onClick={async () => {await logout()}}>

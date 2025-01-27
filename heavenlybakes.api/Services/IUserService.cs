@@ -10,4 +10,5 @@ public interface IUserService
     public Task<User?> GetUserByIdAsync(Guid userId);
     public Task ResetPasswordAsync(Guid userId, Guid tokenId, string newPassword);
     public Task<User?> GetUserByEmailAsync(string email);
+    public Task UpdateUsersGroupAsync (Guid userId, int groupId);
 }

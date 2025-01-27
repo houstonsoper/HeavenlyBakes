@@ -43,4 +43,15 @@ public class UserRepository : IUserRepository
         
         return true;
     }
+
+    public async Task UpdateUsersGroupAsync(User user, int groupId)
+    {
+        user.UserGroupId = groupId;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task <UserGroup?> GetUserGroupById(int groupId)
+    {
+        return await _context.UserGroups.FindAsync(groupId);
+    }
 }

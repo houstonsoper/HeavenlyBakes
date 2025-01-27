@@ -95,6 +95,20 @@ public class UserService : IUserService
         return user;
     }
 
+    public async Task UpdateUsersGroupAsync(Guid userId, int groupId)
+    {
+        //Get the user
+        var user = await _userRepository.GetUserByIdAsync(userId)
+            ?? throw new Exception("User not found");
+        
+        //Get the usergroup
+        var userGroup = await _userRepository.GetUserGroupById(groupId)
+            ?? throw new Exception("Group not found");
+        
+        //Update the users group
+        await _userRepository.UpdateUsersGroupAsync(user, groupId);
+    }
+
     public async Task ResetPasswordAsync(Guid userId, Guid tokenId, string newPassword)
     {
         //Get user
@@ -124,4 +138,5 @@ public class UserService : IUserService
         //Set token as used
         await _passwordTokenRepository.UpdateUsedTokenAsync(tokenId);
     }
+    
 }
