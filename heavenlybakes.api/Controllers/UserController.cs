@@ -124,4 +124,20 @@ public class UserController : Controller
         }
         return BadRequest(new { message = "Unable to reset password" });
     }
+
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserById(string userId)
+    {
+        if (!Guid.TryParse(userId, out var userIdGuid))
+        {
+            return BadRequest(new { message = "Please enter a valid Guid" });
+        }
+        
+        var user = await _userService.GetUserByIdAsync(userIdGuid);
+        
+        if (user == null) 
+            return BadRequest(new { message = "Unable to find user" });
+        
+        return Ok(user.ToUserRequestDto());
+    }
 }

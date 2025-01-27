@@ -14,7 +14,7 @@ interface ReviewFormProps {
     updatePageAction: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export default function ReviewForm({bakeForReview, updatePageAction}: ReviewFormProps) {
+export default function ReviewFormCard ({bakeForReview, updatePageAction}: ReviewFormProps) {
     const bake: Bake = bakeForReview.bake;
     const review: Review | null = bakeForReview.review;
     const [rating, setRating] = useState<number>(1);

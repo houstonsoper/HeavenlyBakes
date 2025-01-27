@@ -227,3 +227,18 @@ export async function userResetPassword(tokenId : string, formData : FormData ) 
     
     return await response.json();
 }
+
+export async function fetchUserById (userId : string, signal : AbortSignal) : Promise<User | null> {
+    try {
+        const url : string = BASEURL + `/${userId}`;
+        const response : Response = await fetch(url, {signal});
+        
+        if (!response.ok) {
+            throw new Error(`Unable to fetch user with id ${userId}`);
+        }
+        return await response.json();
+    } catch (error){
+        console.error(error);
+        return null;
+    }
+}

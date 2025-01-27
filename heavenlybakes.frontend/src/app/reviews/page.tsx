@@ -7,7 +7,7 @@ import {ReadonlyURLSearchParams, useSearchParams} from "next/navigation";
 import Bake from "@/interfaces/bake";
 import {fetchBakeById} from "@/services/bakeService";
 import ReviewWithBake from "@/interfaces/reviewWithBake";
-import ReviewForm from "@/components/reviewForm";
+import ReviewFormCard from "@/components/reviewFormCard";
 import {useUser} from "@/contexts/userContext";
 
 export default function Page (){
@@ -64,7 +64,7 @@ export default function Page (){
         <div className="container m-auto">
         {bakesForReview.length > 0 ? (
             bakesForReview.map((bakeForReview : ReviewWithBake) => (
-                    <ReviewForm bakeForReview={bakeForReview} updatePageAction={setUpdatePage} key={bakeForReview.bake.id} />
+                    <ReviewFormCard bakeForReview={bakeForReview} updatePageAction={setUpdatePage} key={bakeForReview.bake.id} />
             ))
             ) : (
                 []
