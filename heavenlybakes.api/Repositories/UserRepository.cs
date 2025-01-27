@@ -22,13 +22,15 @@ public class UserRepository : IUserRepository
     
     public async Task<User?> GetUserByEmailAsync(string email)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-        return user;
+        return await _context.Users
+            .Include(u => u.UserGroup)
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<User?> GetUserByIdAsync(Guid userId)
     {
         return await _context.Users
+            .Include(u => u.UserGroup)
             .FirstOrDefaultAsync(u => u.UserId == userId);
     }
     
