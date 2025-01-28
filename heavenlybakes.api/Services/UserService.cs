@@ -2,6 +2,7 @@
 using heavenlybakes.api.Models;
 using heavenlybakes.api.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace heavenlybakes.api.Services;
 
@@ -107,6 +108,25 @@ public class UserService : IUserService
         
         //Update the users group
         await _userRepository.UpdateUsersGroupAsync(user, groupId);
+    }
+
+    public async Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset)
+    {
+        var query = _userRepository.GetAllUsersQuery();
+
+        //Apply offset
+        if (offset.HasValue)
+        {
+            query = query.Skip(offset.Value);
+        }
+
+        //Apply limit
+        if (limit.HasValue)
+        {
+            query = query.Take(limit.Value);
+        }
+
+        return await query.ToListAsync();
     }
 
     public async Task ResetPasswordAsync(Guid userId, Guid tokenId, string newPassword)

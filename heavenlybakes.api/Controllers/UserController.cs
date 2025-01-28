@@ -165,4 +165,12 @@ public class UserController : Controller
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpGet("/Users")]
+    public async Task<IActionResult> GetUsers([FromQuery]int? limit, [FromQuery]int? offset)
+    {
+        var users = await _userService.GetUsersAsync(limit, offset);
+        var usersDto = users.Select(u => u.ToUserRequestDto());
+        return Ok(usersDto);
+    }
 }

@@ -54,4 +54,11 @@ public class UserRepository : IUserRepository
     {
         return await _context.UserGroups.FindAsync(groupId);
     }
+
+    public IQueryable<User> GetAllUsersQuery()
+    {
+        return _context.Users
+            .Include(u => u.UserGroup)
+            .AsQueryable();
+    }
 }
