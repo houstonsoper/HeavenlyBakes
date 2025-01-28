@@ -38,7 +38,7 @@ public class EmailSender : IEmailSender
     
     public void SendPasswordResetEmail(string toEmail, Guid token)
     {
-        var passwordResetLink = "http://localhost:3000/resetpassword?token=" + token;
+        var passwordResetLink = "http://localhost:3000/reset-password?token=" + token;
         var client = SetupSmtpClient();
         
         // Create email message
