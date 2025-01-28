@@ -98,10 +98,20 @@ public class UserService : IUserService
         await _userRepository.UpdateUsersGroupAsync(user, userGroup.GroupId);
     }
 
-    public async Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset)
+    public async Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset, string? search)
     {
         var query = _userRepository.GetAllUsersQuery();
 
+        //Apply search
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query
+                .Where(u => 
+                    u.Email.ToLower().Contains(search.ToLower()) || 
+                    u.Forename.ToLower().Contains(search.ToLower()) || 
+                    u.Surname.ToLower().Contains(search.ToLower())
+                    );
+        }
         //Apply offset
         if (offset.HasValue)
         {

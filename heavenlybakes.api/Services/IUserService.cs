@@ -12,5 +12,5 @@ public interface IUserService
     public Task<User?> GetUserByEmailAsync(string email);
     public Task UpdateUsersGroupAsync (Guid userId, int groupId);
 
-    public Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset);
+    public Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset, string? search);
 }

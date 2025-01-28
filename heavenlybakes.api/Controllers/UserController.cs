@@ -132,13 +132,13 @@ public class UserController : Controller
         //Update the users group
         await _userService.UpdateUsersGroupAsync(userGuid, userGroupUpdateDto.GroupId);
 
-        return Ok("User group updated successfully");
-    }
+        return Ok(new { message = "User group updated successfully" });
+}
 
     [HttpGet("/Users")]
-    public async Task<IActionResult> GetUsers([FromQuery] int? limit, [FromQuery] int? offset)
+    public async Task<IActionResult> GetUsers([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? search)
     {
-        var users = await _userService.GetUsersAsync(limit, offset);
+        var users = await _userService.GetUsersAsync(limit, offset, search);
         var usersDto = users.Select(u => u.ToUserRequestDto());
         return Ok(usersDto);
     }
