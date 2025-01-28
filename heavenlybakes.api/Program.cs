@@ -52,6 +52,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordTokenService, PasswordTokenService>();
 builder.Services.AddScoped<IPasswordTokenRepository, PasswordTokenRepository>();
+builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();

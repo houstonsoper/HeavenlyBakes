@@ -54,7 +54,7 @@ public class UserService : IUserService
     {
         //Check if the user exists 
         var user = await _userRepository.GetUserByEmailAsync(userDto.Email) 
-                   ?? throw new InvalidUserCredentialsException("Invalid username or password");
+                   ?? throw new Exception("Invalid username or password");
         
         //Check that their password is correct
         var passwordHasher = new PasswordHasher<User>();
@@ -125,7 +125,7 @@ public class UserService : IUserService
 
         if (newPassword.Length < 5 || newPassword.Length > 15)
         {
-            throw new InvalidUserCredentialsException("Invalid password");
+            throw new InvalidUserCredentialsException("Password must be between 5 and 15 characters");
         }
         
         //Hash password

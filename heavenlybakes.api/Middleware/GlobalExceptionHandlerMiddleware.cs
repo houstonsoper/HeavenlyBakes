@@ -39,7 +39,7 @@ public class GlobalExceptionHandlerMiddleware : IMiddleware
         var problemDetails = new ProblemDetails
         {
             Title = "Internal Server Error",
-            Status = (int)StatusCodes.Status500InternalServerError,
+            Status = StatusCodes.Status500InternalServerError,
             Instance = context.Request.Path,
             Detail = $"Internal server error occured, traceId : {traceId}",
         };
@@ -48,7 +48,7 @@ public class GlobalExceptionHandlerMiddleware : IMiddleware
         if (isDevelopment)
         {
             problemDetails.Extensions["traceId"] = traceId;
-            problemDetails.Extensions["errorMessage"] = ex.Message;
+            problemDetails.Extensions["message"] = ex.Message;
             problemDetails.Extensions["stackTrace"] = ex.StackTrace;
         }
         
@@ -58,15 +58,8 @@ public class GlobalExceptionHandlerMiddleware : IMiddleware
 
     private static async Task HandleClientErrorAsync(HttpContext context, int statusCode, string message)
     {
-        var problemDetails = new ProblemDetails
-        {
-            Title = "Error",
-            Status = statusCode,
-            Detail = message,
-            Instance = context.Request.Path
-        };
-        
+        var response = new { message };
         context.Response.StatusCode = statusCode;
-        await context.Response.WriteAsJsonAsync(problemDetails);
+        await context.Response.WriteAsJsonAsync(response);
     }
 }
