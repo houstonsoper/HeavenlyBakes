@@ -42,7 +42,6 @@ export default function LoginPage() {
             } catch (error){
                 if (error instanceof Error) {
                     setErrors([{name: "UserLoginError", message: error.message}]);
-                    console.log("erorrswowoow", error);
                 }
             }
         }

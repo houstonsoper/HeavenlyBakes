@@ -1,5 +1,6 @@
 ﻿import User from "@/interfaces/user";
 import UserFormDetails from "@/interfaces/userFormDetails";
+import UserParams from "@/interfaces/userParams";
 
 const BASEURL: string = "https:///localhost:44367/User"
 
@@ -228,7 +229,7 @@ export async function userResetPassword(tokenId : string, formData : FormData ) 
     return await response.json();
 }
 
-export async function fetchUserById (userId : string, signal : AbortSignal) : Promise<User | null> {
+export async function fetchUserById (userId : string, signal? : AbortSignal) : Promise<User | null> {
     try {
         const url : string = BASEURL + `/${userId}`;
         const response : Response = await fetch(url, {signal});
@@ -240,5 +241,59 @@ export async function fetchUserById (userId : string, signal : AbortSignal) : Pr
     } catch (error){
         console.error(error);
         return null;
+    }
+}
+
+export async function fetchUsers ({limit = 0, offset = 0, search = ""} : UserParams , signal? : AbortSignal) : Promise<User[] | []> {
+    try {
+        const url : string = `${BASEURL}s?search=${search}&limit=${limit}&offset=${offset}`;
+        const response : Response = await fetch(url, {signal})
+        
+        if (!response.ok) 
+            throw new Error ("Unable to fetch users");
+        
+        return await response.json();
+    } catch (error){
+        console.error(error);
+        return [];
+    }
+}
+
+export async function updateUsersUserGroup (userId : string, groupId : number) {
+    try{
+        const url : string = BASEURL + `/${userId}/Group`;
+        const response : Response = await fetch(url, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({groupId : groupId}),
+        })
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error(errorData.message);
+        }
+        
+        return await response.json();
+        
+    } catch (error){
+        console.error(error);
+    }
+}
+
+export async function deleteUser (userId : string){
+    try {
+        const url : string = BASEURL + `/${userId}/Delete`;
+        const response : Response = await fetch(url, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"},
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error(errorData.message);
+        }
+        return await response.json();
+    } catch (error){
+        console.error(error);
     }
 }

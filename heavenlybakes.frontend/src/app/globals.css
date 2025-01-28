@@ -139,3 +139,7 @@ progress::-webkit-progress-value {
   background-color: rgb(236 72 153);
   border-radius: 7px;
 }
+
+input:focus{
+  outline:none;
+} 

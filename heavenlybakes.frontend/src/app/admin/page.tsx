@@ -27,13 +27,13 @@ export default function AdminPage () {
             <div className="container m-auto">
                 <div className="grid grid-cols-2 py-10">
                     <div className="m-auto border p-12">
-                        <Link href="/manage-users">
+                        <Link href="/user-dashboard">
                             <span className="material-symbols-outlined w-full text-center">person</span>
                             <Button className="w-full">Manage Users</Button>
                         </Link>
                     </div>
                     <div className="m-auto border p-12">
-                        <Link href="/manage-orders">
+                        <Link href="/order-dashboard">
                             <span className="material-symbols-outlined w-full text-center">orders</span>
                             <Button className="w-full">Manage Orders</Button>
                         </Link>
