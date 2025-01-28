@@ -127,9 +127,16 @@ public class UserService : IUserService
         return await query.ToListAsync();
     }
 
+    public async Task DeleteUserAsync(Guid userId)
+    {
+        var user = await _userRepository.GetUserByIdAsync(userId)
+            ?? throw new Exception("User not found");
+
+        await _userRepository.DeleteUserAsync(user);
+    }
+
     public async Task ResetPasswordAsync(Guid userId, Guid tokenId, string newPassword)
     {
-        //Get user
         var user = await _userRepository.GetUserByIdAsync(userId)
             ?? throw new Exception("User not found");
 

@@ -61,4 +61,10 @@ public class UserRepository : IUserRepository
             .Include(u => u.UserGroup)
             .AsQueryable();
     }
+
+    public async Task DeleteUserAsync(User user)
+    {
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+    }
 }

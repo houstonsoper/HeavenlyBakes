@@ -13,4 +13,5 @@ public interface IUserService
     public Task UpdateUsersGroupAsync (Guid userId, int groupId);
 
     public Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset, string? search);
+    public Task DeleteUserAsync(Guid userId);
 }

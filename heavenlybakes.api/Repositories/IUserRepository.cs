@@ -11,4 +11,5 @@ public interface IUserRepository
     Task UpdateUsersGroupAsync (User user, int groupId);
     Task<UserGroup?> GetUserGroupById(int groupId);
     IQueryable<User> GetAllUsersQuery();
+    Task DeleteUserAsync(User user);
 }

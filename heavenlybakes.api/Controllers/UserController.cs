@@ -39,6 +39,21 @@ public class UserController : Controller
 
         return Ok(new { message = "User created successfully" });
     }
+    
+    [HttpDelete("{userId}/Delete")]
+    public async Task<IActionResult> DeleteUser([FromRoute] string userId)
+    {
+        //Try to parse the userId into a Guid
+        if (!Guid.TryParse(userId, out Guid userGuid))
+        {
+            return BadRequest("Please enter a valid Guid");
+        }
+        
+        //Delete the user
+        await _userService.DeleteUserAsync(userGuid);
+        
+        return Ok(new { message = "User deleted successfully" });
+    }
 
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
