@@ -95,8 +95,12 @@ export default function Navbar() {
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>View Profile</DropdownMenuItem>
                                         {/*If the user is admin then display "Admin Panel"*/}
-                                        {user.userGroup.groupName === "Admin" && 
-                                            <DropdownMenuItem>View Profile</DropdownMenuItem>}
+                                        { user.userGroup.groupName === "Admin" && 
+                                            <>
+                                            <Link href="/admin">
+                                            <DropdownMenuItem>Admin Panel</DropdownMenuItem>
+                                            </Link>
+                                            </>}
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem>
                                             <button onClick={async () => {await logout()}}>
