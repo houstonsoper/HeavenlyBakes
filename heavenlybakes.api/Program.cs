@@ -1,5 +1,6 @@
 using System.Text;
 using heavenlybakes.api.Contexts;
+using heavenlybakes.api.Middleware;
 using heavenlybakes.api.Repositories;
 using heavenlybakes.api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddTransient<IEmailSender,EmailSender>();
+builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordTokenService, PasswordTokenService>();
@@ -66,6 +68,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseSession();
 app.UseRouting();
 app.MapControllers();

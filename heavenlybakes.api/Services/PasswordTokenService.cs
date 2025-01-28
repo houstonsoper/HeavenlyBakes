@@ -1,4 +1,5 @@
-﻿using heavenlybakes.api.Models;
+﻿using heavenlybakes.api.Exceptions;
+using heavenlybakes.api.Models;
 using heavenlybakes.api.Repositories;
 
 namespace heavenlybakes.api.Services;
@@ -58,7 +59,7 @@ public class PasswordTokenService : IPasswordTokenService
         //If one condition is true return an error
         if (token == null || token.TokenUsed || token.ExpiresAt < DateTime.UtcNow)
         {
-            throw new ApplicationException("Password reset token does not exist or has expired");
+            throw new InvalidPasswordTokenException("Password reset token does not exist or has expired");
         }
         
         return token;

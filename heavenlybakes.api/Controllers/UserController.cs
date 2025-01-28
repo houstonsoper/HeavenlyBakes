@@ -17,8 +17,8 @@ public class UserController : Controller
         _userService = userService;
         _passwordTokenService = passwordTokenService;
     }
-    
-    [HttpPost ("Register")]
+
+    [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] UserRegistrationDto userDto)
     {
         if (!ModelState.IsValid)
@@ -26,27 +26,21 @@ public class UserController : Controller
             return BadRequest(ModelState);
         }
 
-        //Attempt to create the user
-        try
+        //Try to create the user
+        var user = await _userService.CreateUserAsync(userDto);
+
+        if (user == null)
         {
-            var user = await _userService.CreateUserAsync(userDto);
-            
-            if (user != null)
-            { 
-                //Store session info
-                HttpContext.Session.SetString("UserId", user.UserId.ToString()); 
-                
-                return Ok(new { message = "User created successfully" });
-            }
+            return BadRequest(new { message = "Unable to create user" });
         }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message});
-        }
-        return BadRequest(new { message = "Unable to create user" });
+
+        //Store session info
+        HttpContext.Session.SetString("UserId", user.UserId.ToString());
+
+        return Ok(new { message = "User created successfully" });
     }
 
-    [HttpPost ("Login")]
+    [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
         if (!ModelState.IsValid)
@@ -54,46 +48,32 @@ public class UserController : Controller
             return BadRequest(ModelState);
         }
 
-        //Attempt to log the user in
-        try
+        //Try to log the user in
+        var user = await _userService.LoginAsync(userLoginDto);
+
+        if (user == null)
         {
-            var user = await _userService.LoginAsync(userLoginDto);
-            
-            if (user == null)
-            {
-                return BadRequest(new { message = "Unable to login" });
-            } 
-            
-            //Store session info
-            HttpContext.Session.SetString("UserId", user.UserId.ToString()); 
-            
-            return Ok(new { message = "Login successful" });
+            return BadRequest(new { message = "Unable to login" });
         }
-        catch (Exception ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
+
+        //Store session info
+        HttpContext.Session.SetString("UserId", user.UserId.ToString());
+        return Ok(new { message = "Login successful" });
     }
+
     [HttpGet]
     public async Task<IActionResult> GetUser()
     {
         //Get userID from the session
         var userId = HttpContext.Session.GetString("UserId");
-        
-        //Attempt to get the details of the user 
-        try
-        {
-            if (userId == null)
-            {
-                return Ok(new { message = "User is not logged in" });
-            }
-            var user = await _userService.GetUserByIdAsync(Guid.Parse(userId)); 
-            return Ok(user?.ToUserRequestDto());
-        }
-        catch (Exception ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
+
+        //If no userID is found then the user is not logged in
+        if (userId == null)
+            return Ok(new { message = "User is not logged in" });
+
+        //If there is a userId find and return the user
+        var user = await _userService.GetUserByIdAsync(Guid.Parse(userId));
+        return Ok(user?.ToUserRequestDto());
     }
 
     [HttpPost("Logout")]
@@ -106,22 +86,16 @@ public class UserController : Controller
     [HttpPost("ResetPassword")]
     public async Task<IActionResult> ResetPassword([FromBody] UserPasswordResetDto userPasswordResetDto)
     {
-        try
-        {
-            //Get the details of the password token
-            var token = await _passwordTokenService.GetTokenByTokenIdAsync(userPasswordResetDto.TokenId);
+        //Get the details of the password token
+        var token = await _passwordTokenService.GetTokenByTokenIdAsync(userPasswordResetDto.TokenId);
 
-            //If password token is valid/exists then reset the users password
-            if (token != null)
-            {
-                await _userService.ResetPasswordAsync(token.UserId, token.TokenId, userPasswordResetDto.Password);
-                return Ok(new { message = "Password reset successful" });
-            }
-        }
-        catch (Exception ex)
+        //If password token is valid/exists then reset the users password
+        if (token != null)
         {
-            return Unauthorized(new { message = ex.Message });
+            await _userService.ResetPasswordAsync(token.UserId, token.TokenId, userPasswordResetDto.Password);
+            return Ok(new { message = "Password reset successful" });
         }
+
         return BadRequest(new { message = "Unable to reset password" });
     }
 
@@ -132,42 +106,37 @@ public class UserController : Controller
         {
             return BadRequest(new { message = "Please enter a valid Guid" });
         }
-        
+
         var user = await _userService.GetUserByIdAsync(userGuid);
-        
-        if (user == null) 
+
+        if (user == null)
             return BadRequest(new { message = "Unable to find user" });
-        
+
         return Ok(user.ToUserRequestDto());
     }
 
     [HttpPut("{userId}/Group")]
-    public async Task<IActionResult> UpdateUsersGroup([FromRoute] string userId, [FromBody] UserGroupUpdateDto userGroupUpdateDto)
+    public async Task<IActionResult> UpdateUsersGroup([FromRoute] string userId,
+        [FromBody] UserGroupUpdateDto userGroupUpdateDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        
+
         if (!Guid.TryParse(userId, out var userGuid))
         {
             return BadRequest(new { message = "Please enter a valid Guid" });
         }
-        
-        //Try to update the users group
-        try
-        {
-            await _userService.UpdateUsersGroupAsync(userGuid, userGroupUpdateDto.GroupId);
-            return Ok("User group updated successfully");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+
+        //Update the users group
+        await _userService.UpdateUsersGroupAsync(userGuid, userGroupUpdateDto.GroupId);
+
+        return Ok("User group updated successfully");
     }
 
     [HttpGet("/Users")]
-    public async Task<IActionResult> GetUsers([FromQuery]int? limit, [FromQuery]int? offset)
+    public async Task<IActionResult> GetUsers([FromQuery] int? limit, [FromQuery] int? offset)
     {
         var users = await _userService.GetUsersAsync(limit, offset);
         var usersDto = users.Select(u => u.ToUserRequestDto());
