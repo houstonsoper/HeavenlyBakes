@@ -151,9 +151,9 @@ public class UserController : Controller
 }
 
     [HttpGet("/Users")]
-    public async Task<IActionResult> GetUsers([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? search)
+    public async Task<IActionResult> GetUsers([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? search ,[FromQuery] int groupId)
     {
-        var users = await _userService.GetUsersAsync(limit, offset, search);
+        var users = await _userService.GetUsersAsync(limit, offset, search, groupId);
         var usersDto = users.Select(u => u.ToUserRequestDto());
         return Ok(usersDto);
     }

@@ -98,11 +98,11 @@ public class UserService : IUserService
         await _userRepository.UpdateUsersGroupAsync(user, userGroup.GroupId);
     }
 
-    public async Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset, string? search)
+    public async Task<IEnumerable<User>> GetUsersAsync(int? limit, int? offset, string? search, int? groupId)
     {
         var query = _userRepository.GetAllUsersQuery();
 
-        //Apply search
+        //Apply search term
         if (!string.IsNullOrEmpty(search))
         {
             query = query
@@ -112,14 +112,21 @@ public class UserService : IUserService
                     u.Surname.ToLower().Contains(search.ToLower())
                     );
         }
-        //Apply offset
-        if (offset.HasValue)
+        
+        //Apply group
+        if (groupId.HasValue && groupId > 0)
+        {
+            query = query.Where(u => u.UserGroup.GroupId == groupId);
+        }
+        
+        //Apply offset (only when offset is greater than 0)
+        if (offset.HasValue && offset > 0)
         {
             query = query.Skip(offset.Value);
         }
 
-        //Apply limit
-        if (limit.HasValue)
+        //Apply limit (only when limit is greater than 0)
+        if (limit.HasValue && limit > 0)
         {
             query = query.Take(limit.Value);
         }
