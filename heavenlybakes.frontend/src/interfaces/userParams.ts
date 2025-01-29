@@ -2,4 +2,5 @@
     limit? : number,
     offset? : number,
     search? : string,
+    groupId? : number,
 }

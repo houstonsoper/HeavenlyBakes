@@ -29,7 +29,6 @@ export default function HomePage() {
             }
             
             try {
-                debugger;
                 //Attempt to create the user if validation passes
                 await createUser(formData);
                 

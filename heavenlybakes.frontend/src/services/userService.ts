@@ -244,9 +244,9 @@ export async function fetchUserById (userId : string, signal? : AbortSignal) : P
     }
 }
 
-export async function fetchUsers ({limit = 0, offset = 0, search = ""} : UserParams , signal? : AbortSignal) : Promise<User[] | []> {
+export async function fetchUsers ({limit = 0, offset = 0, search = "", groupId = 0} : UserParams , signal? : AbortSignal) : Promise<User[] | []> {
     try {
-        const url : string = `${BASEURL}s?search=${search}&limit=${limit}&offset=${offset}`;
+        const url : string = `${BASEURL}s?search=${search}&groupId=${groupId}&limit=${limit}&offset=${offset}`;
         const response : Response = await fetch(url, {signal})
         
         if (!response.ok) 

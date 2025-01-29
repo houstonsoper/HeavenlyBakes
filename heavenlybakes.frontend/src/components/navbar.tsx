@@ -44,8 +44,8 @@ export default function Navbar() {
                 <h1 className="text-2xl font-bold text-pink-600">Heavenly Bakes</h1>
                 <SearchBar/>
                 <nav>
-                    <ul className="flex space-x-4">
-                        <li><Link href="/" className="text-pink-600 hover:text-pink-800">Home</Link></li>
+                    <ul className="flex space-x-4 items-center">
+                        <li><Link href="/" className="text-pink-600 hover:text-pink-800 align-middle">Home</Link></li>
                         {/* Our Selections Dropdown */}
                         {bakeTypes.length > 0 ? (
                         <DropdownMenu>
