@@ -3,7 +3,7 @@ import {ChangeEvent, useState} from "react";
 import UserGroup from "@/interfaces/userGroup";
 import {UpdateUserDetails} from "@/interfaces/updateUserDetails";
 import {deleteUser, updateUsersUserGroup} from "@/services/userService";
-import {Button} from "@/components/ui/button";
+import AlertButton from "./alertButton";
 
 export interface UserDashboardRowProps {
     user: User;
@@ -12,7 +12,6 @@ export interface UserDashboardRowProps {
 }
 
 export default function UserDashboardRow({user, userGroups, handleUserDelete}: UserDashboardRowProps) {
-
     const [selectedUserGroup, setSelectedUserGroup] = useState<string | null>(null);
 
     const handleUpdate = async (details: UpdateUserDetails) => {
@@ -20,7 +19,6 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
         if (!selectedUserGroup || Number(selectedUserGroup) === user.userGroup.groupId) {
             return;
         }
-
         //Update the users group
         try {
             await updateUsersUserGroup(details.userId, details.groupId);
@@ -60,16 +58,25 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                 </td>
                 <td className="border-b border-gray-300">
                     <div>
-                        <Button 
-                            className="m-1 bg-pink-700 hover:bg-pink-900 h-7 w-7" 
-                            onClick={() => 
-                                handleUpdate({userId: user.userId, groupId: Number(selectedUserGroup)})}
-                        >
-                            <span className="material-symbols-outlined ">Update</span>
-                        </Button>
-                        <Button className="m-1 bg-gray-800 hover:bg-gray-900 h-7 w-7" onClick={handleDelete}>
-                            <span className="material-symbols-outlined">delete</span>
-                        </Button>
+                        <AlertButton
+                            buttonIcon="update"
+                            title="Update user"
+                            description="Are you sure you want to update this user?"
+                            action={() => handleUpdate({userId: user.userId, groupId: Number(selectedUserGroup)})}
+                            className="m-1 bg-pink-700 hover:bg-pink-900 h-7 w-7 text-white"
+                            cancelText="No"
+                            continueText="Yes"
+                        />
+
+                        <AlertButton
+                            buttonIcon="delete"
+                            title="Delete user"
+                            description="Are you sure you want to delete this user?"
+                            action={handleDelete}
+                            className="m-1 bg-gray-800 hover:bg-gray-900 h-7 w-7 text-white"
+                            cancelText="No"
+                            continueText="Yes"
+                        />
                     </div>
                 </td>
             </tr>

@@ -181,7 +181,11 @@ export default function UserDashboard() {
                                         handleUserDelete={handleUserDelete}
                                     />
                                 ))
-                            ) : null}
+                            ) : (
+                                <tr>
+                                    <td colSpan={4} className="text-center p-3 text-xl"> No users found</td>
+                                </tr>
+                            )}
                             </tbody>
                         </table>
                     </div>
@@ -196,7 +200,7 @@ export default function UserDashboard() {
                     {/* Back button */}
                     {searchRef.current !== "" && usersForNextPage.length <= 0 && (
                         <Button
-                            className="m-auto bg-pink-700 hover:bg-pink-800"
+                            className="m-auto bg-gray-700 hover:bg-gray-800"
                             onClick={handleClearSearch}>
                             Back
                         </Button>
