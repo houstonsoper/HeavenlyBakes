@@ -1,9 +1,12 @@
-﻿export interface Order {
+﻿import OrderStatus from "@/interfaces/orderStatus";
+import {PaymentMethod} from "@/interfaces/paymentMethod";
+
+export interface Order {
     orderId: number;
     userId : string,
     orderDate: Date,
-    orderStatus: number,
-    paymentMethodId: number,
+    orderStatus : OrderStatus,
+    paymentMethod: PaymentMethod,
     shippingAddress: string,
     shippingCity: string,
     shippingPostCode: string,

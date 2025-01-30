@@ -1,4 +1,5 @@
 ﻿import {PaymentMethod} from "@/interfaces/paymentMethod";
+import OrderStatus from "@/interfaces/orderStatus";
 
 export interface OrderItem {
     bakeId : number,
@@ -16,7 +17,7 @@ export default interface OrderWithOrderItems {
     shippingPostCode: string,
     shippingCountry: string,
     total : number,
-    orderStatus: number,
+    orderStatus: OrderStatus,
     paymentMethod : PaymentMethod,
     orderItems : OrderItem[],
 }

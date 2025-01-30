@@ -62,7 +62,7 @@ export default function OrderCard({order, reviews}: OrderCardProps) {
             <CardHeader className="pb-2">
                 <div className="flex">
                     <CardTitle className="text-pink-700">
-                        {order.orderStatus}
+                        {order.orderStatus.status}
                     </CardTitle>
                     {/*OrderID, with Modal that displays order details*/}
                     <AlertDialog>
