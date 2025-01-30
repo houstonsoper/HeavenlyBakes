@@ -27,7 +27,7 @@ public class OrderRepository : IOrderRepository
             ShippingCountry = order.ShippingCountry,
             Total = 0, //This will updated later when the order items are added
             PaymentMethodId = order.PaymentMethodId,
-            OrderStatus = 0,
+            StatusId = 1
         };
         await _context.Orders.AddAsync(newOrder);
         await _context.SaveChangesAsync();
@@ -103,7 +103,17 @@ public class OrderRepository : IOrderRepository
         return await _context.Orders
             .Include(o => o.OrderItems)
             .Include(o => o.PaymentMethod)
+            .Include(o => o.OrderStatus)
             .Where(o => o.UserId == Guid.Parse(userId) && o.OrderItems.Count > 0) 
             .ToListAsync();
+    }
+
+    public IQueryable<Order> GetAllOrdersQuery()
+    {
+        return _context.Orders
+            .Include(o => o.OrderItems)
+            .Include(o => o.PaymentMethod)
+            .Include(o => o.OrderStatus)
+            .AsQueryable();
     }
 }

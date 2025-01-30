@@ -12,9 +12,9 @@ public class HeavenlyBakesDbContext : DbContext
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
     public DbSet<BakeType> BakeTypes { get; set; }
     public DbSet<Review> Reviews { get; set; }
-    
     public DbSet<User> Users { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
+    public DbSet<OrderStatus> OrderStatus { get; set; }
     
     public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
@@ -34,6 +34,7 @@ public class HeavenlyBakesDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserGroupEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new PasswordResetTokenEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderStatusEntityTypeConfiguration());
     }
 
     public HeavenlyBakesDbContext(DbContextOptions options) : base(options)

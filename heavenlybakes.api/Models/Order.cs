@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using heavenlybakes.api.Enums;
 
 namespace heavenlybakes.api.Models;
 
@@ -35,10 +34,9 @@ public class Order
 
     [Required(ErrorMessage = "PaymentMethod is required.")]
     public required int PaymentMethodId { get; set; } = 1;
-
-    // Use the OrderStatus enum instead of an integer
+    
     [Required(ErrorMessage = "OrderStatus is required.")]
-    public OrderStatusEnum OrderStatus { get; set; } 
+    public required int  StatusId { get; set; } 
 
     public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     [Required(ErrorMessage = "PaymentMethod is required.")]
@@ -46,4 +44,5 @@ public class Order
     //Navigation
     public PaymentMethod? PaymentMethod { get; set; }
     public User? User { get; set; }
+    public OrderStatus? OrderStatus { get; set; }
 }

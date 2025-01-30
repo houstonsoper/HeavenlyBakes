@@ -25,9 +25,9 @@ public static class OrderItemExtension
         };
     }
 
-    public static AddOrderItemCustomerOrderRequestDto ToAddOrderItemCustomerOrderRequestDto(this OrderItem orderItem)
+    public static OrderRequestItemDto ToAddOrderItemCustomerOrderRequestDto(this OrderItem orderItem)
     {
-        return new AddOrderItemCustomerOrderRequestDto
+        return new OrderRequestItemDto
         {
             BakeId = orderItem.BakeId,
             Quantity = orderItem.Quantity,

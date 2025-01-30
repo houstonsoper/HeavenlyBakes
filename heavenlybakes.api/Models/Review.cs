@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using heavenlybakes.api.Enums;
 
 namespace heavenlybakes.api.Models;
 

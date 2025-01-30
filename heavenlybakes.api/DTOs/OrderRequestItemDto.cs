@@ -1,6 +1,6 @@
 ﻿namespace heavenlybakes.api.DTOs;
 
-public class AddOrderItemCustomerOrderRequestDto
+public class OrderRequestItemDto
 {
     public int BakeId { get; set; }
     public int Quantity { get; set; }

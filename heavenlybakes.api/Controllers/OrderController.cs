@@ -1,6 +1,7 @@
 ﻿using heavenlybakes.api.DTOs;
 using heavenlybakes.api.Extensions;
 using heavenlybakes.api.Repositories;
+using heavenlybakes.api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace heavenlybakes.api.Controllers;
@@ -10,10 +11,12 @@ namespace heavenlybakes.api.Controllers;
 public class OrderController : Controller
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IOrderService _orderService;
 
-    public OrderController(IOrderRepository orderRepository)
+    public OrderController(IOrderRepository orderRepository, IOrderService orderService)
     {
         _orderRepository = orderRepository;
+        _orderService = orderService;
     }
     
     [HttpPost]
@@ -53,8 +56,16 @@ public class OrderController : Controller
     public async Task<IActionResult> GetCustomersOrders([FromRoute] string userId)
     {
         var orders = await _orderRepository.GetCustomersOrders(userId);
-        var ordersDto = orders.Select(o => o.ToCustomerOrdersRequestDto());
+        var ordersDto = orders.Select(o => o.ToOrderRequestDto());
         
+        return Ok(ordersDto);
+    }
+
+    [HttpGet("/Orders")]
+    public async Task<IActionResult> GetOrders([FromQuery] string? search, [FromQuery] int? statusId, [FromQuery] int? offset, [FromQuery] int? limit)
+    {
+        var orders = await _orderService.GetOrders(search, statusId, offset, limit);
+        var ordersDto = orders.Select(o => o.ToOrderRequestDto());
         return Ok(ordersDto);
     }
 }

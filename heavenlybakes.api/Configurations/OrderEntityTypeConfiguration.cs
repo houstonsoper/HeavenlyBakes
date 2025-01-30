@@ -26,6 +26,12 @@ public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .WithMany()
             .HasForeignKey(r => r.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        //Foreign key for Order Status
+        builder.HasOne(o => o.OrderStatus)
+            .WithMany()
+            .HasForeignKey(o => o.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
 
     }
 }
