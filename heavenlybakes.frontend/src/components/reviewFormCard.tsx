@@ -118,7 +118,6 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
                                        type="text"
                                        defaultValue={review?.title ?? ''}
                                        onChange={handleTitle}
-                                       value={title}
                                        required
                                 />
 
@@ -129,7 +128,6 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
                                           name="feedback"
                                           defaultValue={review?.feedback ?? feedback}
                                           onChange={handleFeedback}
-                                          value={feedback}
                                           required
                                 />
 
