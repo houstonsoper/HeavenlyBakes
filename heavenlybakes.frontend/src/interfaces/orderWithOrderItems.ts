@@ -17,7 +17,7 @@ export default interface OrderWithOrderItems {
     shippingPostCode: string,
     shippingCountry: string,
     total : number,
-    orderStatus: OrderStatus,
-    paymentMethod : PaymentMethod,
+    orderStatusId: number,
+    paymentMethodId : number,
     orderItems : OrderItem[],
 }

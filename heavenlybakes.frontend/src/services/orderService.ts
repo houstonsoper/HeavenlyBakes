@@ -4,6 +4,7 @@ import BasketItem from "@/interfaces/basketItem";
 import {OrderItem} from "@/interfaces/orderItem";
 import OrderWithOrderItems from "@/interfaces/orderWithOrderItems";
 import GroupedOrders from "@/interfaces/groupedOrders";
+import OrdersParams from "@/interfaces/ordersParams";
 
 const BASE_URL: string = 'https://localhost:44367';
 
@@ -111,4 +112,23 @@ export function groupOrdersByDate (orders : OrderWithOrderItems[]) : GroupedOrde
     });
 
     return groupedOrdersSortedByDate;
+}
+
+export async function fetchOrders ({search = "", statusId, offset = 0, limit = 0} : OrdersParams, signal? : AbortSignal) : Promise<OrderWithOrderItems[] | []>  {
+    try{
+        const url : string = BASE_URL + `/Orders?search=${search}&statusId=${statusId}&offset=${offset}&limit=${limit}`;
+        const response : Response = await fetch(url, {signal});
+        
+        if (!response.ok) {
+            throw new Error("Unable to get orders from API");
+        }
+        return await response.json();
+    } catch(error){
+        if (error instanceof DOMException && error.message === "AbortError"){
+            console.log("Fetch request aborted");
+        } else {
+            console.error(error);
+        }
+        return [];
+    }
 }

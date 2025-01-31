@@ -12,7 +12,7 @@ public class OrderRequestDto
     public string ShippingPostalCode { get; set; } = string.Empty;
     public string ShippingCountry { get; set; } = string.Empty;
     public decimal Total { get; set; } 
-    public OrderStatus? OrderStatus { get; set; }
-    public PaymentMethodDto? PaymentMethod { get; set; }
+    public int PaymentMethodId { get; set; }
+    public int OrderStatusId { get; set; }
     public List<OrderRequestItemDto> OrderItems { get; set; } = [];
 }

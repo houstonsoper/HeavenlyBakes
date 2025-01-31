@@ -17,12 +17,8 @@ public static class OrderExtension
             ShippingPostalCode = order.ShippingPostalCode,
             ShippingCountry = order.ShippingCountry,
             Total = order.Total,
-            OrderStatus = order.OrderStatus,
-            PaymentMethod = new PaymentMethodDto
-            {
-                Id = order.PaymentMethodId,
-                Method = order.PaymentMethod.Method
-            },
+            OrderStatusId = order.StatusId,
+            PaymentMethodId = order.PaymentMethodId,
             OrderItems = order.OrderItems.Select(item => new OrderRequestItemDto
             {
                 BakeId = item.BakeId,
