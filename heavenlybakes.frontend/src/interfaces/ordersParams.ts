@@ -1,6 +1,6 @@
 ﻿export default interface OrdersParams {
     search? : string,
-    statusId?: string,
+    statusId?: number,
     offset? : number,
     limit? : number,
 }

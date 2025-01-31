@@ -28,7 +28,7 @@ public class OrderService : IOrderService
             );
         }
 
-        if (statusId.HasValue)
+        if (statusId.HasValue && statusId != 0)
         {
             query = query.Where(o => o.StatusId == statusId);
         }
@@ -39,7 +39,7 @@ public class OrderService : IOrderService
             query = query.Skip(offset.Value);
         }
         
-        if (limit.HasValue)
+        if (limit.HasValue && limit != 0)
         {
             query = query.Take(limit.Value);
         }

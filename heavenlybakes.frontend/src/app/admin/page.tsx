@@ -33,7 +33,7 @@ export default function AdminPage () {
                         </Link>
                     </div>
                     <div className="m-auto border p-12">
-                        <Link href="/order-dashboard">
+                        <Link href="/orders-dashboard">
                             <span className="material-symbols-outlined w-full text-center">orders</span>
                             <Button className="w-full">Manage Orders</Button>
                         </Link>
