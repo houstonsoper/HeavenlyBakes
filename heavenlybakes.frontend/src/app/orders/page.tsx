@@ -9,13 +9,16 @@ import OrderCard from "@/components/orderCard";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import Review from "@/interfaces/review";
 import {useUser} from "@/contexts/userContext";
+import {PaymentMethod} from "@/interfaces/paymentMethod";
+import {fetchPaymentMethods} from "@/services/paymentService";
 
 export default function orders(){
     const [orders, setOrders] = useState<GroupedOrders[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);
     const {user} = useUser();
+    const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
     
-    //Fetch orders
+    //Fetch orders on mount
     useEffect(() => {
         const controller = new AbortController();
         const signal : AbortSignal = controller.signal;
@@ -31,6 +34,19 @@ export default function orders(){
         //Cleanup function to abort fetch when component unmounts
         return () => controller.abort();
     }, [user])
+    
+    //Fetch payment methods on mount
+    useEffect(() => {
+        const controller = new AbortController;
+        const signal : AbortSignal = controller.signal;
+        
+        const getPaymentMethods = async () => {
+            setPaymentMethods(await fetchPaymentMethods(signal));
+        }
+        getPaymentMethods();
+        
+        return () => controller.abort();
+    }, []);
 
     return (
         <main className="bg-gray-50">
@@ -51,6 +67,8 @@ export default function orders(){
                                             <OrderCard 
                                                 order={order} 
                                                 reviews={reviews.filter(r => order.orderItems.some(i => i.bakeId == r.bakeId))}
+                                                paymentMethod = {paymentMethods.find(pm => pm.id === order.paymentMethodId) 
+                                                    ?? {id: 0, method: "Unknown"}}
                                             />
                                         </CardContent>
                                     </div>

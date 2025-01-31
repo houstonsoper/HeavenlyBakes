@@ -22,13 +22,15 @@ import Review from "@/interfaces/review";
 import {useRouter} from "next/navigation";
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 import router from "next/navigation";
+import {PaymentMethod} from "@/interfaces/paymentMethod";
 
 interface OrderCardProps {
     order: OrderWithOrderItems;
     reviews: Review[];
+    paymentMethod: PaymentMethod;
 }
 
-export default function OrderCard({order, reviews}: OrderCardProps) {
+export default function OrderCard({order, reviews, paymentMethod}: OrderCardProps) {
     const [bakes, setBakes] = useState<Bake[]>([]);
     const router : AppRouterInstance = useRouter();
 
@@ -100,7 +102,7 @@ export default function OrderCard({order, reviews}: OrderCardProps) {
                                         </li>
                                         <li>
                                             <strong>Payment Method: </strong>
-                                            {order.paymentMethodId}
+                                            {paymentMethod.method}
                                         </li>
                                     </ul>
                                 </AlertDialogDescription>
