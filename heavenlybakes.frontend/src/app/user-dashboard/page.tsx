@@ -20,6 +20,7 @@ export default function UserDashboard() {
     const searchRef = useRef<HTMLInputElement>(null);
     const limit: number = 10;
     const [groupFilter, setGroupFilter] = useState<number>(0);
+    const groupFilterRef = useRef<HTMLSelectElement>(null);
 
     //Fetch users for the current page
     useEffect(() => {
@@ -74,11 +75,17 @@ export default function UserDashboard() {
             searchRef.current.value = "";
             setSearch("");
         }
-        //Reset the page state back to 1 
-        setPage(1);
-
+        
+        //Clear group filter
+        if (groupFilterRef.current) {
+            groupFilterRef.current.value = "0";
+            setGroupFilter(0);
+        }
+        
         //Slice the users array down to 1 page worth of results
         setUsers(prevUsers => prevUsers.slice(0, limit))
+
+        setPage(1);
     }
 
     const handleSearch = (e : React.KeyboardEvent<HTMLInputElement>) => {
@@ -87,18 +94,16 @@ export default function UserDashboard() {
             setPage(1);
         }
     }
-    
     const groupFilterHandler = ( e : ChangeEvent<HTMLSelectElement>) => {
         setPage(1);
         setGroupFilter(Number(e.target.value));
     }
-
+    
     //Update the users state when a user is deleted
     const handleUserDelete = (user: User) => {
         setUsers(prevUsers => prevUsers.filter(u => u.userId !== user.userId));
     }
-
-
+    
     //If user is not an admin return a 404 error page
     if (user?.userGroup.groupName !== "Admin") {
         return (
@@ -134,7 +139,7 @@ export default function UserDashboard() {
                     <div className="flex">
                         <div className="ms-auto">
                             <label className="font-semibold text-pink-700">Group:</label>
-                            <select onChange={groupFilterHandler} className="border mx-1 px-1 rounded ">
+                            <select onChange={groupFilterHandler} className="border mx-1 px-1 rounded" ref={groupFilterRef}>
                                 <option value="0">All</option>
                                 {userGroups.map((group: UserGroup) => (
                                     <option
