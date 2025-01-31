@@ -16,24 +16,19 @@ export default function UserDashboard() {
     const [usersForNextPage, setUsersForNextPage] = useState<User[]>([]);
     const [userGroups, setUsersGroups] = useState<UserGroup[]>([]);
     const [search, setSearch] = useState<string>('');
-    const [pageNumber, setPageNumber] = useState<number>(1);
-    const searchRef = useRef<string>('');
+    const [page, setPage] = useState<number>(1);
+    const searchRef = useRef<HTMLInputElement>(null);
     const limit: number = 10;
     const [groupFilter, setGroupFilter] = useState<number>(0);
 
-    //Fetch users
+    //Fetch users for the current page
     useEffect(() => {
         const controller = new AbortController;
         const signal: AbortSignal = controller.signal;
-
-        //Get the users for the current page
+        
         const getUsers = async () => {
-            try {
-                const fetchedUsers: User[] | [] = await fetchUsers({limit, offset: (pageNumber - 1) * limit, search, groupId : groupFilter}, signal);
-                setUsers(fetchedUsers);
-            } catch (error) {
-                console.error(error);
-            }
+            const fetchedUsers: User[] | [] = await fetchUsers({limit, offset: (page - 1) * limit, search, groupId : groupFilter}, signal);
+            setUsers(fetchedUsers);
         }
         getUsers();
 
@@ -41,72 +36,60 @@ export default function UserDashboard() {
     }, [search, groupFilter]);
 
 
-    //Fetch users for the next page when the page is updated
+    //Fetch users for the next page 
     useEffect(() => {
-        const limit: number = 10;
         const controller = new AbortController;
         const signal: AbortSignal = controller.signal;
 
         const getUsersForNextPage = async () => {
-            try {
-                const fetchedUsers: User[] | [] = await fetchUsers({limit, offset: pageNumber * limit, search, groupId : groupFilter}, signal);
-                setUsersForNextPage(fetchedUsers);
-            } catch (error) {
-                console.error(error);
-            }
+            const fetchedUsers: User[] | [] = await fetchUsers({limit, offset: page * limit, search, groupId : groupFilter}, signal);
+            setUsersForNextPage(fetchedUsers);
         }
         getUsersForNextPage();
         
         return () => controller.abort();
-    }, [pageNumber, search, groupFilter]);
+    }, [page, search, groupFilter]);
 
     //Get all user groups on mount
     useEffect(() => {
         const controller = new AbortController;
         const signal: AbortSignal = controller.signal;
         const getAllUserGroups = async () => {
-            try {
-                const fetchedUserGroups: UserGroup[] = await fetchAllUserGroups(signal);
-                setUsersGroups(fetchedUserGroups)
-            } catch (error) {
-                console.error(error);
-            }
+            const fetchedUserGroups: UserGroup[] = await fetchAllUserGroups(signal);
+            setUsersGroups(fetchedUserGroups)
         }
         getAllUserGroups();
         
         return () => controller.abort();
     }, []);
     
-    //Handler to update search state
-    const searchHandler = (e: React.KeyboardEvent) => {
+    const handlePagination = () => {
+        setUsers(users => [...users, ...usersForNextPage]);
+        setPage(page => page + 1);
+    }
+
+    const handlePageReset = () => {
+        //If there is text in the search bar clear it
+        if (searchRef.current) {
+            searchRef.current.value = "";
+            setSearch("");
+        }
+        //Reset the page state back to 1 
+        setPage(1);
+
+        //Slice the users array down to 1 page worth of results
+        setUsers(prevUsers => prevUsers.slice(0, limit))
+    }
+
+    const handleSearch = (e : React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            //Don't update the search state if the input matches what is already stored in state
-            //Instead set the users state to the first 10 users of the current state
-            if (searchRef.current === search){
-                setUsers(users => users.slice(0 , limit))
-            }
-            
-            setSearch(searchRef.current); //Update search
-            setPageNumber(1);
+            setSearch(e.currentTarget.value);
+            setPage(1);
         }
     }
     
-    //Handler to set the users state back to the state before the search,
-    // clear the search term and hide the back button
-    const handleClearSearch = () => {
-        searchRef.current = "";
-        setSearch(searchRef.current);
-        setPageNumber(1);
-    }
-
-    //Handler to load more users when the user clicks load all
-    const handlePagination = () => {
-        setPageNumber(pageNumber + 1);
-        setUsers((currentUsers) => [...currentUsers, ...usersForNextPage]);
-    }
-    
     const groupFilterHandler = ( e : ChangeEvent<HTMLSelectElement>) => {
-        setPageNumber(1);
+        setPage(1);
         setGroupFilter(Number(e.target.value));
     }
 
@@ -139,12 +122,12 @@ export default function UserDashboard() {
                         <div className="flex border rounded w-full mb-12 px-1">
                             <span className="m-auto material-symbols-outlined">search</span>
                             <input
-                                onKeyDown={searchHandler}
-                                onChange={(e) => searchRef.current = e.target.value}
+                                onKeyDown={handleSearch}
                                 defaultValue={search}
                                 className="w-full p-1"
                                 type="text"
                                 placeholder="Search by name or e-mail"
+                                ref={searchRef}
                             />
                         </div>
                     </div>
@@ -190,23 +173,20 @@ export default function UserDashboard() {
                         </table>
                     </div>
                 </div>
-                <div className="flex pt-12">
-                    {/*If there are more users to load and not a search display the "Load more" button*/}
-                    {usersForNextPage.length > 0 && (
-                        <Button className="m-auto bg-pink-700 hover:bg-pink-800" onClick={handlePagination}>
-                            Load more
-                        </Button>
-                    )}
-                    {/* Back button */}
-                    {searchRef.current !== "" && usersForNextPage.length <= 0 && (
-                        <Button
-                            className="m-auto bg-gray-700 hover:bg-gray-800"
-                            onClick={handleClearSearch}>
-                            Back
-                        </Button>
+                    {usersForNextPage.length > 0 ? (
+                        <div className="flex">
+                            <Button className="m-auto bg-pink-700 hover:bg-pink-800" onClick={handlePagination}>
+                                Load more
+                            </Button>
+                        </div>
+                    ): (
+                        <div className="flex">
+                            <Button className="m-auto bg-gray-700 hover:bg-gray-800" onClick={handlePageReset}>
+                                Go back
+                            </Button>
+                        </div>
                     )}
                 </div>
-            </div>
         </main>
     )
 }
