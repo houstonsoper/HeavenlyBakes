@@ -11,12 +11,15 @@ import Review from "@/interfaces/review";
 import {useUser} from "@/contexts/userContext";
 import {PaymentMethod} from "@/interfaces/paymentMethod";
 import {fetchPaymentMethods} from "@/services/paymentService";
+import OrderStatus from "@/interfaces/orderStatus";
+import {fetchOrderStatuses} from "@/services/orderStatusesService";
 
 export default function orders(){
     const [orders, setOrders] = useState<GroupedOrders[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);
     const {user} = useUser();
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+    const [orderStatuses, setOrderStatuses] = useState<OrderStatus[]>([]);
     
     //Fetch orders on mount
     useEffect(() => {
@@ -48,6 +51,19 @@ export default function orders(){
         return () => controller.abort();
     }, []);
 
+    //Fetch order statuses on mount
+    useEffect(() => {
+        const controller = new AbortController;
+        const signal : AbortSignal = controller.signal;
+
+        const getOrderStatuses = async () => {
+            setOrderStatuses(await fetchOrderStatuses(signal));
+        }
+        getOrderStatuses();
+
+        return () => controller.abort();
+    }, []);
+
     return (
         <main className="bg-gray-50">
             <PageHeader title="Your Orders" description="Keep track of all your delicious purchases in one place." />
@@ -68,7 +84,9 @@ export default function orders(){
                                                 order={order} 
                                                 reviews={reviews.filter(r => order.orderItems.some(i => i.bakeId == r.bakeId))}
                                                 paymentMethod = {paymentMethods.find(pm => pm.id === order.paymentMethodId) 
-                                                    ?? {id: 0, method: "Unknown"}}
+                                                    ?? {id: 0, method: "Unknown"}} 
+                                                orderStatus = {orderStatuses.find(os => os.id === order.orderStatusId)
+                                                    ?? {id: 0, status : "Unknown"}}
                                             />
                                         </CardContent>
                                     </div>

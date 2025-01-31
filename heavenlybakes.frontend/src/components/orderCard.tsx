@@ -23,14 +23,16 @@ import {useRouter} from "next/navigation";
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 import router from "next/navigation";
 import {PaymentMethod} from "@/interfaces/paymentMethod";
+import OrderStatus from "@/interfaces/orderStatus";
 
 interface OrderCardProps {
     order: OrderWithOrderItems;
     reviews: Review[];
     paymentMethod: PaymentMethod;
+    orderStatus : OrderStatus;
 }
 
-export default function OrderCard({order, reviews, paymentMethod}: OrderCardProps) {
+export default function OrderCard({order, reviews, paymentMethod, orderStatus}: OrderCardProps) {
     const [bakes, setBakes] = useState<Bake[]>([]);
     const router : AppRouterInstance = useRouter();
 
@@ -64,7 +66,7 @@ export default function OrderCard({order, reviews, paymentMethod}: OrderCardProp
             <CardHeader className="pb-2">
                 <div className="flex">
                     <CardTitle className="text-pink-700">
-                        {order.orderStatusId}
+                        {orderStatus.status}
                     </CardTitle>
                     {/*OrderID, with Modal that displays order details*/}
                     <AlertDialog>
