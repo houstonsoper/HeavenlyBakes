@@ -13,6 +13,7 @@ import {Button} from "@/components/ui/button"
 
 interface AlertProps {
     buttonIcon? : string
+    buttonText? : string
     className? : string 
     title: string,
     description: string,
@@ -20,11 +21,12 @@ interface AlertProps {
     cancelText? : string,
     continueText? : string,
 }
-export default function Alert({buttonIcon, title, description, action, className, cancelText, continueText}: AlertProps) {
+export default function Alert({buttonIcon, buttonText, title, description, action, className, cancelText, continueText,}: AlertProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button className={className}>
+                <Button size="sm" className={className}>
+                    {buttonText}
                     <span className="material-symbols-outlined">{buttonIcon}</span>
                 </Button>
             </AlertDialogTrigger>

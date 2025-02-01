@@ -134,3 +134,21 @@ export async function fetchOrders (
         return [];
     }
 }
+
+export async function updateOrderStatus (orderId : number, orderStatusId : number) : Promise<void> {
+    try {
+        const url: string = BASE_URL + `/Order/${orderId}/UpdateStatus`;
+
+        const response: Response = await fetch(url, {
+            method: 'PUT',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(orderStatusId),
+        });
+        
+        if(!response.ok) {
+            throw new Error("Unable to update order status");
+        }
+    } catch(error){
+        console.error(error);
+    }
+}

@@ -18,7 +18,7 @@ export default function OrdersDashboardPage () {
     const limit = 10;
     const [page, setPage] = useState<number>(1);
     const [timeFilter, setTimeFilter] = useState<string>("");
-    const [statusFilter, setStatusFilter] = useState<Number>(0)
+    const [statusFilter, setStatusFilter] = useState<number>(0)
     
     //Fetch orders on mount
     useEffect(() => {
@@ -198,6 +198,7 @@ export default function OrdersDashboardPage () {
                                     key={order.orderId} 
                                     orderStatus={orderStatuses.find(os => os.id === order.orderStatusId) 
                                         ?? {id : 0, status : "Unknown"}}
+                                    orderStatuses={orderStatuses}
                                 />
                             ))}
                             </tbody>

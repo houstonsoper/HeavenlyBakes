@@ -59,21 +59,22 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                 <td className="border-b border-gray-300">
                     <div>
                         <AlertButton
-                            buttonIcon="update"
-                            title="Update user"
-                            description="Are you sure you want to update this user?"
-                            action={() => handleUpdate({userId: user.userId, groupId: Number(selectedUserGroup)})}
-                            className="m-1 bg-pink-700 hover:bg-pink-900 h-7 w-7 text-white"
-                            cancelText="No"
-                            continueText="Yes"
-                        />
-
-                        <AlertButton
                             buttonIcon="delete"
+                            buttonText="Delete"
                             title="Delete user"
                             description="Are you sure you want to delete this user?"
                             action={handleDelete}
-                            className="m-1 bg-gray-800 hover:bg-gray-900 h-7 w-7 text-white"
+                            className="m-1 bg-gray-800 hover:bg-gray-900 text-white"
+                            cancelText="No"
+                            continueText="Yes"
+                        />
+                        <AlertButton
+                            buttonIcon="update"
+                            buttonText="Update"
+                            title="Update user"
+                            description="Are you sure you want to update this user?"
+                            action={() => handleUpdate({userId: user.userId, groupId: Number(selectedUserGroup)})}
+                            className="m-1 bg-pink-700 hover:bg-pink-900 text-white"
                             cancelText="No"
                             continueText="Yes"
                         />
