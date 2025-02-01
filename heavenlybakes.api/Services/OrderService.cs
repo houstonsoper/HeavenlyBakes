@@ -13,11 +13,31 @@ public class OrderService : IOrderService
         _orderRepository = orderRepository;
     }
     
-    public async Task<IEnumerable<Order>> GetOrders(string? search, int? statusId, int? offset, int? limit)
+    public async Task<IEnumerable<Order>> GetOrders(string? search, int? statusId, int? offset, int? limit, DateTime? startDate, DateTime? endDate)
     {
         var query = _orderRepository.GetAllOrdersQuery();
         var searchTerm = search?.ToLower();
 
+        //Configure query based on the parameters 
+        
+        if (startDate.HasValue && endDate.HasValue)
+        {
+            query = query.Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate);
+        }
+        else if (startDate.HasValue)
+        {
+            query = query.Where(o => o.OrderDate >= startDate);
+        }
+        else if (endDate.HasValue)
+        {
+            query = query.Where(o => o.OrderDate <= endDate);
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(o => o.OrderDate <= endDate);
+        }
+        
         if (!string.IsNullOrEmpty(searchTerm))
         {
             query = query.Where(o =>

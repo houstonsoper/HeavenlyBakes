@@ -61,10 +61,10 @@ public class OrderController : Controller
         return Ok(ordersDto);
     }
 
-    [HttpGet("/Orders")]
-    public async Task<IActionResult> GetOrders([FromQuery] string? search, [FromQuery] int? statusId, [FromQuery] int? offset, [FromQuery] int? limit)
+    [HttpGet("Search")]
+    public async Task<IActionResult> GetOrders([FromQuery] string? search, [FromQuery] int? statusId, [FromQuery] int? offset, [FromQuery] int? limit, DateTime? startDate, DateTime? endDate)
     {
-        var orders = await _orderService.GetOrders(search, statusId, offset, limit);
+        var orders = await _orderService.GetOrders(search, statusId, offset, limit, startDate, endDate);
         var ordersDto = orders.Select(o => o.ToOrderRequestDto());
         return Ok(ordersDto);
     }
