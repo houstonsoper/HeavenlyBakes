@@ -33,6 +33,8 @@ public class OrderService : IOrderService
             query = query.Where(o => o.StatusId == statusId);
         }
         
+        query = query.OrderByDescending(o => o.OrderId);
+        
         
         if (offset.HasValue)
         {
@@ -43,8 +45,6 @@ public class OrderService : IOrderService
         {
             query = query.Take(limit.Value);
         }
-        
-        query = query.OrderByDescending(o => o.OrderDate);
 
         return await query.ToListAsync();
     }
