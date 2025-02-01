@@ -40,9 +40,9 @@ export async function fetchPopularBakes(limit: number = 0, signal? : AbortSignal
     return limit > 0 ? sortedBakes.slice(0, limit) : sortedBakes;
 }
 
-export async function fetchBakeById(bakeId : number, signal : AbortSignal) : Promise<Bake | null>{
+export async function fetchBakeById(bakeId : number, signal? : AbortSignal) : Promise<Bake | null>{
     try{
-        const url = `${BASE_URL}/bakes/id/${bakeId}`;
+        const url = `${BASE_URL}/bakes/${bakeId}`;
         const response : Response = await fetch(url, {signal});
         
         if(!response.ok){
