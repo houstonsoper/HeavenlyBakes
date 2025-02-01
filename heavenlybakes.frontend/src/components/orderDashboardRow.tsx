@@ -65,7 +65,11 @@ export default function OrderDashboardRow({order, orderStatus}: OrderDashboardRo
                     <td className="border-b border-gray-300 py-2">
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button size="sm" variant="outline" onClick={handleGetBakes}>View Items</Button>
+                                <Button size="sm" variant="outline" className="flex gap-1" onClick={handleGetBakes}>Items
+                                    <span className="material-symbols-outlined">
+                                        shopping_bag
+                                    </span>
+                                </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-full w-[50rem]">
                                 <DialogHeader>
