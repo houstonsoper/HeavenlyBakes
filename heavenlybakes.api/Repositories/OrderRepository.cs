@@ -116,4 +116,15 @@ public class OrderRepository : IOrderRepository
             .Include(o => o.OrderStatus)
             .AsQueryable();
     }
+
+    public async Task UpdateOrderStatusAsync(Order order, int orderStatusId)
+    {
+        order.StatusId = orderStatusId;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Order?> GetOrderByIdAsync(int orderId)
+    {
+        return await _context.Orders.FindAsync(orderId);
+    }
 }

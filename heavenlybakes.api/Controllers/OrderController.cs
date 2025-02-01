@@ -68,4 +68,11 @@ public class OrderController : Controller
         var ordersDto = orders.Select(o => o.ToOrderRequestDto());
         return Ok(ordersDto);
     }
+
+    [HttpPut("{orderId}/UpdateStatus")]
+    public async Task<IActionResult> UpdateOrderStatus([FromRoute] int orderId, [FromBody] int statusId)
+    {
+        await _orderService.UpdateOrderStatusAsync(orderId, statusId);
+        return Ok("Order updated");
+    }
 }

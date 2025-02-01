@@ -7,10 +7,12 @@ namespace heavenlybakes.api.Services;
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IOrderStatusesService _orderStatusesService;
 
-    public OrderService(IOrderRepository orderRepository)
+    public OrderService(IOrderRepository orderRepository, IOrderStatusesService orderStatusesService)
     {
         _orderRepository = orderRepository;
+        _orderStatusesService = orderStatusesService;
     }
     
     public async Task<IEnumerable<Order>> GetOrders(string? search, int? statusId, int? offset, int? limit, string? fromDate)
@@ -56,6 +58,19 @@ public class OrderService : IOrderService
         }
 
         return await query.ToListAsync();
+    }
+
+    public async Task UpdateOrderStatusAsync(int orderId, int orderStatusId)
+    {
+        //Find order 
+        var order = await _orderRepository.GetOrderByIdAsync(orderId)
+            ?? throw new KeyNotFoundException("Order not found");
+        
+        //Check to see if the status exists 
+        var status = await _orderStatusesService.GetOrderStatusByIdAsync(orderStatusId);
+        
+        //Update order
+        await _orderRepository.UpdateOrderStatusAsync(order, status.Id);
     }
 }
 

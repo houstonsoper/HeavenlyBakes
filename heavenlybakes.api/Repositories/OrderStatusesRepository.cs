@@ -17,4 +17,9 @@ public class OrderStatusesRepository : IOrderStatusesRepository
     {
        return await _context.OrderStatus.ToListAsync();
     }
+
+    public async Task<OrderStatus?> GetOrderStatusByIdAsync(int orderStatusId)
+    {
+        return await _context.OrderStatus.FindAsync(orderStatusId);
+    }
 }

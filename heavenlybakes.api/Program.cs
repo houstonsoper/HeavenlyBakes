@@ -55,6 +55,7 @@ builder.Services.AddScoped<IPasswordTokenRepository, PasswordTokenRepository>();
 builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderStatusesRepository, OrderStatusesRepository>();
+builder.Services.AddScoped<IOrderStatusesService, OrderStatusesService>();
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
