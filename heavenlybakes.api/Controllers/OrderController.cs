@@ -62,9 +62,9 @@ public class OrderController : Controller
     }
 
     [HttpGet("Search")]
-    public async Task<IActionResult> GetOrders([FromQuery] string? search, [FromQuery] int? statusId, [FromQuery] int? offset, [FromQuery] int? limit, DateTime? startDate, DateTime? endDate)
+    public async Task<IActionResult> GetOrders([FromQuery] string? search, [FromQuery] int? statusId, [FromQuery] int? offset, [FromQuery] int? limit, string? fromDate)
     {
-        var orders = await _orderService.GetOrders(search, statusId, offset, limit, startDate, endDate);
+        var orders = await _orderService.GetOrders(search, statusId, offset, limit, fromDate);
         var ordersDto = orders.Select(o => o.ToOrderRequestDto());
         return Ok(ordersDto);
     }

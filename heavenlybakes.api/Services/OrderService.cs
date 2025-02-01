@@ -13,31 +13,18 @@ public class OrderService : IOrderService
         _orderRepository = orderRepository;
     }
     
-    public async Task<IEnumerable<Order>> GetOrders(string? search, int? statusId, int? offset, int? limit, DateTime? startDate, DateTime? endDate)
+    public async Task<IEnumerable<Order>> GetOrders(string? search, int? statusId, int? offset, int? limit, string? fromDate)
     {
         var query = _orderRepository.GetAllOrdersQuery();
         var searchTerm = search?.ToLower();
-
-        //Configure query based on the parameters 
         
-        if (startDate.HasValue && endDate.HasValue)
+        //Filter query by fromDate (If supplied) by parsing it into a DateTime
+        if (!string.IsNullOrEmpty(fromDate) && DateTime.TryParse(fromDate, out var fromDateDateParsed))
         {
-            query = query.Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate);
-        }
-        else if (startDate.HasValue)
-        {
-            query = query.Where(o => o.OrderDate >= startDate);
-        }
-        else if (endDate.HasValue)
-        {
-            query = query.Where(o => o.OrderDate <= endDate);
-        }
-
-        if (endDate.HasValue)
-        {
-            query = query.Where(o => o.OrderDate <= endDate);
+            query = query.Where(o => o.OrderDate >= fromDateDateParsed);
         }
         
+        //Filter by searchTerm (If supplied)
         if (!string.IsNullOrEmpty(searchTerm))
         {
             query = query.Where(o =>
@@ -48,19 +35,21 @@ public class OrderService : IOrderService
             );
         }
 
+        //Filter by order status (If suppplied)
         if (statusId.HasValue && statusId != 0)
         {
             query = query.Where(o => o.StatusId == statusId);
         }
-        
         query = query.OrderByDescending(o => o.OrderId);
         
         
+        //Filter by offset (If supplied)
         if (offset.HasValue)
         {
             query = query.Skip(offset.Value);
         }
         
+        //Filter by limit (If supplied)
         if (limit.HasValue && limit != 0)
         {
             query = query.Take(limit.Value);
