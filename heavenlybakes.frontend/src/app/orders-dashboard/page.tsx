@@ -17,6 +17,7 @@ export default function OrdersDashboardPage () {
     const [orderStatuses, setOrderStatuses] = useState<OrderStatus[]>([]);
     const limit = 10;
     const [page, setPage] = useState<number>(1);
+    const [timeFilter, setTimeFilter] = useState<string>("");
     
     //Fetch orders on mount
     useEffect(() => {
@@ -25,13 +26,14 @@ export default function OrdersDashboardPage () {
         
         const getOrders = async () => {
             const offset: number = limit * (page - 1);
-            const fetchedOrders : OrderWithOrderItems[] | [] = await fetchOrders({limit, offset, search}, signal);
+            console.log("time filter: ", timeFilter);
+            const fetchedOrders : OrderWithOrderItems[] | [] = await fetchOrders({limit, offset, search, fromDate : timeFilter}, signal);
             setOrders(fetchedOrders);
         }
         getOrders();
         
         return () => controller.abort();
-    }, [search]);
+    }, [search, timeFilter]);
     
     //Fetch orders for next page
     useEffect(() => {
@@ -40,13 +42,13 @@ export default function OrdersDashboardPage () {
 
         const getOrdersForNextPage = async () => {
             const offset: number = limit * page;
-            const fetchedOrders : OrderWithOrderItems[] | [] = await fetchOrders({limit, offset, search}, signal);
+            const fetchedOrders : OrderWithOrderItems[] | [] = await fetchOrders({limit, offset, search, fromDate : timeFilter}, signal);
             setOrdersForNextPage(fetchedOrders);
         }
         getOrdersForNextPage();
 
         return () => controller.abort();
-    }, [page, search]);
+    }, [page, search, timeFilter]);
     
     
     //Fetch order statuses on mount
@@ -55,7 +57,7 @@ export default function OrdersDashboardPage () {
         const signal : AbortSignal = controller.signal;
 
         const getOrderStatuses = async () => {
-            const fetchedOrderStatuses : OrderStatus[] = await fetchOrderStatuses();
+            const fetchedOrderStatuses : OrderStatus[] = await fetchOrderStatuses(signal);
             setOrderStatuses(fetchedOrderStatuses)
         }
         getOrderStatuses();
@@ -74,17 +76,56 @@ export default function OrdersDashboardPage () {
             searchRef.current.value = "";
             setSearch("");
         }
-        //Reset the page state back to 1 
-        setPage(1);
         
         //Slice the users array down to 1 page worth of results
         setOrders(prevOrders => prevOrders.slice(0, limit))
+        setPage(1);
     }
     
     const handleSearch = (e : React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             setSearch(e.currentTarget.value);
             setPage(1);
+        }
+    }
+    
+    const handleTimeFilter = (e : React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTimeFilter : string = e.target.value;
+
+        setPage(1);
+        
+        //Switch to filter time based on what the user has selected in the "From" dropdown
+        switch (selectedTimeFilter) {
+            case "1":
+                let today = new Date();
+                today.setHours(0, 0, 0, 0);
+                setTimeFilter(today.toISOString());
+                break;
+                
+            case "2":
+                let lastWeek = new Date();
+                lastWeek.setDate(lastWeek.getDate() - 7);
+                lastWeek.setHours(0, 0, 0, 0); // Set time to 00:00:00
+                setTimeFilter(lastWeek.toISOString());
+                break;
+                    
+            case "3":
+                let lastMonth = new Date();
+                lastMonth.setMonth(lastMonth.getMonth() - 1);
+                lastMonth.setHours(0, 0, 0, 0); // Set time to 00:00:00
+                setTimeFilter(lastMonth.toISOString());
+                break;
+                
+            case "4":
+                let lastYear = new Date();
+                lastYear.setFullYear(lastYear.getFullYear() - 1);
+                lastYear.setHours(0, 0, 0, 0); // Set time to 00:00:00
+                setTimeFilter(lastYear.toISOString());
+                break;
+               
+            default :
+                setTimeFilter("");
+                break;
         }
     }
     
@@ -110,6 +151,16 @@ export default function OrdersDashboardPage () {
                                 ref={searchRef}
                             />
                         </div>
+                        <div>
+                            <label>From:</label>
+                            <select onChange={handleTimeFilter}>
+                                <option>All time</option>
+                                <option value="1">Today</option>
+                                <option value="2">Last 7 days</option>
+                                <option value="3">Last month</option>
+                                <option value="4">Last year</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="flex justify-center">
                         <table className="table-fixed w-full">
@@ -121,7 +172,7 @@ export default function OrdersDashboardPage () {
                                 <th className="border-b border-gray-300 text-pink-700">Items</th>
                                 <th className="border-b border-gray-300 text-pink-700">Date</th>
                                 <th className="border-b border-gray-300 text-pink-700">Status</th>
-                                <th className="border-b border-gray-300 text-pink-700">Total</th>
+                                <th className="border-b border-gray-300 text-pink-700">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -139,13 +190,13 @@ export default function OrdersDashboardPage () {
                 </div>
                 {ordersForNextPage.length > 0 ? (
                     <div className="flex">
-                        <Button className="m-auto" onClick={handlePagination}>
+                        <Button className="m-auto bg-pink-700 hover:bg-pink-800" onClick={handlePagination}>
                             Load more
                         </Button>
                     </div>
                 ): (
                     <div className="flex">
-                        <Button className="m-auto" onClick={handlePageReset}>
+                        <Button className="m-auto bg-gray-700 hover:bg-gray-800" onClick={handlePageReset}>
                             Go back
                         </Button>
                     </div>

@@ -114,9 +114,10 @@ export function groupOrdersByDate (orders : OrderWithOrderItems[]) : GroupedOrde
     return groupedOrdersSortedByDate;
 }
 
-export async function fetchOrders ({search = "", statusId = 0, offset = 0, limit = 0} : OrdersParams, signal? : AbortSignal) : Promise<OrderWithOrderItems[] | []>  {
+export async function fetchOrders (
+    {search = "", statusId = 0, offset = 0, limit = 0, fromDate}: OrdersParams, signal? : AbortSignal): Promise<OrderWithOrderItems[] | []>  {
     try{
-        const url : string = BASE_URL + `/Orders?search=${search}&statusId=${statusId}&offset=${offset}&limit=${limit}`;
+        const url : string = BASE_URL + `/Order/Search?search=${search}&statusId=${statusId}&offset=${offset}&limit=${limit}&fromDate=${fromDate}`;
         const response : Response = await fetch(url, {signal});
         
         if (!response.ok) {

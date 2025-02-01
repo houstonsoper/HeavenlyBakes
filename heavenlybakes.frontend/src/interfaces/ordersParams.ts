@@ -3,4 +3,5 @@
     statusId?: number,
     offset? : number,
     limit? : number,
+    fromDate? : string,
 }
