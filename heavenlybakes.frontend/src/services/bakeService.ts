@@ -6,6 +6,7 @@ const BASE_URL = 'https://localhost:44367';
 
 export async function fetchBakes({searchTerm = "", type ="", limit = 0,  offset = 0} : BakeParams, signal? : AbortSignal) : Promise<Bake[]> {
     try{
+        debugger;
         const url : string = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}&type=${type}`;
         const response : Response = await fetch(url, {signal});
         

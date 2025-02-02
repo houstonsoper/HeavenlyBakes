@@ -21,6 +21,8 @@ export default function OrdersDashboardPage () {
     const [timeFilter, setTimeFilter] = useState<string>("");
     const [statusFilter, setStatusFilter] = useState<number>(0)
     const { auth } = useUser();
+    const statusFilterRef = useRef<HTMLSelectElement>(null);
+    const timeFilterRef = useRef<HTMLSelectElement>(null);
     
     //Fetch orders on mount
     useEffect(() => {
@@ -73,11 +75,20 @@ export default function OrdersDashboardPage () {
     }
     
     const handlePageReset = () => {
-        //If there is text in the search bar clear it
-        if (searchRef.current) {
+        //Reset state
+        setSearch("");
+        setTimeFilter("");
+        setStatusFilter(0);
+            
+        //Reset input in filters
+        if (searchRef.current)
             searchRef.current.value = "";
-            setSearch("");
-        }
+        
+        if (timeFilterRef.current)
+            timeFilterRef.current.selectedIndex= 0;
+        
+        if (statusFilterRef.current)
+            statusFilterRef.current.selectedIndex = 0;
         
         //Slice the users array down to 1 page worth of results
         setOrders(prevOrders => prevOrders.slice(0, limit))
@@ -153,23 +164,23 @@ export default function OrdersDashboardPage () {
                 />
             </div>
             <div className="container m-auto my-12 px-5">
-                <div className="py-4">
-                    <div className="w-1/2 m-auto">
-                        <div className="flex border rounded w-full mb-12 px-1">
-                            <span className="m-auto material-symbols-outlined">search</span>
+                <div className="mb-8">
+                    <div className="lg:flex mb-6 sm:block">
+                        <div className="flex items-center border rounded-lg overflow-hidden shadow-sm w-[32rem] h-[2rem] my-auto mx-auto lg:mx-0">
+                            <span className="p-2 text-grey-400 material-symbols-outlined">search</span>
                             <input
                                 onKeyDown={handleSearch}
                                 defaultValue={search}
-                                className="w-full p-1"
+                                className="w-full p-2 focus:outline-none"
                                 type="text"
                                 placeholder="Search by order id, name or email"
                                 ref={searchRef}
                             />
                         </div>
-                        <div className="flex justify-evenly">
-                            <div>
-                            <label>From:</label>
-                                <select onChange={handleTimeFilter}>
+                        <div className="flex gap-4 py-5 justify-center ms-auto">
+                            <div className="flex items-center">
+                            <label className="mr-2 text-gray-700">From:</label>
+                                <select onChange={handleTimeFilter} ref={timeFilterRef} className="p-2 border rounded-md shadow-sm">
                                     <option>All time</option>
                                     <option value="1">Today</option>
                                     <option value="2">Last 7 days</option>
@@ -178,8 +189,8 @@ export default function OrdersDashboardPage () {
                                 </select>
                             </div>
                             <div>
-                                <label>Status:</label>
-                                <select onChange={handleStatusFilter}>
+                                <label className="mr-2 text-gray-700">Status:</label>
+                                <select onChange={handleStatusFilter} ref={statusFilterRef} className="p-2 border rounded-md shadow-sm">
                                     <option value="0">All</option>
                                     {orderStatuses.map(status => (
                                         <option key={status.id} value={status.id}>{status.status}</option>
@@ -188,21 +199,21 @@ export default function OrdersDashboardPage () {
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-center">
-                        <table className="table-fixed w-full">
+                    <div className="shadow-md overflow-x-auto rounded-lg">
+                        <table className="table-auto w-full">
                             <thead>
-                            <tr className="text-left">
-                                <th className="border-b border-gray-300 text-pink-700">Order Id</th>
-                                <th className="border-b border-gray-300 text-pink-700">Name</th>
-                                <th className="border-b border-gray-300 text-pink-700">Email</th>
-                                <th className="border-b border-gray-300 text-pink-700">Date</th>
-                                <th className="border-b border-gray-300 text-pink-700">Status</th>
-                                <th className="border-b border-gray-300 text-pink-700">Total</th>
-                                <th className="border-b border-gray-300 text-pink-700">Actions</th>
+                            <tr className="text-left bg-gray-100">
+                                <th className="px-4 py-2 text-left text-pink-700">Order Id</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Name</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Email</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Date</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Status</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Total</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {orders.map((order) => (
+                            {orders.length > 0 ? (orders.map((order) => (
                                 <OrderDashboardRow 
                                     order={order} 
                                     key={order.orderId} 
@@ -210,7 +221,13 @@ export default function OrdersDashboardPage () {
                                         ?? {id : 0, status : "Unknown"}}
                                     orderStatuses={orderStatuses}
                                 />
-                            ))}
+                            ))) : (
+                                <tr>
+                                    <td colSpan={7} className="text-center font-semibold py-2 text-gray-800">
+                                        No orders found
+                                    </td>
+                                </tr>
+                            )}
                             </tbody>
                         </table>
                     </div>

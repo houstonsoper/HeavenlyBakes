@@ -18,9 +18,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {updateOrderStatus} from "@/services/orderService";
-import Alert from "@/components/alertButton";
-import AlertButton from "@/components/alertButton";
 import {useUser} from "@/contexts/userContext";
+import Alert from "@/components/alert";
 
 export interface OrderDashboardRowProps {
     order: OrderWithOrderItems
@@ -29,7 +28,7 @@ export interface OrderDashboardRowProps {
 }
 
 export default function OrderDashboardRow({order, orderStatus, orderStatuses}: OrderDashboardRowProps) {
-    const {user} = useUser();
+    const {auth} = useUser();
     const [customer, setCustomer] = useState<User | null>(null);
     const [bakes, setBakes] = useState<Bake[]>([]);
     const [selectedStatus, setSelectedStatus] = useState<number>(orderStatus.id);
@@ -65,15 +64,17 @@ export default function OrderDashboardRow({order, orderStatus, orderStatuses}: O
     return (
         <>
             {customer ? (
-                <tr>
-                    <td className="border-b border-gray-300">{order.orderId}</td>
-                    <td className="border-b border-gray-300">{customer.forename} {customer.surname}</td>
-                    <td className="border-b border-gray-300">{customer.email}</td>
-                    <td className="border-b border-gray-300">{new Date(order.orderDate).toLocaleString()}</td>
-                    <td className="border-b border-gray-300">
+                <tr className="border-b border-grey-200 hover:bg-grey-50">
+                    <td className="px-4 py-2">{order.orderId}</td>
+                    <td className="px-4 py-2">{customer.forename} {customer.surname}</td>
+                    <td className="px-4 py-2">{customer.email}</td>
+                    <td className="px-4 py-2">{new Date(order.orderDate).toLocaleString()}</td>
+                    <td className="px-4 py-2">
                         <select 
                             value={selectedStatus ?? orderStatus.status} 
-                            onChange={(e : ChangeEvent<HTMLSelectElement>) => setSelectedStatus(Number(e.target.value))}>
+                            onChange={(e : ChangeEvent<HTMLSelectElement>) => setSelectedStatus(Number(e.target.value))}
+                            className="w-full p-1 border rounded-md shadow-sm"
+                        >
                             {orderStatuses.map(status => (
                                 <option 
                                     key={status.id} 
@@ -96,26 +97,26 @@ export default function OrderDashboardRow({order, orderStatus, orderStatuses}: O
                             </DialogTrigger>
                             <DialogContent className="max-w-full w-[50rem]">
                                 <DialogHeader>
-                                    <DialogTitle>Items</DialogTitle>
+                                    <DialogTitle className="text-2xl font-bold text-pink-600">Items</DialogTitle>
                                     <DialogDescription>
-                                        <table className="w-full">
+                                        <table className="w-full mt-4">
                                             <thead className="table-fixed w-full">
-                                            <tr>
-                                                <th className="text-pink-600">Bake</th>
-                                                <th className="text-pink-600">Quantity</th>
-                                                <th className="text-pink-600">Price</th>
-                                                <th className="text-pink-600">Total price</th>
+                                            <tr className="bg-grey-100">
+                                                <th className="px-4 py-2 text-left text-pink-600">Bake</th>
+                                                <th className="px-4 py-2 text-left text-pink-600">Quantity</th>
+                                                <th className="px-4 py-2 text-left text-pink-600">Price</th>
+                                                <th className="px-4 py-2 text-left text-pink-600">Total price</th>
                                             </tr>
                                             </thead>
                                             <tbody className="table-fixed w-full">
                                             {bakes.map(bake => (
-                                                <tr key={bake.id}>
-                                                    <td className="text-black">{bake.name}</td>
-                                                    <td className="text-black">
+                                                <tr key={bake.id}> 
+                                                    <td className="px-4 py-2">{bake.name}</td>
+                                                    <td className="px-4 py-2">
                                                         {order.orderItems.find(oi => oi.bakeId == bake.id)?.quantity}
                                                     </td>
-                                                    <td className="text-black">£{bake.basePrice.toFixed(2)}</td>
-                                                    <td className="text-black">
+                                                    <td className="px-4 py-2">£{bake.basePrice.toFixed(2)}</td>
+                                                    <td className="px-4 py-2">
                                                         £{order.orderItems.find(oi => oi.bakeId === bake.id)?.price.toFixed(2)}
                                                     </td>
                                                 </tr>
@@ -129,8 +130,8 @@ export default function OrderDashboardRow({order, orderStatus, orderStatuses}: O
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
-                        {user?.userGroup.groupName === "Admin" && (
-                        <AlertButton 
+                        {auth.user?.userGroup.groupName === "Admin" && (
+                        <Alert
                             buttonIcon="update"  
                             buttonText="Update"
                             title="Update Order"

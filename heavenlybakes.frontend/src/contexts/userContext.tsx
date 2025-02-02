@@ -49,9 +49,8 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
 
     //Memorize context value to prevent re-renders
     const value: AuthContextType = useMemo(() => ({
-            auth: { user, setUser, logout },
-        }), [user]
-    );
+        auth: { user, setUser, logout }
+    }),[user]);
 
     return (<UserContext.Provider value={value}>{children}</UserContext.Provider>);
 }

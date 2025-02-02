@@ -3,8 +3,8 @@ import {ChangeEvent, useState} from "react";
 import UserGroup from "@/interfaces/userGroup";
 import {UpdateUserDetails} from "@/interfaces/updateUserDetails";
 import {deleteUser, updateUsersUserGroup} from "@/services/userService";
-import AlertButton from "./alertButton";
 import {useUser} from "@/contexts/userContext";
+import Alert from "@/components/alert";
 
 export interface UserDashboardRowProps {
     user: User;
@@ -61,7 +61,7 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                 <td className="border-b border-gray-300">
                     <div>
                         {auth.user?.userGroup.groupName === "Admin" && (
-                            <AlertButton
+                            <Alert
                             buttonIcon="delete"
                             buttonText="Delete"
                             title="Delete user"
@@ -73,7 +73,7 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                         />
                         )}
                         {auth.user?.userGroup.groupName === "Admin" && (
-                        <AlertButton
+                        <Alert
                             buttonIcon="update"
                             buttonText="Update"
                             title="Update user"
