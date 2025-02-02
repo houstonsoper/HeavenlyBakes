@@ -10,13 +10,15 @@ import {get} from "@jridgewell/set-array";
 import {router} from "next/client";
 import {useRouter} from "next/navigation";
 
-interface UserContextType {
-    user: User | null,
-    setUser: (user: User | null) => void,
-    logout: () => Promise<void>
+interface AuthContextType {
+    auth:{
+        user: User | null,
+        setUser: (user: User | null) => void,
+        logout: () => Promise<void> 
+    }
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<AuthContextType | undefined>(undefined);
 
 export const UserProvider = ({children}: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -46,17 +48,16 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
     }
 
     //Memorize context value to prevent re-renders
-    const value: UserContextType = useMemo((): UserContextType => ({
-        user,
-        setUser,
-        logout
-    }), [user]);
+    const value: AuthContextType = useMemo(() => ({
+            auth: { user, setUser, logout },
+        }), [user]
+    );
 
     return (<UserContext.Provider value={value}>{children}</UserContext.Provider>);
 }
 
-export const useUser = (): UserContextType => {
-    const context: UserContextType | undefined = useContext(UserContext);
+export const useUser = (): AuthContextType => {
+    const context: AuthContextType | undefined = useContext(UserContext);
 
     if (!context) {
         throw new Error("useUser must be used within the context");

@@ -18,7 +18,7 @@ export default function Page () {
     const router = useRouter();
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
     const formRef = useRef<HTMLFormElement>(null);
-    const {user} = useUser();
+    const {auth} = useUser();
     
     //Fetch payment methods from API on mount
     useEffect(() => {
@@ -48,9 +48,9 @@ export default function Page () {
         });
         
         //Covert data to an object (User must be logged in and items must be in basket)
-        if(user && basketItems) {
+        if(auth.user && basketItems) {
             const data: OrderForm = {
-                userId: user.userId,
+                userId: auth.user.userId,
                 shippingAddress: formData.get("street") as string,
                 shippingCity: formData.get("city") as string,
                 shippingCountry: formData.get("country") as string,

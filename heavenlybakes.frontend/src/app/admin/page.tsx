@@ -6,10 +6,10 @@ import {Button} from "@/components/ui/button";
 import Link from "next/link";
 
 export default function AdminPage () {
-    const { user } = useUser();
+    const { auth } = useUser();
 
     //If user is not an admin return a 404 error page
-    if (user?.userGroup.groupName !== "Admin") {
+    if (auth.user?.userGroup.groupName !== "Admin") {
         return (
             <main>
                 <h1 className="text-center py-12">404 - Page Not Found</h1>

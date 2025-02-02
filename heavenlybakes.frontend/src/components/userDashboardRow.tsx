@@ -4,6 +4,7 @@ import UserGroup from "@/interfaces/userGroup";
 import {UpdateUserDetails} from "@/interfaces/updateUserDetails";
 import {deleteUser, updateUsersUserGroup} from "@/services/userService";
 import AlertButton from "./alertButton";
+import {useUser} from "@/contexts/userContext";
 
 export interface UserDashboardRowProps {
     user: User;
@@ -13,6 +14,7 @@ export interface UserDashboardRowProps {
 
 export default function UserDashboardRow({user, userGroups, handleUserDelete}: UserDashboardRowProps) {
     const [selectedUserGroup, setSelectedUserGroup] = useState<string | null>(null);
+    const { auth } = useUser();
 
     const handleUpdate = async (details: UpdateUserDetails) => {
         //If no group/new group has been selected, do not update the users user group
@@ -58,7 +60,8 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                 </td>
                 <td className="border-b border-gray-300">
                     <div>
-                        <AlertButton
+                        {auth.user?.userGroup.groupName === "Admin" && (
+                            <AlertButton
                             buttonIcon="delete"
                             buttonText="Delete"
                             title="Delete user"
@@ -68,6 +71,8 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                             cancelText="No"
                             continueText="Yes"
                         />
+                        )}
+                        {auth.user?.userGroup.groupName === "Admin" && (
                         <AlertButton
                             buttonIcon="update"
                             buttonText="Update"
@@ -78,6 +83,7 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                             cancelText="No"
                             continueText="Yes"
                         />
+                        )}
                     </div>
                 </td>
             </tr>

@@ -12,7 +12,7 @@ export default function HomePage() {
     const formRef: RefObject<HTMLFormElement | null> = useRef<HTMLFormElement>(null);
     const [errors, setErrors] = useState<Error[] | null>(null);
     const router = useRouter();
-    const { setUser } = useUser();
+    const { auth } = useUser();
     
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,7 +35,7 @@ export default function HomePage() {
                 //Set the user in state
                 const newUser : User | null = await getUser();
                 if(newUser) {
-                    setUser(newUser );
+                    auth.setUser(newUser );
                     router.push("/");
                 }
             } catch (error) {

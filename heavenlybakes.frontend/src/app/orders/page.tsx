@@ -17,7 +17,7 @@ import {fetchOrderStatuses} from "@/services/orderStatusesService";
 export default function orders(){
     const [orders, setOrders] = useState<GroupedOrders[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);
-    const {user} = useUser();
+    const {auth} = useUser();
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
     const [orderStatuses, setOrderStatuses] = useState<OrderStatus[]>([]);
     
@@ -26,8 +26,8 @@ export default function orders(){
         const controller = new AbortController();
         const signal : AbortSignal = controller.signal;
         const getOrders  = async () => {
-            if (user != null) {
-                const data : orderWithOrderItems[] | [] = await getOrdersByUserId(user.userId, signal);
+            if (auth.user != null) {
+                const data : orderWithOrderItems[] | [] = await getOrdersByUserId(auth.user.userId, signal);
                 const groupedOrders : GroupedOrders[] = groupOrdersByDate(data); //Group the orders by date
                 setOrders(groupedOrders);
             }
@@ -36,7 +36,7 @@ export default function orders(){
 
         //Cleanup function to abort fetch when component unmounts
         return () => controller.abort();
-    }, [user])
+    }, [auth.user])
     
     //Fetch payment methods on mount
     useEffect(() => {

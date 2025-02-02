@@ -20,6 +20,7 @@ import {
 import {updateOrderStatus} from "@/services/orderService";
 import Alert from "@/components/alertButton";
 import AlertButton from "@/components/alertButton";
+import {useUser} from "@/contexts/userContext";
 
 export interface OrderDashboardRowProps {
     order: OrderWithOrderItems
@@ -28,20 +29,20 @@ export interface OrderDashboardRowProps {
 }
 
 export default function OrderDashboardRow({order, orderStatus, orderStatuses}: OrderDashboardRowProps) {
-    const [user, setUser] = useState<User | null>(null);
+    const {user} = useUser();
+    const [customer, setCustomer] = useState<User | null>(null);
     const [bakes, setBakes] = useState<Bake[]>([]);
     const [selectedStatus, setSelectedStatus] = useState<number>(orderStatus.id);
     
-    //Fetch user information on mount
+    //Fetch customer information on mount
     useEffect(() => {
         const controller = new AbortController;
         const signal = controller.signal;
         
-        const getUser = async () => {
-            const user : User | null = await fetchUserById(order.userId, signal)
-            setUser(user);
+        const getCustomer = async () => {
+            setCustomer(await fetchUserById(order.userId, signal));
         }
-        getUser();
+        getCustomer();
         
         return () => controller.abort();
     }, [])
@@ -63,11 +64,11 @@ export default function OrderDashboardRow({order, orderStatus, orderStatuses}: O
     
     return (
         <>
-            {user ? (
+            {customer ? (
                 <tr>
                     <td className="border-b border-gray-300">{order.orderId}</td>
-                    <td className="border-b border-gray-300">{user.forename} {user.surname}</td>
-                    <td className="border-b border-gray-300">{user.email}</td>
+                    <td className="border-b border-gray-300">{customer.forename} {customer.surname}</td>
+                    <td className="border-b border-gray-300">{customer.email}</td>
                     <td className="border-b border-gray-300">{new Date(order.orderDate).toLocaleString()}</td>
                     <td className="border-b border-gray-300">
                         <select 
@@ -128,6 +129,7 @@ export default function OrderDashboardRow({order, orderStatus, orderStatuses}: O
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
+                        {user?.userGroup.groupName === "Admin" && (
                         <AlertButton 
                             buttonIcon="update"  
                             buttonText="Update"
@@ -138,6 +140,7 @@ export default function OrderDashboardRow({order, orderStatus, orderStatuses}: O
                             cancelText="No"
                             continueText="Yes"
                         />
+                        )}
                     </td>
                 </tr>
             ) : null}

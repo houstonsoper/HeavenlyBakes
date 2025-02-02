@@ -11,7 +11,7 @@ import UserDashboardRow from "@/components/userDashboardRow";
 import {Button} from "@/components/ui/button";
 
 export default function UserDashboard() {
-    const {user} = useUser();
+    const {auth} = useUser();
     const [users, setUsers] = useState<User[]>([]);
     const [usersForNextPage, setUsersForNextPage] = useState<User[]>([]);
     const [userGroups, setUsersGroups] = useState<UserGroup[]>([]);
@@ -105,7 +105,7 @@ export default function UserDashboard() {
     }
     
     //If user is not an admin return a 404 error page
-    if (user?.userGroup.groupName !== "Admin") {
+    if (auth.user?.userGroup.groupName !== "Admin") {
         return (
             <main>
                 <h1 className="text-center py-12">404 - Page Not Found</h1>

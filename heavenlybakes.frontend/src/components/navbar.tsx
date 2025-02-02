@@ -20,7 +20,7 @@ import {userLogout} from "@/services/userService";
 
 export default function Navbar() {
     const [bakeTypes, setBakeTypes] = useState<BakeType[]>([]);
-    const {user, logout} = useUser();
+    const {auth} = useUser();
     
     //Fetch bake types from API
     useEffect(() => {
@@ -37,7 +37,6 @@ export default function Navbar() {
         return () => controller.abort();
     }, [])
     
-    console.log("user", user);
     return (
         <header className="bg-pink-100 py-4">
             <div className="container mx-auto px-4 flex justify-between items-center">
@@ -76,7 +75,7 @@ export default function Navbar() {
                         <li><Link href="#contact" className="text-pink-600 hover:text-pink-800">Contact</Link></li>
                         <div className="flex space-x-2 ps-6">
                             {/* User Dropdown */}
-                            {user ? (
+                            {auth.user ? (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>
                                         <li className="text-pink-600 hover:text-pink-800">
@@ -93,9 +92,8 @@ export default function Navbar() {
                                                 My Orders
                                             </Link>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>View Profile</DropdownMenuItem>
                                         {/*If the user is admin then display "Admin Panel"*/}
-                                        { user.userGroup.groupName === "Admin" && 
+                                        { auth.user.userGroup.groupName === "Admin" && 
                                             <>
                                             <Link href="/admin">
                                             <DropdownMenuItem>Admin Panel</DropdownMenuItem>
@@ -103,7 +101,7 @@ export default function Navbar() {
                                             </>}
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem>
-                                            <button onClick={async () => {await logout()}}>
+                                            <button onClick={async () => {await auth.logout()}}>
                                                 Logout
                                             </button>
                                         </DropdownMenuItem>

@@ -14,7 +14,7 @@ export default function Page (){
     const [bakesForReview, setBakesForReview] = useState<(ReviewWithBake)[]>([]);
     const searchParams : ReadonlyURLSearchParams = useSearchParams();
     const [updatePage, setUpdatePage] = useState<boolean>(false);
-    const {user} = useUser();
+    const {auth} = useUser();
     
     useEffect(() => {
         const controller = new AbortController();
@@ -23,7 +23,7 @@ export default function Page (){
         //Get existing reviews for the customer based on the item(s) they have selected to review
         //This is to prevent the user from reviewing the same item twice
         const getCustomersReviews = async() => {
-            if(user) {
+            if(auth.user) {
                 //Get bakes from search param
                 const bakeParam : string | null = searchParams.get("items");
                 const bakeIds : number[] = bakeParam ? JSON.parse(decodeURIComponent(bakeParam)) : [];
@@ -31,7 +31,7 @@ export default function Page (){
                 //Create an array of promises to fetch reviews and bakes for each bakeId
                 const bakesForReviewArray : (ReviewWithBake | null)[]  = await Promise.all (
                     bakeIds.map(async bakeId => {
-                        const review : Review = (await fetchReviews({ bakeId, userId: user.userId }, signal))[0] ?? null;
+                        const review : Review = (await fetchReviews({ bakeId, userId: auth.user?.userId }, signal))[0] ?? null;
                         const bake : Bake | null = await fetchBakeById(bakeId, signal);
                         
                         //If the bake exists, return the bake and existing reviews (if exists), otherwise return null
@@ -58,7 +58,7 @@ export default function Page (){
         setUpdatePage(false);
         
         return () => controller.abort();
-    }, [searchParams, user, updatePage]);
+    }, [searchParams, auth.user, updatePage]);
     
     return (
         <div className="container m-auto">

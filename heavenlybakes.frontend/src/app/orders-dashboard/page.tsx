@@ -8,6 +8,7 @@ import OrderDashboardRow from "@/components/orderDashboardRow";
 import OrderStatus from "@/interfaces/orderStatus";
 import {fetchOrderStatuses} from "@/services/orderStatusesService";
 import {Button} from "@/components/ui/button";
+import {useUser} from "@/contexts/userContext";
 
 export default function OrdersDashboardPage () {
     const searchRef = useRef<HTMLInputElement>(null);
@@ -19,6 +20,7 @@ export default function OrdersDashboardPage () {
     const [page, setPage] = useState<number>(1);
     const [timeFilter, setTimeFilter] = useState<string>("");
     const [statusFilter, setStatusFilter] = useState<number>(0)
+    const { auth } = useUser();
     
     //Fetch orders on mount
     useEffect(() => {
@@ -127,11 +129,19 @@ export default function OrdersDashboardPage () {
                 break;
         }
     }
+
+    //If user is not an admin return a 404 error page
+    if (auth.user?.userGroup.groupName !== "Admin") {
+        return (
+            <main>
+                <h1 className="text-center py-12">404 - Page Not Found</h1>
+            </main>
+        )
+    }
     
     const handleStatusFilter = (e : React.ChangeEvent<HTMLSelectElement>) => {
         setPage(1);
         setStatusFilter(Number(e.currentTarget.value));
-        console.log(e.currentTarget.value);
     }
     
     return (

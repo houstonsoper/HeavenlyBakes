@@ -21,7 +21,7 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
     const formRef = useRef<HTMLFormElement>(null);
     const [title, setTitle] = useState<string>("");
     const [feedback, setFeedback] = useState<string>("");
-    const {user} = useUser();
+    const {auth} = useUser();
 
     useEffect(() => {
         const review : Review | null = bakeForReview.review;
@@ -67,9 +67,9 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
         //Capture form data
         const formData = new FormData(formRef.current);
         
-        if(user) {
+        if(auth.user) {
             const newReview : Review = {
-                userId: user.userId,
+                userId: auth.user.userId,
                 bakeId: bake.id,
                 title: formData.get("title") as string,
                 feedback: formData.get("feedback") as string,
