@@ -72,5 +72,41 @@ public class OrderService : IOrderService
         //Update order
         await _orderRepository.UpdateOrderStatusAsync(order, status.Id);
     }
+
+    public async Task<IEnumerable<Order>> GetCustomersOrders(string userId, int? limit, int? offset)
+    {
+        var query = _orderRepository.GetAllOrdersQuery();
+        
+        //Parse the userId into a Guid
+        if (!Guid.TryParse(userId, out var userGuid))
+        {
+            throw new Exception("Invalid user id");
+        }
+        
+        //Filter the query by the parameter providers
+        if (string.IsNullOrEmpty(userId))
+        {
+            query.Where(o => o.UserId == userGuid);
+        }
+        
+        if (limit.HasValue && limit != 0)
+        {
+            query = query.Take(limit.Value);
+        }
+
+        if (offset.HasValue && offset != 0)
+        {
+            query = query.Skip(offset.Value);
+        }
+        
+        
+        //Return the customers orders (including items) 
+        return await query
+            .Include(o => o.OrderItems)
+            .Include(o => o.PaymentMethod)
+            .Include(o => o.OrderStatus)
+            .Where(o=> o.OrderItems.Count > 0) 
+            .ToListAsync();
+    }
 }
 

@@ -53,9 +53,9 @@ public class OrderController : Controller
     }
 
     [HttpGet("{userId}")]
-    public async Task<IActionResult> GetCustomersOrders([FromRoute] string userId)
+    public async Task<IActionResult> GetCustomersOrders([FromRoute] string userId, [FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var orders = await _orderRepository.GetCustomersOrders(userId);
+        var orders = await _orderService.GetCustomersOrders(userId, limit, offset);
         var ordersDto = orders.Select(o => o.ToOrderRequestDto());
         
         return Ok(ordersDto);

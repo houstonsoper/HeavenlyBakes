@@ -96,18 +96,7 @@ public class OrderRepository : IOrderRepository
         
         return newOrderItem;
     }
-
-    public async Task<IEnumerable<Order>> GetCustomersOrders(string userId)
-    {
-        //Return the customers orders (including items) 
-        return await _context.Orders
-            .Include(o => o.OrderItems)
-            .Include(o => o.PaymentMethod)
-            .Include(o => o.OrderStatus)
-            .Where(o => o.UserId == Guid.Parse(userId) && o.OrderItems.Count > 0) 
-            .ToListAsync();
-    }
-
+    
     public IQueryable<Order> GetAllOrdersQuery()
     {
         return _context.Orders
