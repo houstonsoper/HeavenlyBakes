@@ -166,8 +166,8 @@ export default function OrdersDashboardPage () {
             <div className="container m-auto my-12 px-5">
                 <div className="mb-8">
                     <div className="lg:flex mb-6 sm:block">
-                        <div className="flex items-center border rounded-lg overflow-hidden shadow-sm w-[32rem] h-[2rem] my-auto mx-auto lg:mx-0">
-                            <span className="p-2 text-grey-400 material-symbols-outlined">search</span>
+                        <div className="flex items-center border rounded-lg overflow-hidden shadow-sm w-[32rem] h-[2rem] my-auto mx-auto lg:mx-0 bg-gray-100">
+                            <span className="p-2 text-grey-400 material-symbols-outlined bg-gray-100">search</span>
                             <input
                                 onKeyDown={handleSearch}
                                 defaultValue={search}
@@ -180,7 +180,7 @@ export default function OrdersDashboardPage () {
                         <div className="flex gap-4 py-5 justify-center ms-auto">
                             <div className="flex items-center">
                             <label className="mr-2 text-gray-700">From:</label>
-                                <select onChange={handleTimeFilter} ref={timeFilterRef} className="p-2 border rounded-md shadow-sm">
+                                <select onChange={handleTimeFilter} ref={timeFilterRef} className="p-2 border rounded-md shadow-sm ">
                                     <option>All time</option>
                                     <option value="1">Today</option>
                                     <option value="2">Last 7 days</option>

@@ -5,6 +5,7 @@ import {OrderItem} from "@/interfaces/orderItem";
 import OrderWithOrderItems from "@/interfaces/orderWithOrderItems";
 import GroupedOrders from "@/interfaces/groupedOrders";
 import OrdersParams from "@/interfaces/ordersParams";
+import {GetOrderByUserIdParams} from "@/interfaces/getOrderByUserIdParams";
 
 const BASE_URL: string = 'https://localhost:44367';
 
@@ -52,9 +53,11 @@ export async function postOrderItems(items : OrderItem[])  {
     }
 }
 
-export async function getOrdersByUserId(userId: string | undefined, signal? : AbortSignal) : Promise<OrderWithOrderItems[] | []> {
+
+
+export async function getOrdersByUserId({userId = "", limit = 0, offset = 0} : GetOrderByUserIdParams, signal? : AbortSignal) : Promise<OrderWithOrderItems[] | []> {
     try {
-        const url = `${BASE_URL}/Order/${userId}`;
+        const url = `${BASE_URL}/Order/${userId}?limit=${limit}&offset=${offset}`;
         const response : Response = await fetch(url, {signal});
         
         if (!response.ok) {

@@ -26,9 +26,14 @@ export default function UserDashboard() {
     useEffect(() => {
         const controller = new AbortController;
         const signal: AbortSignal = controller.signal;
-        
+
         const getUsers = async () => {
-            const fetchedUsers: User[] | [] = await fetchUsers({limit, offset: (page - 1) * limit, search, groupId : groupFilter}, signal);
+            const fetchedUsers: User[] | [] = await fetchUsers({
+                limit,
+                offset: (page - 1) * limit,
+                search,
+                groupId: groupFilter
+            }, signal);
             setUsers(fetchedUsers);
         }
         getUsers();
@@ -43,11 +48,16 @@ export default function UserDashboard() {
         const signal: AbortSignal = controller.signal;
 
         const getUsersForNextPage = async () => {
-            const fetchedUsers: User[] | [] = await fetchUsers({limit, offset: page * limit, search, groupId : groupFilter}, signal);
+            const fetchedUsers: User[] | [] = await fetchUsers({
+                limit,
+                offset: page * limit,
+                search,
+                groupId: groupFilter
+            }, signal);
             setUsersForNextPage(fetchedUsers);
         }
         getUsersForNextPage();
-        
+
         return () => controller.abort();
     }, [page, search, groupFilter]);
 
@@ -60,10 +70,10 @@ export default function UserDashboard() {
             setUsersGroups(fetchedUserGroups)
         }
         getAllUserGroups();
-        
+
         return () => controller.abort();
     }, []);
-    
+
     const handlePagination = () => {
         setUsers(users => [...users, ...usersForNextPage]);
         setPage(page => page + 1);
@@ -75,35 +85,35 @@ export default function UserDashboard() {
             searchRef.current.value = "";
             setSearch("");
         }
-        
+
         //Clear group filter
         if (groupFilterRef.current) {
             groupFilterRef.current.value = "0";
             setGroupFilter(0);
         }
-        
+
         //Slice the users array down to 1 page worth of results
         setUsers(prevUsers => prevUsers.slice(0, limit))
 
         setPage(1);
     }
 
-    const handleSearch = (e : React.KeyboardEvent<HTMLInputElement>) => {
+    const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             setSearch(e.currentTarget.value);
             setPage(1);
         }
     }
-    const groupFilterHandler = ( e : ChangeEvent<HTMLSelectElement>) => {
+    const groupFilterHandler = (e: ChangeEvent<HTMLSelectElement>) => {
         setPage(1);
         setGroupFilter(Number(e.target.value));
     }
-    
+
     //Update the users state when a user is deleted
     const handleUserDelete = (user: User) => {
         setUsers(prevUsers => prevUsers.filter(u => u.userId !== user.userId));
     }
-    
+
     //If user is not an admin return a 404 error page
     if (auth.user?.userGroup.groupName !== "Admin") {
         return (
@@ -112,7 +122,7 @@ export default function UserDashboard() {
             </main>
         )
     }
-    
+
     return (
         <main>
             <div>
@@ -122,41 +132,42 @@ export default function UserDashboard() {
                 />
             </div>
             <div className="container m-auto my-12 px-5">
-                <div className="py-4">
-                    <div className="w-1/2 m-auto">
-                        <div className="flex border rounded w-full mb-12 px-1">
-                            <span className="m-auto material-symbols-outlined">search</span>
+                <div className="mb-8">
+                    <div className="lg:flex mb-6 sm:block">
+                        <div className="flex items-center border rounded-lg overflow-hidden shadow-sm w-[32rem] h-[2rem] my-auto mx-auto lg:mx-0">
+                            <span className="p-2 text-grey-400 material-symbols-outlined bg-gray-100">search</span>
                             <input
                                 onKeyDown={handleSearch}
                                 defaultValue={search}
-                                className="w-full p-1"
+                                className="w-full p-2 focus:outline-none"
                                 type="text"
                                 placeholder="Search by name or e-mail"
                                 ref={searchRef}
                             />
                         </div>
-                    </div>
-                    <div className="flex">
-                        <div className="ms-auto">
-                            <label className="font-semibold text-pink-700">Group:</label>
-                            <select onChange={groupFilterHandler} className="border mx-1 px-1 rounded" ref={groupFilterRef}>
-                                <option value="0">All</option>
-                                {userGroups.map((group: UserGroup) => (
-                                    <option
-                                        value={group.groupId}>{group.groupName}
-                                    </option>
-                                ))}
-                            </select>
+                        <div className="flex gap-4 py-2 justify-center ms-auto">
+                            <div className="flex items-center">
+                                <label className="mr-2 text-gray-700">Group:</label>
+                                <select onChange={groupFilterHandler} className="p-2 border rounded-md shadow-sm"
+                                        ref={groupFilterRef}>
+                                    <option value="0">All</option>
+                                    {userGroups.map((group: UserGroup) => (
+                                        <option
+                                            value={group.groupId}>{group.groupName}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex justify-center">
-                        <table className="table-fixed w-full">
+                    <div className="shadow-md overflow-x-auto rounded-lg">
+                        <table className="table-auto w-full">
                             <thead>
-                            <tr className="text-left">
-                                <th className="border-b border-gray-300 text-pink-700">Name</th>
-                                <th className="border-b border-gray-300 text-pink-700">E-mail</th>
-                                <th className="border-b border-gray-300 text-pink-700">Role</th>
-                                <th className="border-b border-gray-300 text-pink-700">Actions</th>
+                            <tr className="text-left bg-gray-100">
+                                <th className="px-4 py-2 text-left text-pink-700">Name</th>
+                                <th className="px-4 py-2 text-left text-pink-700">E-mail</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Role</th>
+                                <th className="px-4 py-2 text-left text-pink-700">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -178,20 +189,20 @@ export default function UserDashboard() {
                         </table>
                     </div>
                 </div>
-                    {usersForNextPage.length > 0 ? (
-                        <div className="flex">
-                            <Button className="m-auto bg-pink-700 hover:bg-pink-800" onClick={handlePagination}>
-                                Load more
-                            </Button>
-                        </div>
-                    ): (
-                        <div className="flex">
-                            <Button className="m-auto bg-gray-700 hover:bg-gray-800" onClick={handlePageReset}>
-                                Go back
-                            </Button>
-                        </div>
-                    )}
-                </div>
+                {usersForNextPage.length > 0 ? (
+                    <div className="flex">
+                        <Button className="m-auto bg-pink-700 hover:bg-pink-800" onClick={handlePagination}>
+                            Load more
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="flex">
+                        <Button className="m-auto bg-gray-700 hover:bg-gray-800" onClick={handlePageReset}>
+                            Go back
+                        </Button>
+                    </div>
+                )}
+            </div>
         </main>
     )
 }

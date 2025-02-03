@@ -6,6 +6,7 @@ import Bake from "@/interfaces/bake";
 import BakeCard from "../../components/bakeCard";
 import {useSearchParams} from "next/navigation";
 import PageHeader from "@/components/pageHeader";
+import {Button} from "@/components/ui/button";
 
 export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
@@ -13,6 +14,7 @@ export default function Page() {
     const [filter, setFilter] = useState("");
     const [bakeType, setBakeType] = useState<string>("");
     const searchTermRef : RefObject<string | null> = useRef<string | null>(null);
+    const limit = 10;
     
     //Fetch Bakes
     useEffect(() => {
@@ -24,8 +26,9 @@ export default function Page() {
 
             //Fetch bakes by search term/type if included, else fetch all
             const fetchedBakes: Bake[] = await fetchBakes({
-                searchTerm: searchTerm || undefined,
-                type: type || undefined
+                searchTerm: searchTerm ?? undefined,
+                type: type ?? undefined,
+                limit: limit,
             });
             setBakes(fetchedBakes);
             type ? setBakeType(type) : setBakeType("All");
@@ -34,6 +37,10 @@ export default function Page() {
         }
         getBakes();
     }, [searchParams])
+    
+    const handlePagination = () => {
+        
+    }
 
     const handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
         switch (event.target.value) {
@@ -98,6 +105,9 @@ export default function Page() {
                         </div>
                     )}
                 </section>
+            </div>
+            <div className="flex py-2">
+                <Button className="m-auto">Next page</Button>
             </div>
         </main>
     );

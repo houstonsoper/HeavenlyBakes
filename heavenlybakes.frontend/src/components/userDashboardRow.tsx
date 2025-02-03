@@ -40,12 +40,13 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
 
     return (
         <>
-            <tr>
-                <td className="border-b border-gray-300">{user.forename} {user.surname}</td>
-                <td className="border-b border-gray-300">{user.email}</td>
-                <td className="border-b border-gray-300">
+            <tr className="border-b border-grey-200 hover:bg-grey-50">
+                <td className="px-4 py-2">{user.forename} {user.surname}</td>
+                <td className="px-4 py-2">{user.email}</td>
+                <td className="px-4 py-2">
                     <select
                         value={selectedUserGroup ?? user.userGroup.groupId}
+                        className="w-full p-1 border rounded-md shadow-sm"
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedUserGroup(e.target.value)}
                     >
                         {userGroups.map((group: UserGroup) => (
@@ -58,7 +59,7 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                         ))}
                     </select>
                 </td>
-                <td className="border-b border-gray-300">
+                <td className="px-4 py-2">
                     <div>
                         {auth.user?.userGroup.groupName === "Admin" && (
                             <Alert
