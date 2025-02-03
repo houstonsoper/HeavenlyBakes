@@ -86,19 +86,20 @@ public class OrderService : IOrderService
         //Filter the query by the parameter providers
         if (string.IsNullOrEmpty(userId))
         {
-            query.Where(o => o.UserId == userGuid);
+            query = query.Where(o => o.UserId == userGuid);
+        }
+        
+        query = query.OrderByDescending(o => o.OrderId);
+        
+        if (offset.HasValue && offset != 0)
+        {
+            query = query.Skip(offset.Value);
         }
         
         if (limit.HasValue && limit != 0)
         {
             query = query.Take(limit.Value);
         }
-
-        if (offset.HasValue && offset != 0)
-        {
-            query = query.Skip(offset.Value);
-        }
-        
         
         //Return the customers orders (including items) 
         return await query
