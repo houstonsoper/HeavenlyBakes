@@ -8,5 +8,6 @@ public interface IBakesRepository
     Task<Bake?> GetBakeByIdAsync(int bakeId); 
     Task<IEnumerable<Bake>> GetBakeByTypeAsync(string category);
     Task<IEnumerable<BakeType>> GetBakeTypesAsync();
-    Task<BakeType?> GetBakeTypeByIdAsync(int bakeTypeId);
+    Task<BakeType?> GetBakeTypeByNameAsync(string name);
+    Task<BakeType?> GetBakeTypeByIdAsync(int id);
 }

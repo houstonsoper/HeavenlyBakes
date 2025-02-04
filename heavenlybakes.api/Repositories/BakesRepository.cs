@@ -41,8 +41,13 @@ public class BakesRepository : IBakesRepository
         return await _context.BakeTypes.ToListAsync();
     }
 
-    public async Task<BakeType?> GetBakeTypeByIdAsync(int bakeTypeId)
+    public async Task<BakeType?> GetBakeTypeByNameAsync(string name)
     {
-        return await _context.BakeTypes.FindAsync(bakeTypeId);
+        return await _context.BakeTypes.FirstOrDefaultAsync(bt => bt.Type == name);
+    }
+    
+    public async Task<BakeType?> GetBakeTypeByIdAsync(int id)
+    {
+        return await _context.BakeTypes.FindAsync(id);
     }
 }
