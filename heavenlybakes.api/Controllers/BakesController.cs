@@ -53,4 +53,13 @@ public class BakesController : ControllerBase
 
         return Ok(bakeTypesDto);
     }
+    
+        
+    [HttpGet("types/{bakeTypeId}")]
+    public async Task<IActionResult> GetBakeTypes([FromRoute] int bakeTypeId)
+    {
+        var bakeType = await _bakesService.GetBakeTypeByIdAsync(bakeTypeId);
+
+        return Ok(bakeType.ToBakeTypeRequestDto());
+    }
 }

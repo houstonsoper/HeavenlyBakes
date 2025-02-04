@@ -40,4 +40,9 @@ public class BakesRepository : IBakesRepository
     {
         return await _context.BakeTypes.ToListAsync();
     }
+
+    public async Task<BakeType?> GetBakeTypeByIdAsync(int bakeTypeId)
+    {
+        return await _context.BakeTypes.FindAsync(bakeTypeId);
+    }
 }

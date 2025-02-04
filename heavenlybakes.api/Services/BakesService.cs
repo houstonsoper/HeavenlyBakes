@@ -31,6 +31,14 @@ public class BakesService : IBakesService
             query = query.Take(limit.Value);
         }
 
-        return await query.ToListAsync();
+        return await query.Include(b => b.BakeType).ToListAsync();
+    }
+
+    public async Task<BakeType> GetBakeTypeByIdAsync(int bakeTypeId)
+    {
+        var bakeType = await _bakesRepository.GetBakeTypeByIdAsync(bakeTypeId)
+            ?? throw new NullReferenceException($"Bake type with id {bakeTypeId} not found");
+        
+        return bakeType;
     }
 }
