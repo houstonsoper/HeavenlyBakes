@@ -2,6 +2,7 @@
 using heavenlybakes.api.Extensions;
 using heavenlybakes.api.Models;
 using heavenlybakes.api.Repositories;
+using heavenlybakes.api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace heavenlybakes.api.Controllers;
@@ -12,32 +13,18 @@ namespace heavenlybakes.api.Controllers;
 public class BakesController : ControllerBase
 {
     private readonly IBakesRepository _bakesRepository;
+    private readonly IBakesService _bakesService;
 
-    public BakesController(IBakesRepository bakesRepository)
+    public BakesController(IBakesRepository bakesRepository, IBakesService bakesService)
     {
         _bakesRepository = bakesRepository;
+        _bakesService = bakesService;
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetBakes([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? type)
+    public async Task<IActionResult> GetBakes([FromQuery] string search, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] int? bakeTypeId)
     {
-        var bakes = await _bakesRepository.GetAllBakesAsync();
-        
-        //Filter bakes by optional query paramaters if included
-        if (offset.HasValue)
-        {
-            bakes = bakes.Skip(offset.Value);
-        }
-        
-        if (limit.HasValue && limit != 0)
-        { 
-            bakes = bakes.Take(limit.Value);
-        }
-
-        if (type != null)
-        {
-            bakes = await _bakesRepository.GetBakeByTypeAsync(type);
-        }
+        var bakes = await _bakesService.GetAllBakesAsync(search, limit, offset, bakeTypeId);
         
         //Map data to the Bake DTO
         var bakeDto = bakes.Select(b => b.ToBakeRequestDto());

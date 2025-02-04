@@ -14,7 +14,7 @@ export default function Page() {
     const [filter, setFilter] = useState("");
     const [bakeType, setBakeType] = useState<string>("");
     const searchTermRef : RefObject<string | null> = useRef<string | null>(null);
-    const limit = 10;
+    const limit = 12;
     
     //Fetch Bakes
     useEffect(() => {

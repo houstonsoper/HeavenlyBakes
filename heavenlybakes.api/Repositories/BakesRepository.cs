@@ -14,11 +14,9 @@ public class BakesRepository : IBakesRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Bake>> GetAllBakesAsync()
+    public IQueryable<Bake> GetBakesQuery()
     {
-        return await _context.Bakes
-            .Include(b => b.BakeType)
-            .ToListAsync();
+        return _context.Bakes.AsQueryable();
     }
 
     public async Task<Bake?> GetBakeByIdAsync(int bakeId)
