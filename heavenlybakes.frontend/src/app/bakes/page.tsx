@@ -1,12 +1,13 @@
 ﻿"use client"
 
-import {fetchBakes, fetchPopularBakes} from "@/services/bakeService";
-import {RefObject, useEffect, useRef, useState} from "react";
+import {fetchBakes, fetchBakeTypeByName, fetchBakeTypes, fetchPopularBakes} from "@/services/bakeService";
+import {RefObject, useEffect, useMemo, useRef, useState} from "react";
 import Bake from "@/interfaces/bake";
 import BakeCard from "../../components/bakeCard";
 import {useSearchParams} from "next/navigation";
 import PageHeader from "@/components/pageHeader";
 import {Button} from "@/components/ui/button";
+import {BakeType} from "@/interfaces/bakeType";
 
 export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
@@ -18,24 +19,32 @@ export default function Page() {
     
     //Fetch Bakes
     useEffect(() => {
+        const controller = new AbortController;
+        const signal = controller.signal;
+        
         const getBakes = async () => {
-
             //Get the searchParam for search term and type
             const searchTerm: string | null = searchParams.get("search");
             const type: string | null = searchParams.get("type");
 
+            //Get the details of the bake type if included
+            let fetchedType: BakeType | null = null;
+            if (type) 
+                fetchedType = await fetchBakeTypeByName(type);
+            
             //Fetch bakes by search term/type if included, else fetch all
             const fetchedBakes: Bake[] = await fetchBakes({
                 searchTerm: searchTerm ?? undefined,
-                type: type ?? undefined,
+                type: fetchedType?.id ?? 0,
                 limit: limit,
             });
             setBakes(fetchedBakes);
-            type ? setBakeType(type) : setBakeType("All");
+            fetchedType ? setBakeType(fetchedType.type) : setBakeType("All");
             searchTermRef.current = searchTerm;
-
         }
         getBakes();
+        
+        return () => controller.abort();
     }, [searchParams])
     
     const handlePagination = () => {
