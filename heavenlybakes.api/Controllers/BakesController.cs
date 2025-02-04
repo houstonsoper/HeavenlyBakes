@@ -22,7 +22,7 @@ public class BakesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetBakes([FromQuery] string search, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] int? bakeTypeId)
+    public async Task<IActionResult> GetBakes([FromQuery] string? search, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] int? bakeTypeId)
     {
         var bakes = await _bakesService.GetAllBakesAsync(search, limit, offset, bakeTypeId);
         

@@ -12,7 +12,7 @@ public class BakesService : IBakesService
     {
         _bakesRepository = bakesRepository;
     }
-    public async Task<IEnumerable<Bake>> GetAllBakesAsync(string search, int? limit, int? offset, int? bakeTypeId)
+    public async Task<IEnumerable<Bake>> GetAllBakesAsync(string? search, int? limit, int? offset, int? bakeTypeId)
     {
         var query =  _bakesRepository.GetBakesQuery();
 
