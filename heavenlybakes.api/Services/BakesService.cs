@@ -16,7 +16,7 @@ public class BakesService : IBakesService
     {
         var query =  _bakesRepository.GetBakesQuery();
 
-        if (bakeTypeId.HasValue)
+        if (bakeTypeId.HasValue && bakeTypeId.Value != 0)
         {
             query = query.Where(b => b.BakeTypeId == bakeTypeId);
         }
