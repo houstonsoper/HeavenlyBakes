@@ -1,7 +1,7 @@
 ﻿"use client"
 
 import {fetchBakes, fetchBakeTypeByName, fetchBakeTypes, fetchPopularBakes} from "@/services/bakeService";
-import {RefObject, useEffect, useMemo, useRef, useState} from "react";
+import {ChangeEvent, RefObject, useEffect, useMemo, useRef, useState} from "react";
 import Bake from "@/interfaces/bake";
 import BakeCard from "../../components/bakeCard";
 import {useSearchParams} from "next/navigation";
@@ -13,12 +13,12 @@ export default function Page() {
     const [bakes, setBakes] = useState<Bake[]>([]);
     const [bakesForNextPage, setBakesForNextPage] = useState<Bake[]>([]);
     const searchParams = useSearchParams();
-    const [filter, setFilter] = useState("");
     const [page, setPage] = useState(1);
     const limit = 12;
     const [search, setSearch] = useState<string | null>(null);
     const [bakeType, setBakeType] = useState<BakeType | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [orderBy, setOrderBy] = useState<string>("");
 
     //Fetch the search and bake type params 
     useEffect(() => {
@@ -44,7 +44,7 @@ export default function Page() {
             setIsLoading(true);
             
             const offset: number = (page - 1) * limit;
-            const fetchedBakes: Bake[] = await fetchBakes({searchTerm: search ?? "", type: bakeType?.id ?? 0, limit, offset});
+            const fetchedBakes: Bake[] = await fetchBakes({searchTerm: search ?? "", type: bakeType?.id ?? 0, limit, offset, orderBy});
             
             if (fetchedBakes.length > 0) {
                 setBakes(fetchedBakes);
@@ -52,7 +52,7 @@ export default function Page() {
             }
         }
         getBakes();
-    }, [search, bakeType])
+    }, [search, bakeType, orderBy])
 
 
     //Fetch bakes for next page
@@ -66,48 +66,17 @@ export default function Page() {
                 searchTerm: search ?? "",
                 type: bakeType?.id ?? 0,
                 limit,
-                offset
+                offset,
+                orderBy,
             }, signal);
             setBakesForNextPage(fetchedBakes);
         }
         fetchBakesForNextPage();
-    }, [search, bakeType, page]);
+    }, [search, bakeType, page, orderBy]);
 
     const handlePagination = () => {
         setBakes([...bakes, ...bakesForNextPage]);
         setPage(prevPage => prevPage + 1);
-    }
-
-    const handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        switch (event.target.value) {
-            //Most Popular
-            case "a":
-                bakes.sort((a, b) => a.rating - b.rating);
-                break;
-            //Price: Low to High    
-            case "b":
-                bakes.sort((a, b) => a.price - b.price);
-                break;
-            //Price: High to Low    
-            case "c":
-                bakes.sort((a, b) => b.price - a.price);
-                break;
-            //Name: A to Z  
-            case "d":
-                bakes.sort((a, b) => a.name.localeCompare(b.name));
-                break;
-            //Name: Z to A   
-            case "e":
-                bakes.sort((a, b) => b.name.localeCompare(a.name));
-                break;
-            //Discount 
-            case "f":
-                bakes.sort((a, b) => b.discount - a.discount);
-                break;
-            default:
-                break;
-        }
-        setFilter(event.target.value);
     }
 
     return (
@@ -121,13 +90,13 @@ export default function Page() {
                             <div className="container mx-auto px-4 ">
                                 <h1 className="text-center">{bakeType?.type ?? "All"}</h1>
                                 <div className="py-3">
-                                    <select onChange={handleFilter} defaultValue="a">
-                                        <option value="a">Most Popular</option>
-                                        <option value="b">Price (Low To High)</option>
-                                        <option value="c">Price (High to Low)</option>
-                                        <option value="d">Name (A To Z)</option>
-                                        <option value="e">Name (Z To A)</option>
-                                        <option value="f">Discount</option>
+                                    <select onChange={(e : ChangeEvent<HTMLSelectElement>) => setOrderBy(e.target.value)} value={orderBy}>
+                                        <option value="">Most Popular</option>
+                                        <option value="priceAsc">Price (Low To High)</option>
+                                        <option value="priceDesc">Price (High to Low)</option>
+                                        <option value="nameAsc">Name (A To Z)</option>
+                                        <option value="nameDesc">Name (Z To A)</option>
+                                        <option value="discountDesc">Discount</option>
                                     </select>
                                 </div>
                                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-12">

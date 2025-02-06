@@ -4,9 +4,9 @@ import {BakeType} from "@/interfaces/bakeType";
 
 const BASE_URL = 'https://localhost:44367';
 
-export async function fetchBakes({searchTerm = "", type = 0, limit = 0,  offset = 0} : BakeParams, signal? : AbortSignal) : Promise<Bake[]> {
+export async function fetchBakes({searchTerm = "", type = 0, limit = 0,  offset = 0, orderBy = ""} : BakeParams, signal? : AbortSignal) : Promise<Bake[]> {
     try{
-        const url : string = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}&bakeTypeId=${type}`;
+        const url : string = `${BASE_URL}/bakes?limit=${limit}&offset=${offset}&bakeTypeId=${type}&orderBy=${orderBy}`;
         const response : Response = await fetch(url, {signal});
         
         if(!response.ok){
