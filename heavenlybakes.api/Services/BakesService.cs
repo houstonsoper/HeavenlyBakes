@@ -8,11 +8,11 @@ public class BakesService : IBakesService
 {
     private readonly IBakesRepository _bakesRepository;
 
-    public BakesService(IBakesRepository bakesRepository)
+    public BakesService(IBakesRepository bakesRepository, IReviewRepository reviewRepository)
     {
         _bakesRepository = bakesRepository;
     }
-    public async Task<IEnumerable<Bake>> GetAllBakesAsync(string? search, int? limit, int? offset, int? bakeTypeId)
+    public async Task<IEnumerable<Bake>> GetAllBakesAsync(string? search, int? limit, int? offset, int? bakeTypeId, string? orderBy)
     {
         var query =  _bakesRepository.GetBakesQuery();
 
@@ -29,6 +29,33 @@ public class BakesService : IBakesService
         if (limit.HasValue && limit != 0)
         { 
             query = query.Take(limit.Value);
+        } 
+        
+        if (!string.IsNullOrEmpty(orderBy)) 
+        {
+            switch (orderBy) 
+            {
+                case "priceDesc":
+                    query = query.OrderByDescending(o => o.Price);
+                    break;
+                case "priceAsc":
+                    query = query.OrderBy(o => o.Price);
+                    break;
+                case "nameDesc":
+                    query = query.OrderByDescending(o => o.Name);
+                    break;
+                case "nameAsc":
+                    query = query.OrderBy(o => o.Name);
+                    break;
+                case "discountDesc":
+                    query = query.OrderByDescending(o => o.Discount);
+                    break;
+                case "discountAsc":
+                    query = query.OrderBy(o => o.Discount);
+                    break;
+                default:
+                    return query;
+            }
         }
 
         return await query.Include(b => b.BakeType).ToListAsync();

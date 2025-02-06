@@ -22,9 +22,9 @@ public class BakesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetBakes([FromQuery] string? search, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] int? bakeTypeId)
+    public async Task<IActionResult> GetBakes([FromQuery] string? search, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] int? bakeTypeId, string? orderBy)
     {
-        var bakes = await _bakesService.GetAllBakesAsync(search, limit, offset, bakeTypeId);
+        var bakes = await _bakesService.GetAllBakesAsync(search, limit, offset, bakeTypeId, orderBy);
         
         //Map data to the Bake DTO
         var bakeDto = bakes.Select(b => b.ToBakeRequestDto());
