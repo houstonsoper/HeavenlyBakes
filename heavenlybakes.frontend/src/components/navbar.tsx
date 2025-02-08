@@ -99,8 +99,6 @@ export default function Navbar() {
                         ) : <li><Link href="/bakes" className="text-pink-600 hover:text-pink-800">Our Selections </Link>
                         </li>
                         }
-                        <li><Link href="#about" className="text-pink-600 hover:text-pink-800">About</Link></li>
-                        <li><Link href="#contact" className="text-pink-600 hover:text-pink-800">Contact</Link></li>
                         <div className="flex space-x-2 ps-6">
                             {/* User Dropdown */}
                             {auth.user ? (
