@@ -78,6 +78,11 @@ export default function Page() {
         setBakes([...bakes, ...bakesForNextPage]);
         setPage(prevPage => prevPage + 1);
     }
+    
+    const handleOrderBy = (e : ChangeEvent<HTMLSelectElement>) => {
+        setOrderBy(e.currentTarget.value);
+        setPage(1);
+    }
 
     return (
         <main>
@@ -90,7 +95,11 @@ export default function Page() {
                             <div className="container mx-auto px-4 ">
                                 <h1 className="text-center">{bakeType?.type ?? "All"}</h1>
                                 <div className="py-3">
-                                    <select onChange={(e : ChangeEvent<HTMLSelectElement>) => setOrderBy(e.target.value)} value={orderBy}>
+                                    <select 
+                                        onChange={handleOrderBy} 
+                                        value={orderBy}
+                                        className="p-2 border rounded-md shadow-sm"
+                                    >
                                         <option value="">Most Popular</option>
                                         <option value="priceAsc">Price (Low To High)</option>
                                         <option value="priceDesc">Price (High to Low)</option>
@@ -114,7 +123,7 @@ export default function Page() {
             </div>
             <div className="flex py-2">
                 {bakesForNextPage.length > 0 && (
-                    <Button onClick={handlePagination} className="m-auto">Next page</Button>
+                    <Button onClick={handlePagination} className="m-auto">Load more</Button>
                 )}
             </div>
         </main>
