@@ -21,25 +21,15 @@ public class BakesService : IBakesService
             query = query.Where(b => b.BakeTypeId == bakeTypeId);
         }
         
-        if (offset.HasValue)
-        {
-            query = query.Skip(offset.Value);
-        }
-        
-        if (limit.HasValue && limit != 0)
-        { 
-            query = query.Take(limit.Value);
-        } 
-        
         if (!string.IsNullOrEmpty(orderBy)) 
         {
             switch (orderBy) 
             {
                 case "priceDesc":
-                    query = query.OrderByDescending(o => o.Price);
+                    query = query.OrderByDescending(o => o.Price - (o.Price / 100 * o.Discount));
                     break;
                 case "priceAsc":
-                    query = query.OrderBy(o => o.Price);
+                    query = query.OrderBy(o => o.Price - (o.Price / 100 * o.Discount));
                     break;
                 case "nameDesc":
                     query = query.OrderByDescending(o => o.Name);
@@ -57,6 +47,16 @@ public class BakesService : IBakesService
                     return query;
             }
         }
+        
+        if (offset.HasValue)
+        {
+            query = query.Skip(offset.Value);
+        }
+        
+        if (limit.HasValue && limit != 0)
+        { 
+            query = query.Take(limit.Value);
+        } 
 
         return await query.Include(b => b.BakeType).ToListAsync();
     }
