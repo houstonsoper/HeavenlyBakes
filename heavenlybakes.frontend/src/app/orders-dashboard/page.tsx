@@ -232,16 +232,10 @@ export default function OrdersDashboardPage () {
                         </table>
                     </div>
                 </div>
-                {ordersForNextPage.length > 0 ? (
+                {ordersForNextPage.length > 0 && (
                     <div className="flex">
                         <Button className="m-auto bg-pink-700 hover:bg-pink-800" onClick={handlePagination}>
                             Load more
-                        </Button>
-                    </div>
-                ): (
-                    <div className="flex">
-                        <Button className="m-auto bg-gray-700 hover:bg-gray-800" onClick={handlePageReset}>
-                            Go back
                         </Button>
                     </div>
                 )}
