@@ -59,7 +59,7 @@ export default function BakeCard({bake} : BakeCardProps){
                 </div>
             </Link>
             <div className="flex justify-center p-2">
-                <Button onClick={addToBasketHandler} className="bg-pink-500 hover:bg-pink-600 w-full h-6">Add to Basket</Button>
+                <Button onClick={addToBasketHandler} className="bg-pink-600 hover:bg-pink-700 w-full h-6">Add to Basket</Button>
             </div>
         </div>
     );

@@ -36,8 +36,7 @@ export default function AdminPage() {
                                 <CardTitle className="text-2xl font-bold text-pink-600">Manage Users</CardTitle>
                             </CardHeader>
                             <CardContent className="flex flex-col items-center">
-                                <Users size={64} className="text-pink-500 mb-4" />
-                                <Button className="w-full bg-pink-500 hover:bg-pink-600 text-white">Go to User Management</Button>
+                                <Users size={64} className="text-gray-600 mb-4" />
                             </CardContent>
                         </Link>
                     </Card>
@@ -47,8 +46,7 @@ export default function AdminPage() {
                                 <CardTitle className="text-2xl font-bold text-pink-600">Manage Orders</CardTitle>
                             </CardHeader>
                             <CardContent className="flex flex-col items-center">
-                                <ShoppingBag size={64} className="text-pink-500 mb-4" />
-                                <Button className="w-full bg-pink-500 hover:bg-pink-600 text-white">Go to Order Management</Button>
+                                <ShoppingBag size={64} className="text-gray-600 mb-4" />
                             </CardContent>
                         </Link>
                     </Card>

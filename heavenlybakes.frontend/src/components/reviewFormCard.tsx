@@ -8,6 +8,7 @@ import Image from "next/image";
 import {deleteReview, postReview, updateReview} from "@/services/reviewService";
 import Link from "next/link";
 import {useUser} from "@/contexts/userContext";
+import {Button} from "@/components/ui/button";
 
 interface ReviewFormProps {
     bakeForReview: ReviewWithBake,
@@ -98,8 +99,8 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
     return (
         <div className="flex justify-center py-8">
             {bakeForReview ? (
-                <div className="border justify-center gap-6 w-3/4 rounded p-3">
-                    <h2 className="text-pink-700 font-semibold mb-2">{bake.name}</h2>
+                <div className="justify-center gap-6 w-3/4 p-3 shadow-md rounded-lg border border-gray-100">
+                    <h2 className="text-pink-700 font-bold mb-2 text-[1.15rem]">{bake.name}</h2>
                     <div className="grid grid-cols-[1fr_2fr]">
                         <div>
                             <Link href={`/bakes/${bake.id}`}>
@@ -112,7 +113,7 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
                                 ref={formRef}>
 
                                 {/* Review Title */}
-                                <label className="block text-pink-700" htmlFor="title">Review title: </label>
+                                <label className="block text-gray-800" htmlFor="title">Review title: </label>
                                 <input className="mb-4 w-full border"
                                        name="title"
                                        type="text"
@@ -122,9 +123,9 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
                                 />
 
                                 {/* Review Feedback */}
-                                <label className="block text-pink-700" htmlFor="feedback">Share your review about this
+                                <label className="block text-gray-800" htmlFor="feedback">Share your review about this
                                     product: </label>
-                                <textarea className="w-full mb-4 border" 
+                                <textarea className="w-full mb-4 border outline-0" 
                                           name="feedback"
                                           defaultValue={review?.feedback ?? feedback}
                                           onChange={handleFeedback}
@@ -132,7 +133,7 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
                                 />
 
                                 {/* Review Rating */}
-                                <label className="block text-pink-700" htmlFor="rating">Rating: </label>
+                                <label className="block text-gray-800" htmlFor="rating">Rating: </label>
                                 <input className="w-full border mb-4"
                                        name="rating" type="number"
                                        onChange={handleRating}
@@ -141,15 +142,20 @@ export default function ReviewFormCard ({bakeForReview, updatePageAction}: Revie
                                 />
                                 
                                 <div className="flex gap-6">
-                                    <button type="submit"
-                                            className="bg-pink-500 hover:bg-pink-600 text-white p-2 block w-1/4">
+                                    <Button type="submit"
+                                            className="bg-pink-600 hover:bg-pink-700 text-white px-5"
+                                            size="sm"
+                                    >
                                         {review ? ("Update Review") : ("Add Review")}
-                                    </button>
+                                    </Button>
                                     {review ? (
-                                        <button onClick={handleDeleteReview} type="button"
-                                                className="bg-red-500 hover:bg-red-600 text-white p-2 block w-1/4">
+                                        <Button onClick={handleDeleteReview} 
+                                                type="button"
+                                                className="bg-gray-800 hover:bg-gray-900 text-white px-5"
+                                                size="sm"
+                                        >
                                             Delete Review
-                                        </button>) : null}
+                                        </Button>) : null}
                                 </div>
                             </form>
                         </div>

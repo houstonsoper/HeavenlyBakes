@@ -137,7 +137,7 @@ export default function OrderDashboardRow({order, orderStatus, orderStatuses}: O
                             title="Update Order"
                             description="Are you sure you want to update the status of this order?"
                             action={handleOrderUpdate}
-                            className="m-1 bg-pink-700 hover:bg-pink-900 gap-1 text-white"
+                            className="m-1 bg-pink-600 hover:bg-pink-700 gap-1 text-white"
                             cancelText="No"
                             continueText="Yes"
                         />

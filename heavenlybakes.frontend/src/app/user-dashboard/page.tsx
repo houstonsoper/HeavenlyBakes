@@ -182,7 +182,7 @@ export default function UserDashboard() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={4} className="text-center p-3 text-xl"> No users found</td>
+                                    <td colSpan={4} className="text-center p-6"> No users found</td>
                                 </tr>
                             )}
                             </tbody>

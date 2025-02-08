@@ -80,7 +80,7 @@ export default function UserDashboardRow({user, userGroups, handleUserDelete}: U
                             title="Update user"
                             description="Are you sure you want to update this user?"
                             action={() => handleUpdate({userId: user.userId, groupId: Number(selectedUserGroup)})}
-                            className="m-1 bg-pink-700 hover:bg-pink-900 text-white"
+                            className="m-1 bg-pink-600 hover:bg-pink-700 text-white"
                             cancelText="No"
                             continueText="Yes"
                         />

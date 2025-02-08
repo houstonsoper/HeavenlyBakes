@@ -223,7 +223,7 @@ export default function OrdersDashboardPage () {
                                 />
                             ))) : (
                                 <tr>
-                                    <td colSpan={7} className="text-center font-semibold py-2 text-gray-800">
+                                    <td colSpan={7} className="text-center py-6 text-gray-800">
                                         No orders found
                                     </td>
                                 </tr>
