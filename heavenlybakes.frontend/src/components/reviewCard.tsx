@@ -27,8 +27,8 @@ export default function ReviewCard({review} : ReviewCardProps) {
     }, []);
     
     return (
-        <div className="m-auto">
-            <div className="border mt-3 mb-8 p-3">
+        <div className="m-auto pt-12">
+            <div className="border mt-3 mb-8 p-3 rounded-2xl shadow-md">
                 <div>
                     <div className="flex">
                         <h2 className="font-semibold">{review.title}</h2>
