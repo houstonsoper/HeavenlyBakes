@@ -39,7 +39,9 @@ export default function Home() {
                                     Occasion</h2>
                                 <p className="text-lg mb-6">Indulge in our handcrafted bakes made with love and the finest
                                     ingredients.</p>
+                                <Link href="/bakes">
                                 <Button className="bg-pink-500 hover:bg-pink-600 text-white">Order Now</Button>
+                                </Link>
                             </div>
                             <div className="md:w-1/2">
                                 <Image src={bakes[0].imageUrl} width={600} height={400} alt="Featured Cake"
