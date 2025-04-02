@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace heavenlybakes.api.Models;
+namespace userpanel.api.Models;
 
 public class UserGroup
 {
