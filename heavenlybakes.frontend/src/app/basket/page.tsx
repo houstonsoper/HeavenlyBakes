@@ -9,7 +9,7 @@ import {Button} from "@/components/ui/button";
 
 export default function Page(){
     const { basket, basketCount, total} = useBasket();
-    //test2
+    //test3
     
     return(
         <main>
