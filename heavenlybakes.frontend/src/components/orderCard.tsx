@@ -65,7 +65,7 @@ export default function OrderCard({order, reviews, paymentMethod, orderStatus}: 
         <Card className="w-full overflow-hidden  rounded shadow-card my-4">
             <CardHeader className="pb-2">
                 <div className="flex">
-                    <CardTitle className="text-pink-700">
+                    <CardTitle className="text-pink-700 text-[1.15rem]">
                         {orderStatus.status}
                     </CardTitle>
                     {/*OrderID, with Modal that displays order details*/}
@@ -125,7 +125,7 @@ export default function OrderCard({order, reviews, paymentMethod, orderStatus}: 
                                             alt={bake.name}
                                             width={80}
                                             height={80}
-                                            className="rounded-md object-cover"
+                                            className="rounded-sm object-cover"
                                         />
                                     </Link>
                                 </div>
@@ -148,7 +148,7 @@ export default function OrderCard({order, reviews, paymentMethod, orderStatus}: 
                 )}
                 <div>
                     <button onClick={handleReview}>
-                        <p>Write a review</p>
+                        <p className="text-pink-700">Write a review</p>
                     </button>
                 </div>
                 <div className="mt-4 pt-4 flex justify-between items-center">

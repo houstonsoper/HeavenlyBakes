@@ -110,7 +110,7 @@ export default function Navbar() {
                                             </span>
                                         </li>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-pink-50">
+                                    <DropdownMenuContent>
                                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                         <DropdownMenuSeparator/>
                                         <DropdownMenuItem>

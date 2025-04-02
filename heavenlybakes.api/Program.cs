@@ -3,6 +3,7 @@ using heavenlybakes.api.Contexts;
 using heavenlybakes.api.Middleware;
 using heavenlybakes.api.Repositories;
 using heavenlybakes.api.Services;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,7 +61,6 @@ builder.Services.AddScoped<IBakesService, BakesService>();
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
-
 
 var app = builder.Build();
 

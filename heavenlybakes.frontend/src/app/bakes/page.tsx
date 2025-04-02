@@ -93,7 +93,7 @@ export default function Page() {
                     {!isLoading && (
                         bakes.length > 0 ? (
                             <div className="container mx-auto px-4 ">
-                                <h1 className="text-center">{bakeType?.type ?? "All"}</h1>
+                                <h1 className="text-center text-pink-700 font-bold">{bakeType?.type ?? "All"}</h1>
                                 <div className="py-3">
                                     <select 
                                         onChange={handleOrderBy} 
@@ -123,7 +123,7 @@ export default function Page() {
             </div>
             <div className="flex py-2">
                 {bakesForNextPage.length > 0 && (
-                    <Button onClick={handlePagination} className="m-auto">Load more</Button>
+                    <Button onClick={handlePagination} className="m-auto bg-pink-700 hover:bg-pink-800">Load more</Button>
                 )}
             </div>
         </main>
